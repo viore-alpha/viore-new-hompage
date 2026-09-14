@@ -66,13 +66,6 @@ export async function CompanyPage({ language }: { language: Language }) {
                 source={companyMetrics?.source}
                 generatedAt={companyMetrics?.generatedAt}
               />
-              <p className="company-knowledge-next">
-                <a href={technologyRouteFor(language, "medical-model")}>
-                  {language === "ko"
-                    ? "Coming soon — 기관 안에서 구동하는 바이오레의 의료 특화 AI 모델. Technology에서 보기 →"
-                    : "Coming soon — Viore's medical-specialized AI model, running inside the institution. See Technology →"}
-                </a>
-              </p>
             </section>
           )}
           {page.connections && <CompanyConnections content={page.connections} />}
@@ -92,6 +85,13 @@ export async function CompanyPage({ language }: { language: Language }) {
               <small>{language === "ko" ? "파트너십 문의" : "Partnership inquiries"}</small>
               <span>biz@vioreai.com <i aria-hidden="true">↗</i></span>
             </a>
+            <p className="company-join-next">
+              <a href={technologyRouteFor(language, "medical-model")}>
+                {language === "ko"
+                  ? "Coming soon — 기관 안에서 구동하는 바이오레의 의료 특화 AI 모델. Technology 보기 →"
+                  : "Coming soon — Viore's medical-specialized AI model, running inside the institution. See Technology →"}
+              </a>
+            </p>
           </div>
         </section>
       </div>
