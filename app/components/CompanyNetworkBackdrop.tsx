@@ -1,8 +1,17 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import {
+  getThreadRenderTier,
+  raiseThreadRenderTier,
+  type ThreadRenderTier,
+} from "@/app/components/threadRenderQuality";
 
-const FRAME_INTERVAL = 1000 / 20;
+const BLOOM_BLUR_PX = 7;
+const BLOOM_STRENGTH = 0.62;
+const BLOOM_REFRESH_SECONDS = 1 / 20;
+const DRAW_BUDGET_MS = 20;
+const SLOW_DRAW_LIMIT = 3;
 type EnergyFamily = 0 | 1 | 2;
 type Rgb = readonly [number, number, number];
 
@@ -47,14 +56,21 @@ const continueSmoothly = (
 export function CompanyNetworkBackdrop() {
   const backdropRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const bloomCanvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const backdrop = backdropRef.current;
     const canvas = canvasRef.current;
-    const context = canvas?.getContext("2d", { alpha: true });
+    const bloomCanvas = bloomCanvasRef.current;
+    const mainContext = canvas?.getContext("2d", { alpha: true });
+    const scene = document.createElement("canvas");
+    const context = scene.getContext("2d", { alpha: true });
+    // Keep strand geometry Retina-sharp while the soft bloom lives in a
+    // cheaper 1x layer that can refresh less often without visible stepping.
+    const bloomContext = bloomCanvas?.getContext("2d", { alpha: true });
     const chapter = backdrop?.closest<HTMLElement>(".company-dark-chapter");
     const join = chapter?.querySelector<HTMLElement>(".company-join") ?? null;
-    if (!backdrop || !canvas || !context) return;
+    if (!backdrop || !canvas || !bloomCanvas || !mainContext || !context || !bloomContext) return;
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     let width = 1;
@@ -62,8 +78,14 @@ export function CompanyNetworkBackdrop() {
     let progress = 0;
     let animationFrame = 0;
     let scrollFrame = 0;
-    let lastFrame = 0;
+    let renderScale = 1;
+    let bloomScale = 1;
+    let lastBloomAt = Number.NEGATIVE_INFINITY;
+    let bloomDirty = true;
+    let renderTier = getThreadRenderTier();
+    let slowDraws = 0;
     let isIntersecting = false;
+    let shouldAnimate = false;
     let primaryGradient: CanvasGradient | null = null;
     let counterGradient: CanvasGradient | null = null;
     let goldGradient: CanvasGradient | null = null;
@@ -90,8 +112,6 @@ export function CompanyNetworkBackdrop() {
       const jitterB = Math.cos((index + 1) * 2.47 + family * 1.3) * width * 0.014 * flowScale * lateralScale;
       const jitterC = Math.sin((index + 1) * 3.31 + family * 0.8) * width * 0.012 * flowScale * lateralScale;
       const centerX = width * 0.5;
-
-      context.beginPath();
 
       if (family === 0) {
         const previousControlX = centerX + width * 0.145 * curveScale - spread * 0.12 + drift + jitterB;
@@ -212,32 +232,53 @@ export function CompanyNetworkBackdrop() {
       const convergence = Math.pow(progress, 2.6);
       const convergenceAlpha = mix(1, 0.3, convergence);
 
-      for (let index = 0; index < count; index += 1) {
-        traceStrand(index, count, seconds, family);
-        const accent = !haze && index % (family === 0 ? 11 : 8) === 0;
-        const shimmer = 0.86 + Math.sin(seconds * 0.22 + index * 0.57 + family) * 0.14;
-        context.strokeStyle = gradient;
-        context.globalAlpha = haze
-          ? 0.055 * convergenceAlpha
-          : (accent ? 0.78 : 0.21) * shimmer * convergenceAlpha;
-        context.lineWidth = haze ? 18 : accent ? 2.35 : 0.76 + (index % 4) * 0.11;
+      context.strokeStyle = gradient;
 
-        if (haze || accent) {
-          context.shadowColor = progress > 0.72
-            ? "rgba(255, 59, 48, .28)"
-            : family === 2
-              ? "rgba(248, 183, 53, .2)"
-              : "rgba(255, 93, 31, .24)";
-          context.shadowBlur = haze ? 20 : 8;
-        } else {
-          context.shadowBlur = 0;
+      if (haze) {
+        context.beginPath();
+        for (let index = 0; index < count; index += 1) {
+          traceStrand(index, count, seconds, family);
         }
+        context.globalAlpha = 0.055 * convergenceAlpha;
+        context.lineWidth = 18;
+        context.stroke();
+        return;
+      }
 
+      const accentModulo = family === 0 ? 11 : 8;
+
+      for (let widthGroup = 0; widthGroup < 4; widthGroup += 1) {
+        let hasRegularStrands = false;
+        context.beginPath();
+        for (let index = widthGroup; index < count; index += 4) {
+          if (index % accentModulo === 0) continue;
+          traceStrand(index, count, seconds, family);
+          hasRegularStrands = true;
+        }
+        if (!hasRegularStrands) continue;
+
+        const shimmer = 0.86 + Math.sin(seconds * 0.22 + widthGroup * 0.57 + family) * 0.14;
+        context.globalAlpha = 0.21 * shimmer * convergenceAlpha;
+        context.lineWidth = 0.76 + widthGroup * 0.11;
         context.stroke();
       }
+
+      context.beginPath();
+      for (let index = 0; index < count; index += accentModulo) {
+        traceStrand(index, count, seconds, family);
+      }
+      const accentShimmer = 0.86 + Math.sin(seconds * 0.22 + family) * 0.14;
+      context.globalAlpha = 0.78 * accentShimmer * convergenceAlpha;
+      context.lineWidth = 2.35;
+      context.stroke();
     };
 
     const draw = (seconds: number) => {
+      context.setTransform(renderScale, 0, 0, renderScale, 0, 0);
+      context.globalAlpha = 1;
+      context.globalCompositeOperation = "source-over";
+      context.filter = "none";
+
       if (
         !primaryGradient ||
         !counterGradient ||
@@ -252,24 +293,56 @@ export function CompanyNetworkBackdrop() {
 
       context.clearRect(0, 0, width, height);
       context.save();
-      context.globalCompositeOperation = "screen";
+      context.globalCompositeOperation = "source-over";
       context.lineCap = "round";
       context.lineJoin = "round";
 
       const compact = width < 700;
+      const primaryHazeCount = renderTier === 0 ? (compact ? 6 : 8) : renderTier === 1 ? (compact ? 2 : 3) : 1;
+      const counterHazeCount = renderTier === 0 ? (compact ? 3 : 4) : 1;
+      const primaryCount = renderTier === 0 ? (compact ? 32 : 48) : renderTier === 1 ? (compact ? 16 : 24) : (compact ? 6 : 10);
+      const counterCount = renderTier === 0 ? (compact ? 7 : 11) : renderTier === 1 ? (compact ? 4 : 6) : (compact ? 2 : 3);
+      const goldCount = renderTier === 0 ? (compact ? 11 : 17) : renderTier === 1 ? (compact ? 6 : 9) : (compact ? 2 : 4);
 
-      strokeFamily(compact ? 6 : 8, seconds, 0, primaryGradient, true);
-      strokeFamily(compact ? 3 : 4, seconds, 1, counterGradient, true);
-      strokeFamily(compact ? 32 : 48, seconds, 0, primaryGradient);
-      strokeFamily(compact ? 7 : 11, seconds, 1, counterGradient);
-      strokeFamily(compact ? 11 : 17, seconds, 2, goldGradient);
+      strokeFamily(primaryHazeCount, seconds, 0, primaryGradient, true);
+      strokeFamily(counterHazeCount, seconds, 1, counterGradient, true);
+      strokeFamily(primaryCount, seconds, 0, primaryGradient);
+      strokeFamily(counterCount, seconds, 1, counterGradient);
+      strokeFamily(goldCount, seconds, 2, goldGradient);
 
       context.restore();
+
+      const bloomRefreshSeconds = renderTier === 0
+        ? BLOOM_REFRESH_SECONDS
+        : renderTier === 1 ? 1 / 12 : Number.POSITIVE_INFINITY;
+      if (bloomDirty || seconds - lastBloomAt >= bloomRefreshSeconds) {
+        bloomContext.setTransform(1, 0, 0, 1, 0, 0);
+        bloomContext.clearRect(0, 0, bloomCanvas.width, bloomCanvas.height);
+        bloomContext.filter = `blur(${(BLOOM_BLUR_PX * bloomScale).toFixed(2)}px)`;
+        bloomContext.globalAlpha = BLOOM_STRENGTH;
+        bloomContext.drawImage(scene, 0, 0, bloomCanvas.width, bloomCanvas.height);
+        bloomContext.filter = "none";
+        bloomContext.globalAlpha = 1;
+        lastBloomAt = seconds;
+        bloomDirty = false;
+      }
+
+      mainContext.setTransform(1, 0, 0, 1, 0, 0);
+      mainContext.clearRect(0, 0, canvas.width, canvas.height);
+      mainContext.filter = "none";
+      mainContext.globalAlpha = 1;
+      mainContext.globalCompositeOperation = "source-over";
+      mainContext.drawImage(scene, 0, 0);
     };
 
-    const updateProgress = () => {
+    const updateProgress = (syncAnimation = false) => {
       scrollFrame = 0;
       const rect = backdrop.getBoundingClientRect();
+      // Hand motion over at the viewport midpoint so the two full-screen
+      // Retina canvases never run animation loops at the same time.
+      const nextShouldAnimate = rect.top <= window.innerHeight * 0.5;
+      const animationChanged = nextShouldAnimate !== shouldAnimate;
+      shouldAnimate = nextShouldAnimate;
       const fallbackFinish = Math.max(backdrop.offsetHeight - window.innerHeight * 0.85, 1);
       const finishDistance = join
         ? Math.max(join.offsetTop - window.innerHeight * 0.15, 1)
@@ -281,10 +354,13 @@ export function CompanyNetworkBackdrop() {
         backdrop.style.setProperty("--company-convergence-progress", progress.toFixed(4));
         if (reducedMotion.matches) draw(0);
       }
+      if (syncAnimation && animationChanged) syncMotion();
     };
 
     const requestProgressUpdate = () => {
-      if (!scrollFrame) scrollFrame = window.requestAnimationFrame(updateProgress);
+      if (!scrollFrame) {
+        scrollFrame = window.requestAnimationFrame(() => updateProgress(true));
+      }
     };
 
     const releaseCanvas = () => {
@@ -294,8 +370,14 @@ export function CompanyNetworkBackdrop() {
       counterGradient = null;
       goldGradient = null;
       gradientProgress = -1;
+      lastBloomAt = Number.NEGATIVE_INFINITY;
+      bloomDirty = true;
       if (canvas.width !== 1) canvas.width = 1;
       if (canvas.height !== 1) canvas.height = 1;
+      if (scene.width !== 1) scene.width = 1;
+      if (scene.height !== 1) scene.height = 1;
+      if (bloomCanvas.width !== 1) bloomCanvas.width = 1;
+      if (bloomCanvas.height !== 1) bloomCanvas.height = 1;
     };
 
     const resize = () => {
@@ -303,15 +385,21 @@ export function CompanyNetworkBackdrop() {
       const bounds = canvas.getBoundingClientRect();
       width = Math.max(1, Math.round(bounds.width));
       height = Math.max(1, Math.round(bounds.height));
-      const pixelRatioCap = width < 700 ? 1 : 1.15;
-      const pixelRatio = Math.min(window.devicePixelRatio || 1, pixelRatioCap);
+      const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+      renderScale = pixelRatio;
+      bloomScale = Math.min(pixelRatio, 1);
       const renderWidth = Math.round(width * pixelRatio);
       const renderHeight = Math.round(height * pixelRatio);
 
       if (canvas.width !== renderWidth || canvas.height !== renderHeight) {
         canvas.width = renderWidth;
         canvas.height = renderHeight;
+        scene.width = renderWidth;
+        scene.height = renderHeight;
+        bloomCanvas.width = Math.round(width * bloomScale);
+        bloomCanvas.height = Math.round(height * bloomScale);
         context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+        bloomDirty = true;
         primaryGradient = null;
         counterGradient = null;
         goldGradient = null;
@@ -322,9 +410,18 @@ export function CompanyNetworkBackdrop() {
     };
 
     const animate = (timestamp: number) => {
-      if (timestamp - lastFrame >= FRAME_INTERVAL) {
-        draw(timestamp / 1000);
-        lastFrame = timestamp;
+      const drawStartedAt = performance.now();
+      draw(timestamp / 1000);
+      const drawDuration = performance.now() - drawStartedAt;
+      if (drawDuration > DRAW_BUDGET_MS) {
+        slowDraws += 1;
+        if (slowDraws >= SLOW_DRAW_LIMIT && renderTier < 2) {
+          renderTier = raiseThreadRenderTier((renderTier + 1) as ThreadRenderTier);
+          slowDraws = 0;
+          bloomDirty = true;
+        }
+      } else {
+        slowDraws = Math.max(0, slowDraws - 1);
       }
       animationFrame = window.requestAnimationFrame(animate);
     };
@@ -332,15 +429,15 @@ export function CompanyNetworkBackdrop() {
     const syncMotion = () => {
       window.cancelAnimationFrame(animationFrame);
       animationFrame = 0;
-      lastFrame = 0;
 
       if (!isIntersecting || document.hidden) {
         releaseCanvas();
         return;
       }
+      renderTier = Math.max(renderTier, getThreadRenderTier()) as ThreadRenderTier;
       resize();
       if (reducedMotion.matches) draw(0);
-      else animationFrame = window.requestAnimationFrame(animate);
+      else if (shouldAnimate) animationFrame = window.requestAnimationFrame(animate);
     };
 
     const handleMotionChange = () => {
@@ -351,10 +448,10 @@ export function CompanyNetworkBackdrop() {
     const resizeObserver = new ResizeObserver(resize);
     const intersectionObserver = new IntersectionObserver(
       ([entry]) => {
-        isIntersecting = Boolean(entry?.isIntersecting && entry.intersectionRatio >= 0.01);
+        isIntersecting = entry?.isIntersecting ?? false;
         syncMotion();
       },
-      { rootMargin: "0px", threshold: [0, 0.01] },
+      { rootMargin: "0px", threshold: 0 },
     );
 
     resizeObserver.observe(canvas);
@@ -381,6 +478,7 @@ export function CompanyNetworkBackdrop() {
   return (
     <div ref={backdropRef} className="company-network-backdrop" aria-hidden="true">
       <div className="company-network-viewport">
+        <canvas ref={bloomCanvasRef} className="company-convergence-bloom-canvas" />
         <canvas ref={canvasRef} className="company-convergence-canvas" />
       </div>
     </div>

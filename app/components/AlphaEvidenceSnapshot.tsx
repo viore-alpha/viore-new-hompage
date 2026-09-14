@@ -20,8 +20,6 @@ const COUNT_LABELS = [
   ["canonical_papers", "정규화 논문 레코드", "Canonical papers"],
   ["papers_with_abstract", "초록 보유 논문", "Papers with abstract"],
   ["visible_guidelines", "노출 가능한 진료지침", "Visible guidelines"],
-  ["source_change_observations", "출처·변경 관찰 기록", "Source & change observations"],
-  ["managed_units", "관리 중인 작업 단위", "Managed source · enrichment · report units"],
 ] as const;
 
 function subscribeToReducedMotion(onStoreChange: () => void) {
@@ -157,7 +155,7 @@ function SnapshotContent({
           <span className={`snapshot-state snapshot-state-${state}`}>
             {state === "stale"
               ? (ko ? "갱신 지연" : "STALE · UPDATE DELAYED")
-              : (ko ? "실시간 집계" : "LIVE SNAPSHOT")}
+              : (ko ? "최근 공개 집계" : "RECENT PUBLIC SNAPSHOT")}
           </span>
           <p>{ko ? "데이터 기준" : "Data as of"} {formatDateTime(snapshot.data_as_of)} KST</p>
         </div>
@@ -174,7 +172,7 @@ function SnapshotContent({
             <tr>
               <th scope="col">No.</th>
               <th scope="col">{ko ? "항목" : "Metric"}</th>
-              <th scope="col">{ko ? "현재 집계" : "Live count"}</th>
+              <th scope="col">{ko ? "집계" : "Count"}</th>
             </tr>
           </thead>
           <tbody>
@@ -194,6 +192,11 @@ function SnapshotContent({
         </table>
       </div>
 
+      <p className="alphaevidence-snapshot-note">
+        {ko
+          ? "문헌 레코드 수는 수집·정규화된 자료의 규모이며, 모든 자료가 임상 검증을 마쳤다는 뜻은 아닙니다."
+          : "Literature record counts describe collected and normalized material; they do not mean every record has completed clinical validation."}
+      </p>
     </>
   );
 }

@@ -29,9 +29,16 @@
 
 ## What Viore builds
 
-Viore connects medical questions, evidence, documents, images, and tools into a continuous workflow for healthcare professionals. Its Technology Journal reports implementation, product integration, release review, and selected-path operation as distinct states.
+Viore designs medical AI as a connected technology system rather than one model. AlphaEvidence owns evidence, AlphaDoc Engine orchestrates medical work, AlphaDocument and AlphaImage prepare reusable document and image inputs, AlphaLayer governs selected external AI execution, and AlphaSeal protects supported one-to-one conversations. Viore connects only verified paths to Alphadoc.
 
-Alphadoc is Viore's AI Medical Workspace for healthcare professionals. AlphaEvidence is an implemented evidence foundation, and AlphaDoc Engine is an implemented workflow capability. AlphaDocument's deterministic document-to-artifact engine is implemented, with product release under review. AlphaImage's static-image artifact technology is implemented, while activation in Alphadoc user workflows remains under integration review. AlphaLayer operates on selected protected text paths; this does not represent a full-service rollout, patient-information processing readiness, or legal suitability.
+Alphadoc is Viore's AI Medical Workspace for healthcare professionals. Its Technology Journal reports implementation, product connection, runtime verification, and legal suitability as distinct states.
+
+- AlphaEvidence Foundation is implemented and connected to Alphadoc evidence paths. Public record counts do not mean every record has completed clinical validation.
+- AlphaDoc Engine is an implemented product execution layer, not Viore's own large language model or a universal AI platform.
+- AlphaDocument's core engine and product connection paths are implemented; broader activation remains under review, and fidelity varies by document format.
+- AlphaImage's bounded static-image artifact technology is implemented and synthetic-input runtime-verified; Alphadoc user-path activation remains under review. It is not a diagnostic model.
+- AlphaLayer is runtime-verified for selected protected text capabilities. It does not cover every feature, identifier type, image, or source file and does not establish patient-information readiness or legal suitability.
+- AlphaSeal encrypts message bodies on supported one-to-one paths between participant browsers. Delivery metadata and reporting paths remain separate, and the scope does not establish patient-information suitability.
 
 ## Naming guidance
 
@@ -40,3 +47,4 @@ Alphadoc is Viore's AI Medical Workspace for healthcare professionals. AlphaEvid
 - Alphadoc is a Viore product and does not replace healthcare-professional judgment.
 - Do not present AlphaImage implementation as broad Alphadoc workflow activation or diagnostic capability.
 - Do not present AlphaLayer's selected protected paths as broad production or legal readiness.
+- Do not present AlphaSeal as hiding all conversation metadata, covering group conversations, guaranteeing perfect forward secrecy, or establishing patient-information suitability.

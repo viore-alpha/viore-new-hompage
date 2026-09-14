@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element -- Alphadoc app icons are served from the product asset registry. */
 "use client";
 
 import Image from "next/image";
@@ -42,6 +43,18 @@ type MotionCopy = {
 };
 
 const xrayAsset = "/assets/product/alphadoc/generated/synthetic-chest-xray-rll-optimized.webp";
+const alphadocAssetRoot = "https://alphadoc.ai";
+
+const heroAppIcons = [
+  "/brand/feature-icons/functions/soap/logo.svg",
+  "/brand/feature-icons/functions/guide/logo.svg",
+  "/brand/feature-icons/functions/drug/logo.svg",
+  "/brand/feature-icons/functions/medical-tools/logo.svg",
+  "/brand/feature-icons/functions/document-translation/logo.svg",
+  "/brand/feature-icons/functions/medical-notices/logo.png",
+  "/brand/feature-icons/panel/paper/logo.svg",
+  "/brand/feature-icons/panel/guideline/logo.svg",
+] as const;
 
 const MOTION_TIMING = {
   introDelay: 520,
@@ -428,6 +441,14 @@ export function AlphadocHeroMotion({ language, label }: { language: Language; la
           <div className="ap-motion-prompts">
             {copy.prompts.map((prompt, index) => (
               <span className={`ap-motion-interface ap-motion-prompt ap-motion-prompt--${index + 1}`} key={prompt}>{prompt}</span>
+            ))}
+          </div>
+
+          <div className="ap-motion-interface ap-motion-apps" aria-hidden="true">
+            {heroAppIcons.map((icon) => (
+              <span className="ap-motion-app" key={icon}>
+                <img src={`${alphadocAssetRoot}${icon}`} alt="" width="48" height="48" decoding="async" />
+              </span>
             ))}
           </div>
         </div>

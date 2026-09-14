@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element -- Real product captures need predictable layering for crossfades and motion. */
 import { technologyRouteFor, type Language } from "@/app/site-content";
 import { AlphadocHeroMotion } from "@/app/components/AlphadocHeroMotion";
+import { AlphadocGeneralChatMotion } from "@/app/components/AlphadocGeneralChatMotion";
 import { AlphadocWorkspaceMotion } from "@/app/components/AlphadocWorkspaceMotion";
 import { AlphadocsPhoneDemo } from "@/app/components/AlphadocsPhoneDemo";
 import { AlphadocFeatureRail } from "@/app/components/AlphadocFeatureRail";
@@ -13,6 +14,7 @@ const productCopy = {
   ko: {
     nav: [
       ["overview", "인터페이스"],
+      ["general", "일반대화"],
       ["clinical", "앱"],
       ["alphadocs", "알파닥스"],
     ],
@@ -31,6 +33,10 @@ const productCopy = {
         ["Workspace", "지금 하는 일", "질문, 도구, 기록과 문서", "01-workspace-apps.jpg", "알파닥 Workspace의 앱 화면", 648, 648],
         ["Alphawing", "새 문헌과 소식", "뉴스, 문헌, 의료인 연결", "13-alphawing-literature.jpg", "국가와 분야, 최신순과 인용순을 고르는 알파닥 Alphawing 문헌 탭", 320, 648],
       ],
+    },
+    general: {
+      title: "임상 밖의 질문도 함께",
+      body: "임상 질문은 임상 모드에서, 일상의 궁금증은 일반 모드에서. 작은 전환만으로 대화 목적을 구분하고, 같은 입력창에서 자연스럽게 질문을 이어갑니다.",
     },
     clinical: {
       title: "모든 가능성은 앱 하나로",
@@ -59,7 +65,7 @@ const productCopy = {
     },
   },
   en: {
-    nav: [["overview", "Overview"], ["clinical", "Apps"], ["alphadocs", "Alphadocs"]],
+    nav: [["overview", "Overview"], ["general", "General chat"], ["clinical", "Apps"], ["alphadocs", "Alphadocs"]],
     hero: {
       titleBrand: "Alphadoc,",
       titleRest: "From Workstation to AI Workspace",
@@ -75,6 +81,10 @@ const productCopy = {
         ["Workspace", "Work in progress", "Questions, clinical tools, records, and documents", "01-workspace-apps.jpg", "The Alphadoc Workspace app launcher", 648, 648],
         ["Alphawing", "Incoming knowledge", "News, literature, and professional connections", "13-alphawing-literature.jpg", "The literature tab in Alphawing", 320, 648],
       ],
+    },
+    general: {
+      title: "A clinician’s day includes\nmore than clinical questions.",
+      body: "Use Clinical mode for clinical questions and General mode for everyday questions. A small switch separates the conversation context while keeping the same familiar composer.",
     },
     clinical: {
       title: "Every possibility, one app.",
@@ -117,8 +127,8 @@ export function ProductPage({ language }: { language: Language }) {
     operatingSystem: "Web",
     url: "https://alphadoc.ai",
     description: language === "ko"
-      ? "질문과 근거 탐색, 임상 도구, 진료노트와 문서를 한곳에서 이어주는 AI Medical Workspace"
-      : "An AI Medical Workspace connecting questions, evidence, clinical tools, notes, and documents in one place",
+      ? "임상·일반 대화와 근거 탐색, 임상 도구, 진료노트와 문서를 한곳에서 이어주는 AI Medical Workspace"
+      : "An AI Medical Workspace connecting clinical and general conversations, evidence, clinical tools, notes, and documents in one place",
     inLanguage: language === "ko" ? "ko-KR" : "en-US",
     author: { "@id": "https://vioreai.com/#organization" },
   };
@@ -162,6 +172,18 @@ export function ProductPage({ language }: { language: Language }) {
               : "The Alphadoc workspace moving from calendar marking to a clinical answer and Alphawing tabs"}
           />
         </figure>
+      </section>
+
+      <section className="ap-general" id="general" data-ap-section aria-labelledby="ap-general-title">
+        <div className="ap-shell">
+          <header className="ap-section-head">
+            <div><h2 className="ap-general-title" id="ap-general-title">{content.general.title}</h2></div>
+            <p>{content.general.body}</p>
+          </header>
+          <figure className="ap-general-motion-figure">
+            <AlphadocGeneralChatMotion language={language} />
+          </figure>
+        </div>
       </section>
 
       <section className="ap-showcase ap-shell" id="clinical" data-ap-section>

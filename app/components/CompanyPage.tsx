@@ -15,7 +15,7 @@ export async function CompanyPage({ language }: { language: Language }) {
   return (
     <article className="detail-page detail-page-company detail-company">
       <section className="company-hero">
-        <CompanyEnergyCanvas quality="balanced" />
+        <CompanyEnergyCanvas quality="balanced" activationThreshold={0.5} />
         <div className="company-hero-copy">
           <h1>{page.title}</h1>
           <p>{page.lead}</p>

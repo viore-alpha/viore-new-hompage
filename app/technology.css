@@ -190,21 +190,22 @@
   letter-spacing: -.019em;
 }
 
+.technology-intro-copy > h2 {
+  max-width: 680px;
+  margin: 0 0 20px;
+  color: var(--technology-ink);
+  font-size: clamp(27px, 3vw, 38px);
+  font-weight: 620;
+  line-height: 1.2;
+  letter-spacing: -.045em;
+}
+
 .technology-intro-copy > p {
   margin: 0;
 }
 
 .technology-intro-copy > p + p {
   margin-top: 18px;
-}
-
-.technology-intro-copy .technology-intro-emphasis {
-  margin: 38px 0;
-  color: var(--technology-ink);
-  font-size: clamp(25px, 2.7vw, 34px);
-  font-weight: 610;
-  line-height: 1.3;
-  letter-spacing: -.045em;
 }
 
 .technology-intro-copy blockquote {
@@ -470,7 +471,8 @@
   background: transparent;
 }
 
-.technology-status-selected-path-active {
+.technology-status-selected-path-active,
+.technology-status-supported-path-implemented {
   color: var(--technology-blue);
 }
 
@@ -546,22 +548,6 @@
 /* Figures share the paper; structure comes from lines, not cards. */
 .technology-figure {
   margin: 64px 0;
-}
-
-.technology-figure-heading {
-  padding: 0 0 12px;
-  display: grid;
-  grid-template-columns: 88px minmax(0, 1fr);
-  gap: 22px;
-  color: var(--technology-dim);
-  font: 590 9px/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  letter-spacing: .07em;
-  text-transform: uppercase;
-}
-
-.technology-figure-heading p {
-  margin: 0;
-  color: var(--technology-muted);
 }
 
 .technology-figure figcaption {
@@ -1061,7 +1047,7 @@
     transform .7s cubic-bezier(.22, 1, .36, 1) calc(var(--flow-order, 0) * 64ms);
 }
 
-/* Viore research-system plates: one visual grammar, five distinct architectures. */
+/* Viore research-system plates: one visual grammar, seven distinct architectures. */
 .technology-raw-diagram {
   --diagram-paper: #f7f6f1;
   --diagram-paper-raised: #fcfbf7;
@@ -1103,7 +1089,16 @@
 .technology-paper-svg .diagram-version-node,
 .technology-paper-svg .diagram-document-page,
 .technology-paper-svg .diagram-document-shadow,
-.technology-paper-svg .diagram-document-chart {
+.technology-paper-svg .diagram-document-chart,
+.technology-paper-svg .diagram-lineage-spine,
+.technology-paper-svg .diagram-image-frame,
+.technology-paper-svg .diagram-image-grid,
+.technology-paper-svg .diagram-image-annotation,
+.technology-paper-svg .diagram-coordinate-axis,
+.technology-paper-svg .diagram-external-zone,
+.technology-paper-svg .diagram-trust-boundary,
+.technology-paper-svg .diagram-browser,
+.technology-paper-svg .diagram-separate-lane {
   vector-effect: non-scaling-stroke;
 }
 
@@ -1139,7 +1134,10 @@
 
 .technology-paper-svg .diagram-domain-label,
 .technology-paper-svg .diagram-panel-title,
-.technology-paper-svg .diagram-micro-label {
+.technology-paper-svg .diagram-micro-label,
+.technology-paper-svg .diagram-zone-label,
+.technology-paper-svg .diagram-annotation,
+.technology-paper-svg .diagram-footnote {
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   letter-spacing: .055em;
 }
@@ -1188,6 +1186,34 @@
 
 .technology-paper-svg .diagram-module-label.is-strong {
   font-weight: 650;
+}
+
+.technology-paper-svg .diagram-architecture-label {
+  fill: var(--diagram-ink);
+  font-size: 11.5px;
+  font-weight: 590;
+  letter-spacing: -.018em;
+}
+
+.technology-paper-svg .diagram-zone-label {
+  fill: var(--diagram-muted);
+  font-size: 8.2px;
+  font-weight: 720;
+  letter-spacing: .075em;
+}
+
+.technology-paper-svg .diagram-annotation {
+  fill: var(--diagram-muted);
+  font-size: 10.5px;
+  font-weight: 560;
+  letter-spacing: -.012em;
+}
+
+.technology-paper-svg .diagram-footnote {
+  fill: var(--diagram-muted);
+  font-size: 9.8px;
+  font-weight: 520;
+  letter-spacing: -.01em;
 }
 
 .technology-paper-svg .diagram-panel {
@@ -1330,9 +1356,21 @@
   stroke: var(--diagram-blue);
 }
 
+.technology-paper-svg .diagram-version-node-red {
+  fill: color-mix(in srgb, var(--diagram-red) 46%, white);
+  stroke: var(--diagram-red);
+}
+
 .technology-paper-svg .diagram-version-node-muted {
   fill: color-mix(in srgb, var(--diagram-muted) 22%, white);
   stroke: var(--diagram-muted);
+}
+
+.technology-paper-svg .diagram-lineage-spine {
+  fill: none;
+  stroke: color-mix(in srgb, var(--diagram-blue) 72%, var(--diagram-line));
+  stroke-width: 1.15;
+  stroke-linecap: round;
 }
 
 .technology-paper-svg .diagram-document-shadow {
@@ -1367,6 +1405,83 @@
   stroke-width: 1;
 }
 
+.technology-paper-svg .diagram-image-frame {
+  fill: color-mix(in srgb, var(--diagram-ink) 2.5%, var(--diagram-paper-raised));
+  stroke: color-mix(in srgb, var(--diagram-ink) 58%, var(--diagram-line));
+  stroke-width: 1;
+}
+
+.technology-paper-svg .diagram-image-grid {
+  stroke: color-mix(in srgb, var(--diagram-line) 62%, transparent);
+  stroke-width: .7;
+}
+
+.technology-paper-svg .diagram-image-annotation {
+  fill: color-mix(in srgb, var(--diagram-red) 10%, transparent);
+  stroke: var(--diagram-red);
+  stroke-width: 1.2;
+  stroke-linejoin: round;
+}
+
+.technology-paper-svg .diagram-image-annotation.is-normalized {
+  fill: color-mix(in srgb, var(--diagram-blue) 10%, transparent);
+  stroke: var(--diagram-blue);
+}
+
+.technology-paper-svg .diagram-coordinate-origin {
+  fill: var(--diagram-paper-raised);
+  stroke: var(--diagram-red);
+  stroke-width: 1;
+}
+
+.technology-paper-svg .diagram-coordinate-axis {
+  stroke: color-mix(in srgb, var(--diagram-ink) 56%, var(--diagram-line));
+  stroke-width: 1;
+}
+
+.technology-paper-svg .diagram-external-zone {
+  fill: color-mix(in srgb, var(--diagram-red) 2.5%, var(--diagram-paper));
+  stroke: color-mix(in srgb, var(--diagram-red) 45%, var(--diagram-line));
+  stroke-width: 1;
+  stroke-dasharray: 5 4;
+}
+
+.technology-paper-svg .diagram-trust-boundary {
+  fill: none;
+  stroke: var(--diagram-red);
+  stroke-width: 1.35;
+  stroke-dasharray: 7 5;
+}
+
+.technology-paper-svg .diagram-browser {
+  fill: rgba(255, 255, 255, .34);
+  stroke: var(--diagram-line);
+  stroke-width: 1;
+}
+
+.technology-paper-svg .diagram-browser-blue {
+  stroke: color-mix(in srgb, var(--diagram-blue) 58%, var(--diagram-line));
+}
+
+.technology-paper-svg .diagram-browser-red {
+  stroke: color-mix(in srgb, var(--diagram-red) 58%, var(--diagram-line));
+}
+
+.technology-paper-svg .diagram-browser-muted {
+  stroke: var(--diagram-muted);
+}
+
+.technology-paper-svg .diagram-browser-dot {
+  fill: color-mix(in srgb, var(--diagram-muted) 52%, white);
+}
+
+.technology-paper-svg .diagram-separate-lane {
+  fill: none;
+  stroke: var(--diagram-muted);
+  stroke-width: 1;
+  stroke-dasharray: 3 4;
+}
+
 .technology-raw-diagram.is-enhanced .technology-svg-step {
   opacity: 0;
   transform: translateY(5px);
@@ -1393,9 +1508,23 @@
     border-radius: 10px;
     box-shadow: 0 16px 38px rgba(0, 0, 0, .2);
   }
+
+  .technology-paper-svg .diagram-architecture-label {
+    font-size: 11.5px;
+  }
+
+  .technology-paper-svg .diagram-annotation {
+    font-size: 10.5px;
+    letter-spacing: -.01em;
+  }
+
+  .technology-paper-svg .diagram-footnote {
+    font-size: 10px;
+    letter-spacing: -.01em;
+  }
 }
 
-/* Evidence snapshot: live numbers stay table-first and plainly qualified. */
+/* Evidence snapshot: public counts stay table-first and plainly qualified. */
 .technology-data-section {
   margin: 58px 0 0 !important;
   padding-top: 56px;
@@ -1535,6 +1664,14 @@
   font-weight: 550;
   letter-spacing: -.055em;
   font-variant-numeric: tabular-nums;
+}
+
+.alphaevidence-snapshot-note {
+  max-width: 720px;
+  margin: 14px 0 0 !important;
+  color: var(--technology-dim);
+  font-size: 11px;
+  line-height: 1.65;
 }
 
 .alphaevidence-snapshot-unavailable {
@@ -1801,6 +1938,10 @@
     right: auto;
     z-index: 70;
     width: 100%;
+    border-bottom: 1px solid var(--technology-line);
+    background: color-mix(in srgb, var(--technology-page) 96%, transparent);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
     opacity: 1;
     visibility: visible;
     transform: none;
@@ -1832,7 +1973,7 @@
 
   .technology-article-nav ol {
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(6, minmax(0, 1fr));
   }
 
   .technology-article-nav a {
@@ -1900,7 +2041,7 @@
 
   .technology-article-nav ol {
     width: max-content;
-    grid-template-columns: repeat(5, minmax(126px, auto));
+    grid-template-columns: repeat(6, minmax(126px, auto));
   }
 
   .technology-post {
@@ -1950,7 +2091,6 @@
     margin: 52px 0;
   }
 
-  .technology-figure-heading,
   .technology-figure figcaption {
     grid-template-columns: 70px minmax(0, 1fr);
     gap: 12px;
@@ -2176,7 +2316,6 @@
     gap: 5px;
   }
 
-  .technology-figure-heading,
   .technology-figure figcaption {
     grid-template-columns: 1fr;
     gap: 5px;

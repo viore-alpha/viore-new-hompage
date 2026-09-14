@@ -12,6 +12,7 @@ export async function GET() {
     headers: {
       "Cache-Control": `public, max-age=0, s-maxage=${ALPHAEVIDENCE_SNAPSHOT_REVALIDATE_SECONDS}, stale-while-revalidate=3600`,
       "X-Content-Type-Options": "nosniff",
+      "X-Robots-Tag": "noindex, nofollow",
     },
   });
 }

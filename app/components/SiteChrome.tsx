@@ -122,10 +122,23 @@ export function SiteChrome({ language, children }: { language: Language; childre
           <a className="footer-brand" href={`/${language}`} aria-label="Viore home">
             <img src="/brand/viore-logotype.png" alt="Viore" />
           </a>
+          <div className="footer-company">
+            <div className="footer-company-primary">
+              <strong>{content.footer.company.name}</strong>
+              <span>{content.footer.company.representative}</span>
+              <span>{content.footer.company.registration}</span>
+            </div>
+            <address className="footer-company-address">
+              <span>{content.footer.company.address}</span>
+              <a href={`mailto:${content.footer.company.email}`}>{content.footer.company.email}</a>
+            </address>
+          </div>
           <div className="footer-legal">
-            <a href={`/${language}/legal#privacy`}>{content.footer.privacy}</a>
-            <a href={`/${language}/legal#terms`}>{content.footer.terms}</a>
-            <span>{content.footer.copyright}</span>
+            <div className="footer-policy-links">
+              <a href={`/${language}/legal#privacy`}>{content.footer.privacy}</a>
+              <a href={`/${language}/legal#terms`}>{content.footer.terms}</a>
+            </div>
+            <span className="footer-copyright">{content.footer.copyright}</span>
           </div>
         </div>
       </footer>

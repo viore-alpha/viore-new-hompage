@@ -3,7 +3,7 @@ import { SITE_ORIGIN } from "@/app/seo";
 
 const localizedPages = [
   { path: "", lastModified: "2026-07-27", changeFrequency: "weekly", priority: { ko: 1, en: 0.9 } },
-  { path: "/technology", lastModified: "2026-07-27", changeFrequency: "weekly", priority: { ko: 0.9, en: 0.8 } },
+  { path: "/technology", lastModified: "2026-07-30", changeFrequency: "weekly", priority: { ko: 0.9, en: 0.8 } },
   { path: "/product/alphadoc", lastModified: "2026-07-27", changeFrequency: "weekly", priority: { ko: 0.9, en: 0.8 } },
   { path: "/knowledge", lastModified: "2026-07-27", changeFrequency: "weekly", priority: { ko: 0.8, en: 0.7 } },
   { path: "/legal", lastModified: "2026-07-20", changeFrequency: "yearly", priority: { ko: 0.3, en: 0.3 } },

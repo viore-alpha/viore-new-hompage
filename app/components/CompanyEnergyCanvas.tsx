@@ -1,8 +1,17 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import {
+  getThreadRenderTier,
+  raiseThreadRenderTier,
+  type ThreadRenderTier,
+} from "@/app/components/threadRenderQuality";
 
-const FRAME_INTERVAL = 1000 / 30;
+const GLOW_BLUR_PX = 6;
+const GLOW_STRENGTH = 0.5;
+const GLOW_REFRESH_SECONDS = 1 / 20;
+const DRAW_BUDGET_MS = 20;
+const SLOW_DRAW_LIMIT = 3;
 type EnergyFamily = 0 | 1 | 2;
 type EnergyCanvasQuality = "full" | "balanced";
 
@@ -16,25 +25,43 @@ const continueSmoothly = (
   midpointY +
   (midpointY - previousControlY) * ((nextControlX - midpointX) / (midpointX - previousControlX));
 
-export function CompanyEnergyCanvas({ quality = "full" }: { quality?: EnergyCanvasQuality }) {
+export function CompanyEnergyCanvas({
+  quality = "full",
+  activationThreshold = 0.08,
+}: {
+  quality?: EnergyCanvasQuality;
+  activationThreshold?: number;
+}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const glowCanvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    const context = canvas?.getContext("2d", { alpha: true });
-    if (!canvas || !context) return;
+    const glowCanvas = glowCanvasRef.current;
+    const mainContext = canvas?.getContext("2d", { alpha: true });
+    const scene = document.createElement("canvas");
+    const context = scene.getContext("2d", { alpha: true });
+    // The crisp layer stays at up to 2x DPR while the naturally soft glow uses
+    // a cheaper 1x DOM layer that does not need to be recomposited every frame.
+    const glowContext = glowCanvas?.getContext("2d", { alpha: true });
+    if (!canvas || !glowCanvas || !mainContext || !context || !glowContext) return;
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     let width = 1;
     let height = 1;
     let frame = 0;
-    let lastFrame = 0;
+    let renderScale = 1;
+    let glowScale = 1;
+    let lastGlowAt = Number.NEGATIVE_INFINITY;
+    let glowDirty = true;
+    let renderTier = getThreadRenderTier();
+    let slowDraws = 0;
     let isIntersecting = false;
+    let isVisible = false;
     let primaryGradient: CanvasGradient | null = null;
     let counterGradient: CanvasGradient | null = null;
     let goldGradient: CanvasGradient | null = null;
     const balanced = quality === "balanced";
-    const frameInterval = balanced ? 1000 / 24 : FRAME_INTERVAL;
 
     const traceStrand = (index: number, count: number, seconds: number, family: EnergyFamily) => {
       const position = count === 1 ? 0 : index / (count - 1);
@@ -49,8 +76,6 @@ export function CompanyEnergyCanvas({ quality = "full" }: { quality?: EnergyCanv
       const jitterA = Math.sin((index + 1) * 1.91 + family * 2.7) * height * 0.018;
       const jitterB = Math.cos((index + 1) * 2.47 + family * 1.3) * height * 0.014;
       const jitterC = Math.sin((index + 1) * 3.31 + family * 0.8) * height * 0.012;
-
-      context.beginPath();
 
       if (family === 0) {
         const previousControlY = centerY + height * 0.145 - spread * 0.12 + drift + jitterB;
@@ -158,29 +183,55 @@ export function CompanyEnergyCanvas({ quality = "full" }: { quality?: EnergyCanv
       gradient: CanvasGradient,
       haze = false,
     ) => {
-      for (let index = 0; index < count; index += 1) {
-        traceStrand(index, count, seconds, family);
-        const accent = !haze && index % (family === 0 ? 10 : 8) === 0;
-        const shimmer = 0.86 + Math.sin(seconds * 0.72 + index * 0.57 + family) * 0.14;
-        context.strokeStyle = gradient;
-        const densityCompensation = balanced && !haze ? 1.12 : 1;
-        context.globalAlpha = haze
-          ? 0.055
-          : Math.min(1, (accent ? 0.78 : 0.21) * shimmer * densityCompensation);
-        context.lineWidth = haze ? 18 : accent ? 2.35 : 0.76 + (index % 4) * 0.11;
-        if (haze || accent) {
-          context.shadowColor = family === 2 ? "rgba(248, 183, 53, .24)" : "rgba(255, 93, 31, .3)";
-          context.shadowBlur = haze ? 20 : 8;
-        } else {
-          context.shadowBlur = 0;
+      context.strokeStyle = gradient;
+
+      if (haze) {
+        context.beginPath();
+        for (let index = 0; index < count; index += 1) {
+          traceStrand(index, count, seconds, family);
         }
+        context.globalAlpha = 0.055;
+        context.lineWidth = 18;
+        context.stroke();
+        return;
+      }
+
+      const accentModulo = family === 0 ? 10 : 8;
+      const densityCompensation = balanced ? 1.12 : 1;
+
+      for (let widthGroup = 0; widthGroup < 4; widthGroup += 1) {
+        let hasRegularStrands = false;
+        context.beginPath();
+        for (let index = widthGroup; index < count; index += 4) {
+          if (index % accentModulo === 0) continue;
+          traceStrand(index, count, seconds, family);
+          hasRegularStrands = true;
+        }
+        if (!hasRegularStrands) continue;
+
+        const shimmer = 0.86 + Math.sin(seconds * 0.72 + widthGroup * 0.57 + family) * 0.14;
+        context.globalAlpha = Math.min(1, 0.21 * shimmer * densityCompensation);
+        context.lineWidth = 0.76 + widthGroup * 0.11;
         context.stroke();
       }
+
+      context.beginPath();
+      for (let index = 0; index < count; index += accentModulo) {
+        traceStrand(index, count, seconds, family);
+      }
+      const accentShimmer = 0.86 + Math.sin(seconds * 0.72 + family) * 0.14;
+      context.globalAlpha = Math.min(1, 0.78 * accentShimmer * densityCompensation);
+      context.lineWidth = 2.35;
+      context.stroke();
     };
 
     const draw = (seconds: number) => {
       if (!primaryGradient || !counterGradient || !goldGradient) return;
 
+      context.setTransform(renderScale, 0, 0, renderScale, 0, 0);
+      context.globalAlpha = 1;
+      context.globalCompositeOperation = "source-over";
+      context.filter = "none";
       context.clearRect(0, 0, width, height);
       context.save();
       context.globalCompositeOperation = "multiply";
@@ -188,14 +239,46 @@ export function CompanyEnergyCanvas({ quality = "full" }: { quality?: EnergyCanv
       context.lineJoin = "round";
 
       const compact = width < 700;
+      const primaryHazeCount = renderTier === 0 ? (compact ? 6 : 8) : renderTier === 1 ? (compact ? 2 : 3) : 1;
+      const counterHazeCount = renderTier === 0 ? (compact ? 3 : 4) : 1;
+      const primaryCount = renderTier === 0
+        ? compact ? (balanced ? 32 : 40) : (balanced ? 48 : 64)
+        : renderTier === 1 ? (compact ? 16 : 24) : (compact ? 6 : 10);
+      const counterCount = renderTier === 0
+        ? compact ? (balanced ? 7 : 9) : (balanced ? 11 : 14)
+        : renderTier === 1 ? (compact ? 4 : 6) : (compact ? 2 : 3);
+      const goldCount = renderTier === 0
+        ? compact ? (balanced ? 11 : 14) : (balanced ? 17 : 22)
+        : renderTier === 1 ? (compact ? 6 : 9) : (compact ? 2 : 4);
 
-      strokeBundle(compact ? 6 : 8, seconds, 0, primaryGradient, true);
-      strokeBundle(compact ? 3 : 4, seconds, 1, counterGradient, true);
-      strokeBundle(compact ? (balanced ? 32 : 40) : (balanced ? 48 : 64), seconds, 0, primaryGradient);
-      strokeBundle(compact ? (balanced ? 7 : 9) : (balanced ? 11 : 14), seconds, 1, counterGradient);
-      strokeBundle(compact ? (balanced ? 11 : 14) : (balanced ? 17 : 22), seconds, 2, goldGradient);
+      strokeBundle(primaryHazeCount, seconds, 0, primaryGradient, true);
+      strokeBundle(counterHazeCount, seconds, 1, counterGradient, true);
+      strokeBundle(primaryCount, seconds, 0, primaryGradient);
+      strokeBundle(counterCount, seconds, 1, counterGradient);
+      strokeBundle(goldCount, seconds, 2, goldGradient);
 
       context.restore();
+
+      const glowRefreshSeconds = renderTier === 0
+        ? GLOW_REFRESH_SECONDS
+        : renderTier === 1 ? 1 / 12 : Number.POSITIVE_INFINITY;
+      if (glowDirty || seconds - lastGlowAt >= glowRefreshSeconds) {
+        glowContext.setTransform(1, 0, 0, 1, 0, 0);
+        glowContext.clearRect(0, 0, glowCanvas.width, glowCanvas.height);
+        glowContext.filter = `blur(${(GLOW_BLUR_PX * glowScale).toFixed(2)}px)`;
+        glowContext.globalAlpha = GLOW_STRENGTH;
+        glowContext.drawImage(scene, 0, 0, glowCanvas.width, glowCanvas.height);
+        glowContext.filter = "none";
+        glowContext.globalAlpha = 1;
+        lastGlowAt = seconds;
+        glowDirty = false;
+      }
+
+      mainContext.setTransform(1, 0, 0, 1, 0, 0);
+      mainContext.clearRect(0, 0, canvas.width, canvas.height);
+      mainContext.globalAlpha = 1;
+      mainContext.globalCompositeOperation = "source-over";
+      mainContext.drawImage(scene, 0, 0);
     };
 
     const releaseCanvas = () => {
@@ -204,17 +287,24 @@ export function CompanyEnergyCanvas({ quality = "full" }: { quality?: EnergyCanv
       primaryGradient = null;
       counterGradient = null;
       goldGradient = null;
+      lastGlowAt = Number.NEGATIVE_INFINITY;
+      glowDirty = true;
       if (canvas.width !== 1) canvas.width = 1;
       if (canvas.height !== 1) canvas.height = 1;
+      if (scene.width !== 1) scene.width = 1;
+      if (scene.height !== 1) scene.height = 1;
+      if (glowCanvas.width !== 1) glowCanvas.width = 1;
+      if (glowCanvas.height !== 1) glowCanvas.height = 1;
     };
 
     const resize = () => {
-      if (!isIntersecting || document.hidden) return;
+      if (!isVisible || document.hidden) return;
       const bounds = canvas.getBoundingClientRect();
       width = Math.max(1, Math.round(bounds.width));
       height = Math.max(1, Math.round(bounds.height));
-      const pixelRatioCap = width < 700 ? 1 : balanced ? 1.25 : 1.5;
-      const pixelRatio = Math.min(window.devicePixelRatio || 1, pixelRatioCap);
+      const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+      renderScale = pixelRatio;
+      glowScale = Math.min(pixelRatio, 1);
       const renderWidth = Math.round(width * pixelRatio);
       const renderHeight = Math.round(height * pixelRatio);
       const sizeChanged = canvas.width !== renderWidth || canvas.height !== renderHeight;
@@ -222,7 +312,12 @@ export function CompanyEnergyCanvas({ quality = "full" }: { quality?: EnergyCanv
       if (sizeChanged) {
         canvas.width = renderWidth;
         canvas.height = renderHeight;
+        scene.width = renderWidth;
+        scene.height = renderHeight;
+        glowCanvas.width = Math.round(width * glowScale);
+        glowCanvas.height = Math.round(height * glowScale);
         context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+        glowDirty = true;
         primaryGradient = makeGradient(0);
         counterGradient = makeGradient(1);
         goldGradient = makeGradient(2);
@@ -237,9 +332,18 @@ export function CompanyEnergyCanvas({ quality = "full" }: { quality?: EnergyCanv
     };
 
     const animate = (timestamp: number) => {
-      if (timestamp - lastFrame >= frameInterval) {
-        draw(timestamp / 1000);
-        lastFrame = timestamp;
+      const drawStartedAt = performance.now();
+      draw(timestamp / 1000);
+      const drawDuration = performance.now() - drawStartedAt;
+      if (drawDuration > DRAW_BUDGET_MS) {
+        slowDraws += 1;
+        if (slowDraws >= SLOW_DRAW_LIMIT && renderTier < 2) {
+          renderTier = raiseThreadRenderTier((renderTier + 1) as ThreadRenderTier);
+          slowDraws = 0;
+          glowDirty = true;
+        }
+      } else {
+        slowDraws = Math.max(0, slowDraws - 1);
       }
       frame = window.requestAnimationFrame(animate);
     };
@@ -247,24 +351,27 @@ export function CompanyEnergyCanvas({ quality = "full" }: { quality?: EnergyCanv
     const syncMotion = () => {
       window.cancelAnimationFrame(frame);
       frame = 0;
-      lastFrame = 0;
 
-      if (!isIntersecting || document.hidden) {
+      if (document.hidden || !isVisible) {
         releaseCanvas();
         return;
       }
+      renderTier = Math.max(renderTier, getThreadRenderTier()) as ThreadRenderTier;
       resize();
       if (reducedMotion.matches) draw(0);
-      else frame = window.requestAnimationFrame(animate);
+      else if (isIntersecting) frame = window.requestAnimationFrame(animate);
     };
 
     const resizeObserver = new ResizeObserver(resize);
     const intersectionObserver = new IntersectionObserver(
       ([entry]) => {
-        isIntersecting = entry?.isIntersecting ?? false;
+        isVisible = entry?.isIntersecting ?? false;
+        isIntersecting = Boolean(
+          entry?.isIntersecting && entry.intersectionRatio >= activationThreshold,
+        );
         syncMotion();
       },
-      { rootMargin: "120px 0px" },
+      { rootMargin: "0px", threshold: [0, activationThreshold] },
     );
 
     resizeObserver.observe(canvas);
@@ -281,7 +388,12 @@ export function CompanyEnergyCanvas({ quality = "full" }: { quality?: EnergyCanv
       document.removeEventListener("visibilitychange", syncMotion);
       releaseCanvas();
     };
-  }, [quality]);
+  }, [activationThreshold, quality]);
 
-  return <canvas ref={canvasRef} className="company-energy-canvas" aria-hidden="true" />;
+  return (
+    <>
+      <canvas ref={glowCanvasRef} className="company-energy-glow-canvas" aria-hidden="true" />
+      <canvas ref={canvasRef} className="company-energy-canvas" aria-hidden="true" />
+    </>
+  );
 }

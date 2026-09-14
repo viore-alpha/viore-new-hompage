@@ -1,6 +1,6 @@
 const ALPHAEVIDENCE_SNAPSHOT_ENDPOINT =
   process.env.VIORE_ALPHAEVIDENCE_SNAPSHOT_ENDPOINT ??
-  "https://texauplfngpawivaeukr.supabase.co/rest/v1/viore_alphaevidence_public_snapshot?select=schema_version,generated_at,data_as_of,counts,source_health,observation_outcomes_30d,ingestion_lag_hours_30d,observation_window_days,health_max_stale_hours";
+  "https://texauplfngpawivaeukr.supabase.co/rest/v1/viore_alphaevidence_public_snapshot?select=schema_version,generated_at,data_as_of,counts";
 const ALPHAEVIDENCE_SNAPSHOT_PUBLISHABLE_KEY =
   process.env.VIORE_METRICS_SUPABASE_PUBLISHABLE_KEY ??
   "sb_publishable_luvxrrYk1-G4PvatU1tILg__1r4aRc6";
@@ -13,29 +13,6 @@ type CountMap = {
   canonical_papers: number;
   papers_with_abstract: number;
   visible_guidelines: number;
-  source_change_observations: number;
-  managed_units: number;
-};
-
-type HealthMap = {
-  healthy: number;
-  degraded: number;
-  failed: number;
-  unknown: number;
-};
-
-type OutcomeMap = {
-  unchanged: number;
-  updated: number;
-  conflict: number;
-  unknown: number;
-};
-
-type LagMap = {
-  p50: number | null;
-  p95: number | null;
-  max: number | null;
-  unknown_count: number;
 };
 
 export type AlphaEvidencePublicSnapshotV1 = {
@@ -43,11 +20,6 @@ export type AlphaEvidencePublicSnapshotV1 = {
   generated_at: string;
   data_as_of: string;
   counts: CountMap;
-  source_health: HealthMap;
-  observation_outcomes_30d: OutcomeMap;
-  ingestion_lag_hours_30d: LagMap;
-  observation_window_days: 30;
-  health_max_stale_hours: 48;
 };
 
 export type AlphaEvidenceSnapshotResult =
@@ -74,10 +46,6 @@ function isNonNegativeInteger(value: unknown): value is number {
   return Number.isSafeInteger(value) && Number(value) >= 0;
 }
 
-function isFiniteNonNegativeNumberOrNull(value: unknown): value is number | null {
-  return value === null || (typeof value === "number" && Number.isFinite(value) && value >= 0);
-}
-
 function hasExactIntegerKeys(value: unknown, keys: readonly string[]): value is UnknownRecord {
   return isRecord(value) && keys.every((key) => isNonNegativeInteger(value[key]));
 }
@@ -86,37 +54,31 @@ export function parseAlphaEvidenceSnapshot(value: unknown): AlphaEvidencePublicS
   if (!isRecord(value)) return null;
 
   const counts = value.counts;
-  const sourceHealth = value.source_health;
-  const outcomes = value.observation_outcomes_30d;
-  const lag = value.ingestion_lag_hours_30d;
-
   if (
     value.schema_version !== "technology.alphaevidence.snapshot.v1" ||
     typeof value.generated_at !== "string" ||
     !Number.isFinite(Date.parse(value.generated_at)) ||
     typeof value.data_as_of !== "string" ||
     !Number.isFinite(Date.parse(value.data_as_of)) ||
-    value.observation_window_days !== 30 ||
-    value.health_max_stale_hours !== 48 ||
     !hasExactIntegerKeys(counts, [
       "canonical_papers",
       "papers_with_abstract",
       "visible_guidelines",
-      "source_change_observations",
-      "managed_units",
-    ]) ||
-    !hasExactIntegerKeys(sourceHealth, ["healthy", "degraded", "failed", "unknown"]) ||
-    !hasExactIntegerKeys(outcomes, ["unchanged", "updated", "conflict", "unknown"]) ||
-    !isRecord(lag) ||
-    !isFiniteNonNegativeNumberOrNull(lag.p50) ||
-    !isFiniteNonNegativeNumberOrNull(lag.p95) ||
-    !isFiniteNonNegativeNumberOrNull(lag.max) ||
-    !isNonNegativeInteger(lag.unknown_count)
+    ])
   ) {
     return null;
   }
 
-  return value as AlphaEvidencePublicSnapshotV1;
+  return {
+    schema_version: "technology.alphaevidence.snapshot.v1",
+    generated_at: value.generated_at,
+    data_as_of: value.data_as_of,
+    counts: {
+      canonical_papers: counts.canonical_papers as number,
+      papers_with_abstract: counts.papers_with_abstract as number,
+      visible_guidelines: counts.visible_guidelines as number,
+    },
+  };
 }
 
 export function snapshotStateAt(
