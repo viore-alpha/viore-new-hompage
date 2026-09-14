@@ -61,7 +61,7 @@ test("server-renders independent Korean and English homepage metadata", async ()
   assert.match(englishHtml, /class="company-efficiency-product">Alphadoc<\/strong> brings evidence-based conversation and medical work apps into one place, connecting these tasks into a single flow\./);
   assert.match(englishHtml, /Answers to clinical questions come with sources from Korean and international literature and clinical guidelines, and Alphadoc is designed to be deployed and operated within each institution&#x27;s environment\./);
   assert.doesNotMatch(englishHtml, /one natural flow|focus on what matters most/);
-  assert.match(englishHtml, /class="company-knowledge-next"><a href="\/en\/technology#technology-medical-model">Coming soon — Viore&#x27;s medical-specialized AI model, running inside the institution\. See Technology →<\/a><\/p>/);
+  assert.match(englishHtml, /class="company-join-next"><a href="\/en\/technology#technology-medical-model">Coming soon — Viore&#x27;s medical-specialized AI model, running inside the institution\. See Technology →<\/a><\/p>/);
   assert.doesNotMatch(englishHtml, FORBIDDEN_TOKENS);
   assert.doesNotMatch(englishHtml, /<title>바이오레,/);
 });
@@ -265,9 +265,10 @@ test("server-renders the Korean Company story as the homepage", async () => {
   assert.match(html, /class="company-efficiency-product">알파닥<\/strong>은 근거 기반 대화와 의료 업무 앱을 한곳에서 제공해 이 과정을 하나의 흐름으로 연결합니다\./);
   assert.match(html, /임상 질문의 답에는 국내외 의학 문헌과 진료지침의 출처가 함께 제시되고, 기관 환경에 맞춰 도입하고 운영할 수 있도록 설계했습니다\./);
   assert.doesNotMatch(html, /하나의 자연스러운 흐름으로 연결하여|가장 중요한 일에 집중할 수 있도록/);
-  assert.match(html, /class="company-knowledge-next"><a href="\/ko\/technology#technology-medical-model">Coming soon — 기관 안에서 구동하는 바이오레의 의료 특화 AI 모델\. Technology에서 보기 →<\/a><\/p>/);
-  assert.ok(html.indexOf('class="company-metrics"') < html.indexOf('class="company-knowledge-next"'));
-  assert.ok(html.indexOf('class="company-knowledge-next"') < html.indexOf('class="company-connections"'));
+  assert.match(html, /class="company-join-next"><a href="\/ko\/technology#technology-medical-model">Coming soon — 기관 안에서 구동하는 바이오레의 의료 특화 AI 모델\. Technology 보기 →<\/a><\/p><\/div><\/section>/);
+  assert.doesNotMatch(html, /company-knowledge-next|Technology에서 보기/);
+  assert.ok(html.indexOf('class="company-join-product"') < html.indexOf('id="partnership-inquiry"'));
+  assert.ok(html.indexOf('id="partnership-inquiry"') < html.indexOf('class="company-join-next"'));
   assert.doesNotMatch(html, FORBIDDEN_TOKENS);
   assert.match(html, /class="company-connections"/);
   assert.ok(html.indexOf('class="company-efficiency"') < html.indexOf('class="company-knowledge"'));
