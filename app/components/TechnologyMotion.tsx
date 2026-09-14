@@ -9,7 +9,9 @@ export type TechnologyMotionKind =
   | "document"
   | "image"
   | "layer"
-  | "seal";
+  | "seal"
+  | "model"
+  | "onpremise";
 
 type DiagramTone = "ink" | "blue" | "red" | "muted";
 type DiagramCopy = {
@@ -47,6 +49,14 @@ const diagramCopy: Record<Language, Record<TechnologyMotionKind, DiagramCopy>> =
       title: "AlphaSeal 지원 1:1 쪽지 보호 구조",
       description: "지원되는 1:1 쪽지 본문이 발신자 브라우저에서 암호화되고 일반 저장 경로에는 암호문으로 남은 뒤 수신자 브라우저에서 열리는 구조입니다.",
     },
+    model: {
+      title: "바이오레 의료 특화 모델과 AlphaDoc Engine 모델 자리",
+      description: "바이오레의 의료 특화 모델 (V1)은 AlphaDoc Engine의 모델 자리에 들어가, 기관 안에서 구동하는 선택지가 됩니다. 개발 구상을 설명하는 다이어그램.",
+    },
+    onpremise: {
+      title: "온프레미스 알파닥과 기관 단위 보안 체계",
+      description: "온프레미스 알파닥은 기관 내부 서버에서 인터넷 연결 없이 구동하며, 민감정보는 기관 경계 밖으로 나가지 않습니다. 기관 단위 보안 체계가 요청 인증부터 감사 기록까지 경계 안에서 통제합니다. 개발 구상을 설명하는 다이어그램.",
+    },
   },
   en: {
     overview: {
@@ -76,6 +86,14 @@ const diagramCopy: Record<Language, Record<TechnologyMotionKind, DiagramCopy>> =
     seal: {
       title: "AlphaSeal supported one-to-one message protection",
       description: "Supported one-to-one message bodies are encrypted in the sender browser, remain ciphertext in ordinary storage, and open in the recipient browser.",
+    },
+    model: {
+      title: "Viore medical-specialized model in the AlphaDoc Engine model slot",
+      description: "Viore's medical-specialized model (V1) takes the model slot in AlphaDoc Engine and becomes an option that runs inside the institution. A diagram describing the development concept.",
+    },
+    onpremise: {
+      title: "On-premise Alphadoc and institution-level security",
+      description: "On-premise Alphadoc runs on the institution's internal servers without an internet connection, and sensitive data never leaves the institutional boundary. The institution-level security framework governs everything from request authentication to audit records inside that boundary. A diagram describing the development concept.",
     },
   },
 };
@@ -1064,6 +1082,238 @@ function SealDiagram({ language, mobile }: { language: Language; mobile: boolean
   );
 }
 
+function ListPanel({
+  x,
+  y,
+  width,
+  height,
+  title,
+  rows,
+  rowsY,
+  rowLineHeight,
+  tone = "ink",
+  step,
+}: {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  title: readonly string[];
+  rows: readonly (readonly string[])[];
+  rowsY: number;
+  rowLineHeight: number;
+  tone?: DiagramTone;
+  step: number;
+}) {
+  const rowX = x + 14;
+
+  return (
+    <g className="technology-svg-step" style={stepStyle(step)}>
+      <rect x={x} y={y} width={width} height={height} rx="7" className={`diagram-panel diagram-panel-${tone}`} />
+      <Lines lines={title} x={x + width / 2} y={y + 22} />
+      <line x1={rowX} y1={y + 34} x2={x + width - 14} y2={y + 34} className="diagram-panel-rule" />
+      {rows.map((row, index) => {
+        const linesAbove = rows.slice(0, index).reduce((sum, previous) => sum + previous.length, 0);
+        const rowY = y + rowsY + linesAbove * rowLineHeight;
+
+        return (
+          <text key={row.join(" ")} x={rowX} y={rowY} className="diagram-annotation diagram-text-ink">
+            {row.map((line, lineIndex) => (
+              <tspan key={`${line}-${lineIndex}`} x={lineIndex === 0 ? rowX : rowX + 12} dy={lineIndex === 0 ? 0 : rowLineHeight}>
+                {line}
+              </tspan>
+            ))}
+          </text>
+        );
+      })}
+    </g>
+  );
+}
+
+function ModelDiagram({ language, mobile }: { language: Language; mobile: boolean }) {
+  const id = `viore-${language}-model-${mobile ? "mobile" : "desktop"}`;
+  const engineLabel = pick(language, "AlphaDoc Engine (실행 계층)", "AlphaDoc Engine (execution layer)");
+  const questionLabel = [pick(language, "의료인의 질문", "Question from clinician")];
+  const slotLabel = [pick(language, "모델 자리", "Model slot")];
+  const cloudLabel = [pick(language, "외부 프론티어 모델 · 클라우드", "External frontier model · cloud")];
+  const vioreLabelEn = mobile
+    ? ["Viore medical-specialized", "model V1 · institution's", "internal server"]
+    : ["Viore medical-specialized model V1 ·", "institution's internal server"];
+  const vioreLabel = language === "ko"
+    ? ["바이오레 의료 특화 모델 V1 ·", "기관 내부 서버"]
+    : vioreLabelEn;
+  const policyLabel = pick(language, "기관 정책에 따라 선택", "Selected by institutional policy");
+  const outputLabel = language === "ko"
+    ? ["근거 · 문서 · 도구 · 결과"]
+    : ["Evidence · documents ·", "tools · results"];
+  const footnote = [pick(language, "개발 구상", "Development concept")];
+
+  if (mobile) {
+    const policyLines = language === "ko"
+      ? ["기관 정책에", "따라 선택"]
+      : ["Selected by", "institutional", "policy"];
+
+    return (
+      <DiagramSvg id={id} kind="model" language={language} mobile height={640}>
+        <Module x={92} y={30} width={236} height={58} label={questionLabel} tone="ink" step={1} />
+        <Link id={id} d="M 210 88 V 122" tone="ink" step={2} />
+        <Boundary x={30} y={122} width={340} height={146} label={engineLabel} tone="red" step={3} solid />
+        <Module x={178} y={176} width={162} height={64} label={slotLabel} tone="ink" step={4} dashed />
+        <Module x={148} y={324} width={222} height={68} label={cloudLabel} tone="muted" step={5} />
+        <Link id={id} d="M 259 324 V 240" tone="muted" step={6} dashed />
+        <Module x={148} y={424} width={222} height={68} label={vioreLabel} tone="red" step={7} strong />
+        <Link id={id} d="M 148 458 C 108 458 108 208 178 208" tone="red" step={8} />
+        <g className="technology-svg-step" style={stepStyle(9)}>
+          <Lines lines={policyLines} x={272} y={language === "ko" ? 289 : 282} lineHeight={15} anchor="start" className="diagram-annotation diagram-text-muted" />
+        </g>
+        <Link id={id} d="M 370 208 H 382 C 390 208 394 212 394 220 V 515 C 394 523 390 527 382 527 H 328" tone="blue" step={10} />
+        <Module x={92} y={498} width={236} height={58} label={outputLabel} tone="blue" step={11} />
+        <Footnote lines={footnote} x={30} y={588} width={340} step={12} />
+      </DiagramSvg>
+    );
+  }
+
+  return (
+    <DiagramSvg id={id} kind="model" language={language} mobile={false} height={456}>
+      <Module x={42} y={174} width={180} height={64} label={questionLabel} tone="ink" step={1} />
+      <Link id={id} d="M 222 206 H 276" tone="ink" step={2} />
+      <Boundary x={276} y={128} width={424} height={156} label={engineLabel} tone="red" step={3} solid />
+      <Module x={502} y={174} width={160} height={64} label={slotLabel} tone="ink" step={4} dashed />
+      <Module x={464} y={32} width={236} height={64} label={cloudLabel} tone="muted" step={5} />
+      <Link id={id} d="M 582 96 V 174" tone="muted" step={6} dashed />
+      <Module x={464} y={316} width={236} height={64} label={vioreLabel} tone="red" step={7} strong />
+      <Link id={id} d="M 582 316 V 238" tone="red" step={8} />
+      <Annotation x={596} y={117} text={policyLabel} step={9} />
+      <Link id={id} d="M 700 206 H 750" tone="blue" step={10} />
+      <Module x={750} y={174} width={170} height={64} label={outputLabel} tone="blue" step={11} />
+      <Footnote lines={footnote} x={42} y={408} width={878} step={12} />
+    </DiagramSvg>
+  );
+}
+
+function OnpremiseDiagram({ language, mobile }: { language: Language; mobile: boolean }) {
+  const id = `viore-${language}-onpremise-${mobile ? "mobile" : "desktop"}`;
+  const networkLabel = pick(language, "기관 내부망 (폐쇄망)", "Institution's internal network (closed)");
+  const clinicianLabel = [pick(language, "의료인", "Clinician")];
+  const securityTitle = [pick(language, "기관 단위 보안 체계", "Institution-level security")];
+  const securityRows: readonly (readonly string[])[] = language === "ko"
+    ? [
+      ["요청 인증 · 권한 확인"],
+      ["민감정보 탐지 · 치환"],
+      ["입력 검증"],
+      ["허용 모델 게이트웨이"],
+      ["응답 검증 · 복원"],
+      ["감사 기록"],
+    ]
+    : [
+      ["Request authentication", "· access check"],
+      ["Sensitive-data detection", "· substitution"],
+      ["Input validation"],
+      ["Permitted-model gateway"],
+      ["Response validation", "· restoration"],
+      ["Audit records"],
+    ];
+  const securityRowsY = language === "ko" ? 56 : 50;
+  const securityRowLineHeight = language === "ko" ? 19 : 14;
+  const storeTokenLabel = [pick(language, "토큰 볼트", "Token vault")];
+  const externalLabel = language === "ko"
+    ? ["외부 인터넷 ·", "외부 클라우드 AI"]
+    : ["External internet ·", "external cloud AI"];
+  const noLeaveLines = language === "ko" ? ["민감정보 반출 없음"] : ["No sensitive", "data leaves"];
+  const noInternetLines = language === "ko" ? ["인터넷 연결 불필요"] : ["No internet", "connection required"];
+  const footnote = [pick(language, "개발 구상", "Development concept")];
+
+  if (mobile) {
+    const claimsY = 664;
+    const secondClaimY = claimsY + noLeaveLines.length * 15 + 10;
+
+    return (
+      <DiagramSvg id={id} kind="onpremise" language={language} mobile height={800}>
+        <Boundary x={20} y={28} width={380} height={604} label={networkLabel} tone="blue" step={1} solid />
+        <Module x={92} y={68} width={236} height={54} label={clinicianLabel} tone="ink" step={2} />
+        <Link id={id} d="M 196 122 V 156" tone="ink" step={3} />
+        <Module x={92} y={156} width={236} height={58} label={[pick(language, "온프레미스 알파닥", "On-premise Alphadoc")]} tone="blue" step={4} />
+        <Link id={id} d="M 196 214 V 248" tone="ink" step={5} />
+        <ListPanel x={92} y={248} width={236} height={176} title={securityTitle} rows={securityRows} rowsY={securityRowsY} rowLineHeight={securityRowLineHeight} step={6} />
+        <Link id={id} d="M 196 424 V 458" tone="ink" step={7} />
+        <Module
+          x={92}
+          y={458}
+          width={236}
+          height={68}
+          label={language === "ko" ? ["사내 서버 ·", "의료 특화 모델 V1 (07)"] : ["Internal server ·", "medical-specialized model V1 (07)"]}
+          tone="red"
+          step={8}
+          strong
+        />
+        <Link id={id} d="M 224 156 V 122" tone="blue" step={9} dashed />
+        <Link id={id} d="M 224 248 V 214" tone="blue" step={9} dashed />
+        <Link id={id} d="M 224 458 V 424" tone="blue" step={9} dashed />
+        <Module x={40} y={556} width={92} height={52} label={language === "ko" ? ["기관 데이터"] : ["Institution", "data"]} tone="muted" step={10} dashed />
+        <Module x={164} y={556} width={92} height={52} label={language === "ko" ? ["감사 기록"] : ["Audit", "records"]} tone="muted" step={10} dashed />
+        <Module x={288} y={556} width={92} height={52} label={storeTokenLabel} tone="muted" step={10} dashed />
+        <line x1="30" y1="632" x2="390" y2="632" className="diagram-trust-boundary technology-svg-step" style={stepStyle(11)} />
+        <Link id={id} d="M 272 526 V 625" tone="muted" step={12} arrow={false} />
+        <Link id={id} d="M 265 625 L 279 639" tone="red" step={12} arrow={false} />
+        <Link id={id} d="M 279 625 L 265 639" tone="red" step={12} arrow={false} />
+        <g className="technology-svg-step" style={stepStyle(13)}>
+          <Lines lines={noLeaveLines} x={28} y={claimsY} lineHeight={15} anchor="start" className="diagram-annotation diagram-text-red" />
+          <Lines lines={noInternetLines} x={28} y={secondClaimY} lineHeight={15} anchor="start" className="diagram-annotation diagram-text-red" />
+        </g>
+        <rect x="196" y="658" width="152" height="64" rx="7" className="diagram-external-zone technology-svg-step" style={stepStyle(14)} />
+        <g className="technology-svg-step" style={stepStyle(14)}>
+          <Lines lines={externalLabel} x={272} y={687} className="diagram-architecture-label diagram-text-muted" />
+        </g>
+        <Footnote lines={footnote} x={20} y={750} width={380} step={15} />
+      </DiagramSvg>
+    );
+  }
+
+  const claimsY = 72;
+  const secondClaimY = claimsY + noLeaveLines.length * 15 + 10;
+
+  return (
+    <DiagramSvg id={id} kind="onpremise" language={language} mobile={false} height={444}>
+      <Boundary x={30} y={34} width={734} height={332} label={networkLabel} tone="blue" step={1} solid />
+      <Module x={54} y={145} width={100} height={64} label={clinicianLabel} tone="ink" step={2} />
+      <Link id={id} d="M 154 169 H 190" tone="ink" step={3} />
+      <Module x={190} y={141} width={130} height={72} label={language === "ko" ? ["온프레미스 알파닥"] : ["On-premise", "Alphadoc"]} tone="blue" step={4} />
+      <Link id={id} d="M 320 169 H 356" tone="ink" step={5} />
+      <ListPanel x={356} y={88} width={200} height={178} title={securityTitle} rows={securityRows} rowsY={securityRowsY} rowLineHeight={securityRowLineHeight} step={6} />
+      <Link id={id} d="M 556 169 H 592" tone="ink" step={7} />
+      <Module
+        x={592}
+        y={137}
+        width={144}
+        height={80}
+        label={language === "ko" ? ["사내 서버 ·", "의료 특화 모델", "V1 (07)"] : ["Internal server ·", "medical-specialized", "model V1 (07)"]}
+        tone="red"
+        step={8}
+        strong
+      />
+      <Link id={id} d="M 190 185 H 154" tone="blue" step={9} dashed />
+      <Link id={id} d="M 356 185 H 320" tone="blue" step={9} dashed />
+      <Link id={id} d="M 592 185 H 556" tone="blue" step={9} dashed />
+      <Module x={142} y={298} width={150} height={44} label={[pick(language, "기관 데이터", "Institution data")]} tone="muted" step={10} dashed />
+      <Module x={320} y={298} width={150} height={44} label={[pick(language, "감사 기록", "Audit records")]} tone="muted" step={10} dashed />
+      <Module x={498} y={298} width={150} height={44} label={storeTokenLabel} tone="muted" step={10} dashed />
+      <line x1="764" y1="44" x2="764" y2="356" className="diagram-trust-boundary technology-svg-step" style={stepStyle(11)} />
+      <Link id={id} d="M 736 177 H 757" tone="muted" step={12} arrow={false} />
+      <Link id={id} d="M 757 170 L 771 184" tone="red" step={12} arrow={false} />
+      <Link id={id} d="M 771 170 L 757 184" tone="red" step={12} arrow={false} />
+      <g className="technology-svg-step" style={stepStyle(13)}>
+        <Lines lines={noLeaveLines} x={776} y={claimsY} lineHeight={15} anchor="start" className="diagram-annotation diagram-text-red" />
+        <Lines lines={noInternetLines} x={776} y={secondClaimY} lineHeight={15} anchor="start" className="diagram-annotation diagram-text-red" />
+      </g>
+      <rect x="790" y="145" width="140" height="64" rx="7" className="diagram-external-zone technology-svg-step" style={stepStyle(14)} />
+      <g className="technology-svg-step" style={stepStyle(14)}>
+        <Lines lines={externalLabel} x={860} y={174} className="diagram-architecture-label diagram-text-muted" />
+      </g>
+      <Footnote lines={footnote} x={30} y={394} width={900} step={15} />
+    </DiagramSvg>
+  );
+}
+
 function DiagramPair({
   kind,
   language,
@@ -1088,6 +1338,12 @@ function DiagramPair({
   }
   if (kind === "layer") {
     return <><LayerDiagram language={language} mobile={false} /><LayerDiagram language={language} mobile /></>;
+  }
+  if (kind === "model") {
+    return <><ModelDiagram language={language} mobile={false} /><ModelDiagram language={language} mobile /></>;
+  }
+  if (kind === "onpremise") {
+    return <><OnpremiseDiagram language={language} mobile={false} /><OnpremiseDiagram language={language} mobile /></>;
   }
   return <><SealDiagram language={language} mobile={false} /><SealDiagram language={language} mobile /></>;
 }

@@ -75,6 +75,8 @@ export const technologyAnchors = {
   alphadocument: "technology-alphadocument",
   alphaimage: "technology-alphaimage",
   alphalayer: "technology-alphalayer",
+  "medical-model": "technology-medical-model",
+  "onpremise-security": "technology-onpremise-security",
 } as const;
 
 export type TechnologyAnchorKey = keyof typeof technologyAnchors;
@@ -188,7 +190,7 @@ export const detailContent: Record<Language, Record<PageKey, DetailPage>> = {
       kind: "company",
       eyebrow: "COMPANY",
       title: "의료계의\n새로운 선형을 그리다.",
-      lead: "의료계가 오랜 시간 축적해 온 전문성과 시스템을 연결하기 위한 선\n그것이 바이오레 입니다",
+      lead: "의료계가 오랜 시간 축적해 온 전문성과 시스템을 하나의 선으로 잇는 의료 AI,\n그것이 바이오레입니다.",
       status: "MEDICAL INTELLIGENCE COMPANY",
       statement: "의료인의 모든 업무를\n하나의 흐름으로",
       statementLead: "혁신은, 더 많이 더하는 일이 아닙니다.\n이미 존재하는 의료의 전문성과 시스템이 더 자연스럽게 이어지도록 만드는 일입니다.\n바이오레는 의료인의 질문과 문서, 지식과 도구가 끊김 없이 이어지는 환경을 Medical OS(Operating System)라고 부릅니다.",
@@ -203,8 +205,8 @@ export const detailContent: Record<Language, Record<PageKey, DetailPage>> = {
         context: "의료 현장은 수많은 정보와 시스템 사이를 끊임없이 오갑니다.",
         repetition: "기록하고, 계산하고, 검색하고, 확인하는 반복적인 과정은 의료인의 시간을 빼앗습니다.",
         product: "알파닥",
-        productLead: "은 이러한 업무를 하나의 자연스러운 흐름으로 연결하여,",
-        outcome: "의료인이 가장 중요한 일에 집중할 수 있도록 돕습니다.",
+        productLead: "은 근거 기반 대화와 의료 업무 앱을 한곳에서 제공해 이 과정을 하나의 흐름으로 연결합니다.",
+        outcome: "임상 질문의 답에는 국내외 의학 문헌과 진료지침의 출처가 함께 제시되고, 기관 환경에 맞춰 도입하고 운영할 수 있도록 설계했습니다.",
       },
       connections: {
         title: "One connected Flow\nfor Medicine",
@@ -314,7 +316,7 @@ export const detailContent: Record<Language, Record<PageKey, DetailPage>> = {
       kind: "company",
       eyebrow: "COMPANY",
       title: "Drawing a\nnew linearity in medicine.",
-      lead: "Viore builds a Medical OS that connects the expertise and systems accumulated across medicine into one continuous flow.",
+      lead: "Viore builds medical AI that draws the expertise and systems accumulated across medicine into one continuous line.",
       status: "MEDICAL INTELLIGENCE COMPANY",
       statement: "Viore draws a new linearity in medicine.",
       metricsTitle: "Ever-growing Knowledge",
@@ -328,8 +330,8 @@ export const detailContent: Record<Language, Record<PageKey, DetailPage>> = {
         context: "Medical professionals constantly move between countless sources of information and systems.",
         repetition: "Repetitive recording, calculating, searching, and checking takes time away from medical professionals.",
         product: "Alphadoc",
-        productLead: " connects these tasks into one natural flow,",
-        outcome: "helping medical professionals focus on what matters most.",
+        productLead: " brings evidence-based conversation and medical work apps into one place, connecting these tasks into a single flow.",
+        outcome: "Answers to clinical questions come with sources from Korean and international literature and clinical guidelines, and Alphadoc is designed to be deployed and operated within each institution's environment.",
       },
       connections: {
         title: "One connected Flow\nfor Medicine",

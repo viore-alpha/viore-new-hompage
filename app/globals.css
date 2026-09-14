@@ -6,11 +6,11 @@
   --line: rgba(15,15,16,.14);
   --soft: #f5f5f7;
   --red: #ff3b30;
-  --paper-base: #fdfdfc;
-  --paper-texture: url("/media/viore-paper-texture.webp");
+  --paper-base: #ffffff;
+  --paper-texture: none;
   --paper-size: 820px 820px;
-  --dark-paper-base: #08080a;
-  --dark-paper-image: linear-gradient(rgba(0,0,0,.24),rgba(0,0,0,.24)),url("/media/viore-paper-texture-dark-v2.webp");
+  --dark-paper-base: #000000;
+  --dark-paper-image: none;
   --dark-paper-size: auto,720px 720px;
   --dark-paper-size-wide: auto,1024px auto;
   --shell: min(1340px, calc(100vw - 96px));
@@ -42,8 +42,119 @@ img { display: block; max-width: 100%; }
 .skip-link { position: fixed; z-index: 300; top: 10px; left: 10px; padding: 10px 14px; border-radius: 999px; background: #111; color: #fff; transform: translateY(-160%); transition: transform .2s ease; }
 .skip-link:focus { transform: translateY(0); }
 
-.site-header { position: fixed; inset: 0 0 auto; z-index: 100; height: var(--header); background: rgba(255,255,255,.48); backdrop-filter: blur(22px) saturate(180%); -webkit-backdrop-filter: blur(22px) saturate(180%); }
+.site-header { position: fixed; inset: 0 0 auto; z-index: 100; height: var(--header); background: rgba(255,255,255,.58); backdrop-filter: blur(22px) saturate(180%); -webkit-backdrop-filter: blur(22px) saturate(180%); }
 .site-header::after { content: ""; position: absolute; inset: auto 0 -16px; height: 16px; pointer-events: none; background: linear-gradient(rgba(255,255,255,.16),transparent); }
+
+/* Dark route chrome — shared by every dark page (Technology, Alphadoc product). */
+.site-header.site-header-dark {
+  --technology-page: #000000;
+  --technology-ink: #f5f5f7;
+  color: #f5f5f7;
+  background: rgba(0, 0, 0, .82);
+  border-bottom: 1px solid rgba(245, 245, 247, .09);
+  backdrop-filter: blur(22px) saturate(135%);
+  -webkit-backdrop-filter: blur(22px) saturate(135%);
+}
+
+.site-header.site-header-dark::after {
+  background: linear-gradient(rgba(0, 0, 0, .32), transparent);
+}
+
+.site-header-dark .brand img {
+  filter: invert(1) brightness(1.14);
+}
+
+.site-header-dark .desktop-nav,
+.site-header-dark .nav-link,
+.site-header-dark .contact-link {
+  color: rgba(245, 245, 247, .72);
+}
+
+.site-header-dark .nav-link:hover,
+.site-header-dark .nav-link:focus-visible,
+.site-header-dark .nav-link.is-active {
+  color: #f5f5f7;
+}
+
+.site-header-dark .nav-link.nav-link-disabled,
+.site-header-dark .nav-link.nav-link-disabled:disabled {
+  color: rgba(245, 245, 247, .36);
+}
+
+.site-header-dark .nav-link-disabled small,
+.site-header-dark .mobile-top-link-disabled small {
+  color: rgba(245, 245, 247, .34);
+}
+
+.site-header-dark .language-switch a {
+  color: rgba(245, 245, 247, .44);
+}
+
+.site-header-dark .language-switch a.is-active {
+  color: #f5f5f7;
+}
+
+.site-header-dark .language-switch a.is-active::after,
+.site-header-dark .menu-toggle span {
+  background: #f5f5f7;
+}
+
+.site-header-dark .contact-link {
+  color: #f5f5f7;
+  border-color: rgba(245, 245, 247, .34);
+}
+
+.site-header-dark .contact-link:hover {
+  color: #111114;
+  background: #f5f5f7;
+}
+
+.site-header-dark .dropdown {
+  color: var(--technology-ink);
+  border-color: rgba(245, 245, 247, .12);
+  background: rgba(0, 0, 0, .97);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, .38);
+}
+
+.site-header-dark .dropdown-label,
+.site-header-dark .dropdown a small,
+.site-header-dark .dropdown-disabled small,
+.site-header-dark .mobile-menu-group > span,
+.site-header-dark .mobile-menu-group small {
+  color: rgba(245, 245, 247, .46);
+}
+
+.site-header-dark .dropdown a:hover {
+  background: rgba(255, 255, 255, .065);
+}
+
+.site-header-dark .dropdown-disabled,
+.site-header-dark .mobile-menu-disabled,
+.site-header-dark .mobile-top-link-disabled,
+.site-header-dark .mobile-top-link-disabled:disabled {
+  color: rgba(245, 245, 247, .32);
+}
+
+.site-header-dark .mobile-menu {
+  color: var(--technology-ink);
+  background-color: var(--technology-page);
+  background-image: var(--technology-paper);
+  background-size: var(--dark-paper-size);
+}
+
+.site-header-dark .mobile-menu-group,
+.site-header-dark .mobile-primary-links {
+  border-color: rgba(245, 245, 247, .14);
+}
+
+@media (max-width: 760px) {
+  .site-header.site-header-dark {
+    background: #000000;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
 .nav-shell { width: var(--shell); height: 100%; margin: auto; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 32px; }
 .brand { width: 90px; display: inline-flex; justify-self: start; transition: opacity .16s ease, transform .16s ease; }
 .brand:hover { opacity: .6; }
@@ -293,7 +404,7 @@ img { display: block; max-width: 100%; }
 .detail-page-company .detail-body { padding-top: clamp(420px,52svh,560px); }
 .company-network-backdrop { --company-convergence-progress: 0; position: absolute; inset: 0; z-index: 0; pointer-events: none; }
 .company-network-viewport { position: sticky; top: 0; height: 100svh; overflow: hidden; }
-.company-network-viewport::after { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg,rgba(17,17,20,.46) 0%,rgba(17,17,20,.18) 42%,transparent 72%),linear-gradient(180deg,rgba(17,17,20,.08),transparent 20% 78%,rgba(17,17,20,.12)); opacity: calc(.82 - var(--company-convergence-progress) * .82); transition: opacity .08s linear; }
+.company-network-viewport::after { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg,rgba(0,0,0,.46) 0%,rgba(0,0,0,.18) 42%,transparent 72%),linear-gradient(180deg,rgba(0,0,0,.08),transparent 20% 78%,rgba(0,0,0,.12)); opacity: calc(.82 - var(--company-convergence-progress) * .82); transition: opacity .08s linear; }
 .company-convergence-canvas { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; display: block; contain: layout paint style; opacity: calc(.82 + var(--company-convergence-progress) * .18); }
 .company-convergence-bloom-canvas { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; display: block; contain: layout paint style; opacity: calc(.82 + var(--company-convergence-progress) * .18); }
 .detail-body > h2 { max-width: 1100px; margin: 0; white-space: pre-line; font-size: clamp(48px,5.5vw,84px); font-weight: 610; line-height: 1.04; letter-spacing: -.058em; word-break: keep-all; text-wrap: balance; }
@@ -328,6 +439,9 @@ img { display: block; max-width: 100%; }
 .company-knowledge { margin-top: clamp(104px,9vw,140px); }
 .company-knowledge > h2 { margin: 0; color: #f5f5f7; font-size: clamp(32px,3.4vw,48px); font-weight: 570; line-height: 1.08; letter-spacing: -.048em; word-break: keep-all; }
 .company-knowledge .company-metrics { margin-top: 52px; }
+.company-knowledge-next { max-width: 1040px; margin: 40px 0 0; color: #bdbdc3; font-size: clamp(16px,1.35vw,19px); font-weight: 430; line-height: 1.72; letter-spacing: -.024em; word-break: keep-all; }
+.company-knowledge-next a { border-bottom: 1px solid rgba(255,255,255,.28); transition: color .2s,border-color .2s; }
+.company-knowledge-next a:hover,.company-knowledge-next a:focus-visible { color: #f5f5f7; border-bottom-color: rgba(255,255,255,.62); }
 .company-connections { margin-top: clamp(104px,9vw,140px); }
 .company-connections-heading { display: grid; grid-template-columns: minmax(0,1.25fr) minmax(340px,.75fr); align-items: end; gap: clamp(40px,6vw,88px); }
 .company-connections-heading h2 { max-width: 820px; margin: 0; color: #f5f5f7; white-space: pre-line; font-size: clamp(32px,3.4vw,48px); font-weight: 570; line-height: 1.08; letter-spacing: -.048em; word-break: keep-all; }
@@ -695,6 +809,7 @@ img { display: block; max-width: 100%; }
   .company-efficiency p { max-width: 680px; margin: 30px 0 0; font-size: 16px; }
   .company-knowledge { margin-top: 104px; }
   .company-knowledge .company-metrics { margin-top: 48px; }
+  .company-knowledge-next { max-width: 680px; margin-top: 34px; font-size: 16px; }
   .company-connections { margin-top: 104px; }
   .company-connections-heading { grid-template-columns: minmax(0,1fr); align-items: start; gap: 24px; }
   .company-connections-stage { aspect-ratio: auto; overflow: visible; border-bottom: 0; background: transparent; }
@@ -817,6 +932,7 @@ img { display: block; max-width: 100%; }
   .company-knowledge { margin-top: 90px; }
   .company-knowledge > h2 { font-size: 30px; }
   .company-knowledge .company-metrics { margin-top: 38px; }
+  .company-knowledge-next { margin-top: 28px; font-size: 15px; line-height: 1.76; }
   .company-connections { margin-top: 90px; }
   .company-connections-heading h2 { font-size: 30px; }
   .company-connections-stage { margin-top: 38px; }

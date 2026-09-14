@@ -4,7 +4,7 @@ import { CompanyMetrics } from "@/app/components/CompanyMetrics";
 import { CompanyNetworkBackdrop } from "@/app/components/CompanyNetworkBackdrop";
 import { CompanyQuestionLoop } from "@/app/components/CompanyQuestionLoop";
 import { getCompanyMetrics } from "@/app/company-metrics";
-import { detailContent, routeFor, type Language } from "@/app/site-content";
+import { detailContent, routeFor, technologyRouteFor, type Language } from "@/app/site-content";
 
 export async function CompanyPage({ language }: { language: Language }) {
   const page = detailContent[language].company;
@@ -66,6 +66,13 @@ export async function CompanyPage({ language }: { language: Language }) {
                 source={companyMetrics?.source}
                 generatedAt={companyMetrics?.generatedAt}
               />
+              <p className="company-knowledge-next">
+                <a href={technologyRouteFor(language, "medical-model")}>
+                  {language === "ko"
+                    ? "Coming soon — 기관 안에서 구동하는 바이오레의 의료 특화 AI 모델. Technology에서 보기 →"
+                    : "Coming soon — Viore's medical-specialized AI model, running inside the institution. See Technology →"}
+                </a>
+              </p>
             </section>
           )}
           {page.connections && <CompanyConnections content={page.connections} />}
