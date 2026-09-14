@@ -24,10 +24,13 @@ export function KnowledgePage({
   const ko = language === "ko";
   const updatedAt = result.page.refreshed_at ?? result.lastSuccessAt;
   const stateLabel = result.state === "live"
-    ? "LIVE"
+    ? ko ? "실시간 갱신" : "Live feed"
     : result.state === "stale"
       ? ko ? "동기화 확인 중" : "Sync check"
       : ko ? "연결 중" : "Connecting";
+  const refreshedLabel = result.state === "unavailable"
+    ? ko ? "마지막 갱신" : "Last refreshed"
+    : ko ? "최근 갱신" : "Last refreshed";
 
   return (
     <article className="knowledge-page" data-knowledge-state={result.state}>
@@ -37,7 +40,11 @@ export function KnowledgePage({
           <div className="knowledge-live-line" aria-label={ko ? "AlphaEvidence DB 연결 상태" : "AlphaEvidence DB connection status"}>
             <i aria-hidden="true" />
             <span>{stateLabel}</span>
-            {updatedAt && <time dateTime={updatedAt}>{formatUpdatedAt(updatedAt, language)} KST</time>}
+            {updatedAt && (
+              <time dateTime={updatedAt}>
+                <span>{refreshedLabel}</span> {formatUpdatedAt(updatedAt, language)} KST
+              </time>
+            )}
           </div>
         </div>
       </section>

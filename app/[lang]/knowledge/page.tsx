@@ -36,7 +36,7 @@ export default async function KnowledgeRoute({ params }: { params: KnowledgeRout
     name: PAGE_SEO.knowledge[lang].title,
     description: PAGE_SEO.knowledge[lang].description,
     inLanguage: lang === "ko" ? "ko-KR" : "en-US",
-    dateModified: "2026-07-27",
+    dateModified: (result.page.refreshed_at ?? result.lastSuccessAt ?? "2026-07-27").slice(0, 10),
     isPartOf: { "@id": `${SITE_ORIGIN}/#website` },
     publisher: { "@id": `${SITE_ORIGIN}/#organization` },
   };

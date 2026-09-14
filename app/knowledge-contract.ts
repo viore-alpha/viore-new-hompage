@@ -22,6 +22,7 @@ export type KnowledgePaperItem = {
   title: string;
   title_ko: string | null;
   brief: string;
+  brief_en: string | null;
   authors: string[];
   author_count: number;
   journal: string | null;
@@ -53,6 +54,27 @@ function isIsoTimestamp(value: unknown): value is string {
   return typeof value === "string" && Number.isFinite(Date.parse(value));
 }
 
+const KOREAN_SENTENCE_END = /[다요음임함됨죠네까][.!?]/g;
+
+/**
+ * Generated card summaries can arrive with decimals split by a space ("96. 7일",
+ * "AUC=0. 97") and occasionally cut off right after a bare number ("aRR 1.").
+ * Re-join the decimals and never show a dangling numeric fragment: fall back to
+ * the last complete sentence, or mark the cut with an ellipsis.
+ */
+export function repairKnowledgeBrief(brief: string): string {
+  const joined = brief.replace(/(\d)\. (?=\d)/g, "$1.").trim();
+  if (!/\d\.\s*$/.test(joined)) return joined;
+
+  let lastSentenceEnd = -1;
+  for (const match of joined.matchAll(KOREAN_SENTENCE_END)) {
+    lastSentenceEnd = match.index + match[0].length;
+  }
+  if (lastSentenceEnd >= 60) return joined.slice(0, lastSentenceEnd).trim();
+
+  return `${joined.replace(/\s*\S+\s*$/, "").trimEnd()}…`;
+}
+
 export function isKnowledgeCursor(value: unknown): value is string {
   return typeof value === "string" &&
     /^\d{4}-\d{2}-\d{2}_[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);
@@ -75,6 +97,7 @@ export function parseKnowledgePaperItem(value: unknown): KnowledgePaperItem | nu
     !(value.title_ko === null || isBoundedString(value.title_ko, 1, 500)) ||
     !isBoundedString(value.brief, 20, 500) ||
     !/[가-힣]/u.test(value.brief) ||
+    !(value.brief_en === null || value.brief_en === undefined || isBoundedString(value.brief_en, 20, 500)) ||
     !Array.isArray(authors) ||
     authors.length > 3 ||
     !authors.every((author) => isBoundedString(author, 1, 200)) ||
@@ -105,6 +128,7 @@ export function parseKnowledgePaperItem(value: unknown): KnowledgePaperItem | nu
     title: value.title.trim(),
     title_ko: value.title_ko === null ? null : value.title_ko.trim(),
     brief: value.brief.trim(),
+    brief_en: typeof value.brief_en === "string" ? value.brief_en.trim() : null,
     authors: authors.map((author) => author.trim()),
     author_count: Number(authorCount),
     journal: value.journal === null ? null : value.journal.trim(),
