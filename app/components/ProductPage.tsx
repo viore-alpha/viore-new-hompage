@@ -19,9 +19,9 @@ const productCopy = {
       ["alphadocs", "알파닥스"],
     ],
     hero: {
-      titleBrand: "알파닥,",
+      titleBrand: "알파닥, ",
       titleRest: "의료 업무를 하나의 AI Workspace로",
-      lead: "임상 질문부터 근거 확인, 문서 작성과 번역까지.\n의료인의 업무를 앱의 형태로 이어주는 공간.",
+      lead: "임상 질문부터 근거 확인, 문서 작성과 번역까지.\n의료인의 업무를 앱의 형태로 이어주는 공간. 임상 질문의 답에는 근거 출처가 함께 제시됩니다.",
       primary: "알파닥 시작하기",
       visualLabel: "복합 산-염기 질문이 입력되고 전송된 뒤 알파닥 엔진의 근거 기반 답변으로 전환되는 애니메이션",
     },
@@ -69,7 +69,7 @@ const productCopy = {
     hero: {
       titleBrand: "Alphadoc,",
       titleRest: "From Workstation to AI Workspace",
-      lead: "From clinical questions and evidence review to document creation and translation. A space that connects medical work through apps.",
+      lead: "From clinical questions and evidence review to document creation and translation. A space that connects medical work through apps. Answers to clinical questions come with their sources.",
       primary: "Start Alphadoc",
       visualLabel: "A complex acid-base question is typed and submitted before Alphadoc Engine opens an evidence-backed chat answer",
     },

@@ -48,7 +48,13 @@ function PaperCard({ item, language }: { item: KnowledgePaperItem; language: Lan
     ? domestic ? "국내" : "해외"
     : domestic ? "Korea" : "Global";
   const sourceLabel = SOURCE_LABELS[item.source] ?? item.source;
+  const preprint = item.source === "medrxiv";
   const displayTitle = item.title_ko ?? item.title;
+  const brief = language === "ko"
+    ? { text: item.brief, lang: "ko" }
+    : item.brief_en
+      ? { text: item.brief_en, lang: "en" }
+      : null;
   const meta = [
     item.journal,
     String(item.published_year),
@@ -62,6 +68,7 @@ function PaperCard({ item, language }: { item: KnowledgePaperItem; language: Lan
       target="_blank"
       rel="noopener noreferrer"
       data-paper-scope={item.scope}
+      data-paper-preprint={preprint ? "true" : undefined}
       aria-label={`${displayTitle} — ${language === "ko" ? "원문 보기" : "View source"}`}
     >
       <div className="knowledge-paper-topline">
@@ -69,10 +76,13 @@ function PaperCard({ item, language }: { item: KnowledgePaperItem; language: Lan
         <span aria-hidden="true">↗</span>
       </div>
       <h2>{displayTitle}</h2>
-      <p className="knowledge-paper-brief" lang="ko">{item.brief}</p>
+      {brief && <p className="knowledge-paper-brief" lang={brief.lang}>{brief.text}</p>}
       <div className="knowledge-paper-tags" aria-label={language === "ko" ? "논문 분류" : "Paper classification"}>
         <span>{regionLabel}</span>
         <span>{sourceLabel}</span>
+        {preprint && (
+          <span data-kind="preprint">{language === "ko" ? "동료심사 전 프리프린트" : "Preprint · not peer reviewed"}</span>
+        )}
       </div>
       <p className="knowledge-paper-meta">{meta}</p>
     </a>

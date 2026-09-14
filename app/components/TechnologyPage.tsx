@@ -1,8 +1,9 @@
+import { Fragment } from "react";
 import type { AlphaEvidenceSnapshotResult } from "@/app/alphaevidence-snapshot";
 import { AlphaEvidenceSnapshot } from "@/app/components/AlphaEvidenceSnapshot";
 import { TechnologyArticleNav } from "@/app/components/TechnologyArticleNav";
 import { TechnologyMotion, type TechnologyMotionKind } from "@/app/components/TechnologyMotion";
-import type { Language } from "@/app/site-content";
+import { technologyAnchors, type Language } from "@/app/site-content";
 
 type TechnologyStatus =
   | "implemented-foundation"
@@ -10,15 +11,23 @@ type TechnologyStatus =
   | "release-in-review"
   | "integration-in-review"
   | "selected-path-active"
-  | "supported-path-implemented";
+  | "supported-path-implemented"
+  | "coming-soon"
+  | "in-design";
+
+type ProseLink = { text: string; href: string };
+type ProseParagraph = string | ReadonlyArray<string | ProseLink>;
 
 const VERIFIED_DATE = "2026-07-30";
+const NEXT_VERIFIED_DATE = "2026-09-14";
+const MODEL_ANCHOR = `#${technologyAnchors["medical-model"]}`;
+const LAYER_ANCHOR = `#${technologyAnchors.alphalayer}`;
 
 const sharedCopy = {
   ko: {
     journal: "Journal",
     published: "2026년 7월 21일",
-    updated: "2026년 7월 30일 업데이트",
+    updated: "2026년 9월 14일 업데이트",
     hero: <>우리만의 선형을<br />만드는 과정</>,
     author: "Viore Team",
     status: "상태",
@@ -31,6 +40,8 @@ const sharedCopy = {
       "integration-in-review": "구현 · 제품 활성화 검토 중",
       "selected-path-active": "선택 경로 운영 검증",
       "supported-path-implemented": "구현 · 지원 1:1 쪽지",
+      "coming-soon": "Coming soon · 개발 중",
+      "in-design": "설계·구축 중",
     },
     introTitle: "하나의 답보다, 그 답이 만들어지는 전체 구조를 설계합니다",
     intro: [
@@ -45,7 +56,7 @@ const sharedCopy = {
   en: {
     journal: "Journal",
     published: "July 21, 2026",
-    updated: "Updated July 30, 2026",
+    updated: "Updated September 14, 2026",
     hero: <>Medical AI,<br />built as a technology system<br />rather than one model</>,
     author: "Viore Team",
     status: "Status",
@@ -58,6 +69,8 @@ const sharedCopy = {
       "integration-in-review": "IMPLEMENTED · PRODUCT ACTIVATION REVIEW",
       "selected-path-active": "SELECTED PATHS RUNTIME-VERIFIED",
       "supported-path-implemented": "IMPLEMENTED · SUPPORTED 1:1 MESSAGING",
+      "coming-soon": "Coming soon · In development",
+      "in-design": "In design and build",
     },
     introTitle: "We design the whole system behind the answer",
     intro: [
@@ -106,7 +119,11 @@ const articleCopy = {
           title: "질문 다음의 일을 설계하다",
           paragraphs: [
             "같은 질문이라도 근거를 찾는 일, 문서를 다루는 일, 번역하거나 기록을 정리하는 일은 필요한 입력과 검토가 다릅니다. AlphaDoc Engine은 어떤 모델을 쓸지보다 사용자가 지금 무엇을 하려는지부터 구분합니다.",
-            "그 목적에 맞는 근거와 문서 맥락, 도구와 결과 형태를 조합합니다. AlphaDoc Engine은 자체 거대언어모델이 아니라, 바이오레의 기술을 의료 업무에 맞게 연결하는 실행 계층입니다.",
+            [
+              "그 목적에 맞는 근거와 문서 맥락, 도구와 결과 형태를 조합합니다. AlphaDoc Engine은 자체 거대언어모델이 아니라, 바이오레의 기술을 의료 업무에 맞게 연결하는 실행 계층입니다. 바이오레가 개발하는 의료 특화 모델",
+              { text: "(07)", href: MODEL_ANCHOR },
+              "도 이 실행 계층 위에서 외부 모델을 대체할 예정입니다.",
+            ],
           ],
         },
         {
@@ -212,6 +229,54 @@ const articleCopy = {
       figureTitle: "Message body sealed between participant browsers",
       figureCaption: "AlphaSeal이 적용된 1:1 쪽지 본문은 발신자 브라우저에서 암호화돼 일반 저장 경로에 암호문으로 남고, 수신자 브라우저에서 열립니다. 전달 메타데이터와 신고 경로는 별도입니다.",
     },
+    model: {
+      name: "의료 특화 AI 모델",
+      englishTitle: "Medical-specialized AI Model",
+      lead: "바이오레만의 독자적인 fine-tuned AI 모델",
+      sections: [
+        {
+          title: "우리만의 모델을 만드는 이유",
+          paragraphs: [
+            "의료기관 가운데는 환자 정보와 내부 자료를 외부 클라우드의 상용 AI로 보낼 수 없는 곳이 많습니다. 이런 기관에 의료 AI를 제공하려면 프론티어 API 없이 기관 안에서 구동하는 모델이 필요합니다. 바이오레가 모델을 직접 만드는 첫 번째 이유입니다. 두 번째는 효율입니다. 의료 답변의 품질을 유지하면서 더 적은 연산자원과 더 짧은 응답 시간으로 구동해야 기관이 감당할 수 있는 비용으로 운영할 수 있습니다. 세 번째는 검증입니다. 어떤 자료로 무엇을 학습했고 어떤 기준으로 평가했는지를 밝힐 수 있어야 의료인과 기관이 모델을 신뢰할 수 있습니다.",
+          ],
+        },
+        {
+          title: "바이오레의 모델이 만들어지는 방식",
+          paragraphs: [
+            "검증된 공개 기반 모델 위에 의료 지식을 학습·최적화하는 접근입니다. 파운데이션 모델을 처음부터 학습하는 것이 아니라, 의료 업무에 필요한 성능을 더 작은 모델에서 끌어내는 데 집중합니다. 의료 성능은 AlphaEvidence의 근거 체계를 기준으로 프론티어 모델·대형 모델과 같은 조건에서 비교 평가합니다. AlphaDoc Engine은 처음부터 모델에 의존하지 않도록 설계했기 때문에, 바이오레의 모델은 외부 모델과 같은 자리에 들어갑니다. 기관 환경에서는 외부 모델을 대체하고, 클라우드 환경에서는 기관 정책에 따라 선택됩니다. 이후에는 기관이 허용한 범위와 적법한 권한 안에서 기관별 전용 모델로 확장하려 합니다.",
+          ],
+        },
+      ],
+      figureCaption: "바이오레의 의료 특화 모델 (V1)은 AlphaDoc Engine의 모델 자리에 들어가, 기관 안에서 구동하는 선택지가 됩니다. 개발 구상을 설명하는 다이어그램.",
+    },
+    onpremise: {
+      name: "온프레미스 알파닥과 기관 단위 보안 체계",
+      englishTitle: "On-premise Deployment & Zero Trust Extension",
+      lead: "개인의 AI 활용을, 기관이 도입하고 관리할 수 있는 환경으로 넓힙니다.",
+      sections: [
+        {
+          title: "개인의 AI를 기관의 AI로 넓히다",
+          paragraphs: [
+            [
+              "의료인들은 이미 개인 계정으로 AI를 업무에 쓰고 있습니다. 그러나 기관이 이를 업무 도구로 도입하려면 의료 업무에 맞는 기능만으로는 부족합니다. 데이터 보호와 사용 권한, 운영 기준과 감사 기록이 함께 갖춰져야 합니다. 바이오레는 이 요구를 두 갈래로 다룹니다. 하나는 기관 내부 서버나 폐쇄망에 설치하는 온프레미스 알파닥이고, 다른 하나는 기관의 정책에 따라 접근 권한과 민감정보 처리를 통제하는 기관 단위 보안 체계입니다. 온프레미스 환경에서는 ",
+              { text: "07", href: MODEL_ANCHOR },
+              "의 의료 특화 모델이 사내 서버에서 구동하며, 외부 모델 호출을 대체할 예정입니다.",
+            ],
+          ],
+        },
+        {
+          title: "AlphaLayer의 경계를 기관 단위로 다시 세우다",
+          paragraphs: [
+            [
+              "현재 AlphaLayer는 선택된 텍스트 경로에서 외부 AI 실행을 등록된 정책 경계로 묶습니다",
+              { text: "(05)", href: LAYER_ANCHOR },
+              ". 기관 단위 보안 체계는 이 경계를, 요청마다 인증과 접근 권한을 확인하고, 민감정보를 탐지·치환해 토큰으로 매핑하고, 입력과 첨부 자료를 검증하고, 허용된 모델만 호출하며, 응답의 누출과 복원 권한을 점검한 뒤 기관별 감사 기록과 보관 정책을 적용하는 구조로 넓히는 설계입니다. 검증에 실패한 요청은 경계 밖으로 나가기 전에 차단하는 것이 원칙입니다.",
+            ],
+          ],
+        },
+      ],
+      figureCaption: "온프레미스 알파닥은 기관 내부 서버에서 인터넷 연결 없이 구동하며, 민감정보는 기관 경계 밖으로 나가지 않습니다. 기관 단위 보안 체계가 요청 인증부터 감사 기록까지 경계 안에서 통제합니다. 개발 구상을 설명하는 다이어그램.",
+    },
   },
   en: {
     evidence: {
@@ -247,7 +312,11 @@ const articleCopy = {
           title: "Designing what happens after the question",
           paragraphs: [
             "Evidence discovery, document work, translation, and record preparation need different inputs and review. AlphaDoc Engine identifies what the user is trying to do before it considers model execution.",
-            "It combines the evidence, document context, tools, and output form appropriate to that purpose. AlphaDoc Engine is not Viore's own large language model; it is the execution layer connecting Viore technologies to medical work.",
+            [
+              "It combines the evidence, document context, tools, and output form appropriate to that purpose. AlphaDoc Engine is not Viore's own large language model; it is the execution layer connecting Viore technologies to medical work. Viore's medical-specialized model ",
+              { text: "(07)", href: MODEL_ANCHOR },
+              " will also run on this execution layer and replace external models.",
+            ],
           ],
         },
         {
@@ -353,6 +422,54 @@ const articleCopy = {
       figureTitle: "Message body sealed between participant browsers",
       figureCaption: "On supported one-to-one paths, the sender browser encrypts the message body, ordinary storage retains ciphertext, and the recipient browser opens it. Delivery metadata and reporting paths remain separate.",
     },
+    model: {
+      name: "Medical-specialized AI Model",
+      englishTitle: "Medical-specialized AI Model",
+      lead: "Viore's own fine-tuned AI model.",
+      sections: [
+        {
+          title: "Why Viore builds its own model",
+          paragraphs: [
+            "Many medical institutions cannot send patient information or internal documents to commercial AI in external clouds. Serving these institutions requires a model that runs inside the institution without a frontier API. That is the first reason Viore builds its own model. The second is efficiency. A model that keeps the quality of medical answers while running on less compute with shorter response times is what makes operation affordable for an institution. The third is verification. Clinicians and institutions can trust a model only when we can state what it learned from which data and how it was evaluated.",
+          ],
+        },
+        {
+          title: "How Viore's model is built",
+          paragraphs: [
+            "Our approach trains and optimizes medical knowledge on top of a proven open base model. Rather than training a foundation model from scratch, we focus on drawing the performance medical work requires out of a smaller model. Medical performance is evaluated against AlphaEvidence's evidence framework, under the same conditions as frontier and large models. Because AlphaDoc Engine was designed from the start not to depend on any single model, Viore's model takes the same place as external models: in institutional environments it replaces them, and in cloud environments it is selected according to institutional policy. Beyond that, we intend to extend it into institution-specific models within the scope each institution permits and with lawful authority.",
+          ],
+        },
+      ],
+      figureCaption: "Viore's medical-specialized model (V1) takes the model slot in AlphaDoc Engine and becomes an option that runs inside the institution. A diagram describing the development concept.",
+    },
+    onpremise: {
+      name: "On-premise Alphadoc and Institution-level Security",
+      englishTitle: "On-premise Deployment & Zero Trust Extension",
+      lead: "Extending individual AI use into an environment institutions can adopt and govern.",
+      sections: [
+        {
+          title: "From personal AI to institutional AI",
+          paragraphs: [
+            [
+              "Clinicians already use AI for work through personal accounts. But for an institution to adopt it as a work tool, medical-specific features alone are not enough. Data protection, access rights, operating rules, and audit records have to come together. Viore addresses this in two strands: on-premise Alphadoc, installed on an institution's internal servers or in a closed network, and an institution-level security framework that governs access rights and sensitive-data handling according to institutional policy. In on-premise environments, the medical-specialized model from ",
+              { text: "07", href: MODEL_ANCHOR },
+              " will run on internal servers and replace calls to external models.",
+            ],
+          ],
+        },
+        {
+          title: "Extending the AlphaLayer boundary to the institution",
+          paragraphs: [
+            [
+              "Today, AlphaLayer binds external AI execution to a registered policy boundary for selected text paths ",
+              { text: "(05)", href: LAYER_ANCHOR },
+              ". The institution-level security framework is a design that widens this boundary: authenticating and checking access rights on every request, detecting and substituting sensitive data with token mapping, validating inputs and attachments, calling only permitted models, checking responses for leakage and restoration rights, and then applying institution-specific audit records and retention policies. Requests that fail validation are blocked before they leave the boundary.",
+            ],
+          ],
+        },
+      ],
+      figureCaption: "On-premise Alphadoc runs on the institution's internal servers without an internet connection, and sensitive data never leaves the institutional boundary. The institution-level security framework governs everything from request authentication to audit records inside that boundary. A diagram describing the development concept.",
+    },
   },
 } as const;
 
@@ -363,6 +480,7 @@ function TechnologySectionHeader({
   englishTitle,
   lead,
   status,
+  verified = VERIFIED_DATE,
 }: {
   language: Language;
   index: string;
@@ -370,6 +488,7 @@ function TechnologySectionHeader({
   englishTitle: string;
   lead: string;
   status: TechnologyStatus;
+  verified?: string;
 }) {
   const labels = sharedCopy[language];
   const statusClass = status;
@@ -392,7 +511,7 @@ function TechnologySectionHeader({
         </div>
         <div>
           <dt>{labels.verified}</dt>
-          <dd><time dateTime={VERIFIED_DATE}>{VERIFIED_DATE}</time></dd>
+          <dd><time dateTime={verified}>{verified}</time></dd>
         </div>
       </dl>
     </header>
@@ -421,12 +540,25 @@ function TechnologyFigure({
   );
 }
 
+function ProseParagraphContent({ paragraph }: { paragraph: ProseParagraph }) {
+  if (typeof paragraph === "string") return paragraph;
+  return (
+    <>
+      {paragraph.map((segment, index) => (
+        typeof segment === "string"
+          ? <Fragment key={index}>{segment}</Fragment>
+          : <a key={index} href={segment.href}>{segment.text}</a>
+      ))}
+    </>
+  );
+}
+
 function ProseSections({
   sections,
 }: {
   sections: ReadonlyArray<{
     title: string;
-    paragraphs: readonly string[];
+    paragraphs: readonly ProseParagraph[];
   }>;
 }) {
   return (
@@ -434,7 +566,9 @@ function ProseSections({
       {sections.map((section) => (
         <section key={section.title}>
           <h3>{section.title}</h3>
-          {section.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+          {section.paragraphs.map((paragraph, index) => (
+            <p key={index}><ProseParagraphContent paragraph={paragraph} /></p>
+          ))}
         </section>
       ))}
     </>
@@ -604,6 +738,48 @@ export function TechnologyPage({
               number="07"
               kind="seal"
               caption={articles.seal.figureCaption}
+            />
+          </div>
+        </article>
+
+        <article id={technologyAnchors["medical-model"]} className="technology-post" data-tech-status="coming-soon">
+          <TechnologySectionHeader
+            language={language}
+            index="07"
+            name={articles.model.name}
+            englishTitle={articles.model.englishTitle}
+            lead={articles.model.lead}
+            status="coming-soon"
+            verified={NEXT_VERIFIED_DATE}
+          />
+          <div className="technology-prose">
+            <ProseSections sections={articles.model.sections} />
+            <TechnologyFigure
+              language={language}
+              number="08"
+              kind="model"
+              caption={articles.model.figureCaption}
+            />
+          </div>
+        </article>
+
+        <article id={technologyAnchors["onpremise-security"]} className="technology-post" data-tech-status="in-design">
+          <TechnologySectionHeader
+            language={language}
+            index="08"
+            name={articles.onpremise.name}
+            englishTitle={articles.onpremise.englishTitle}
+            lead={articles.onpremise.lead}
+            status="in-design"
+            verified={NEXT_VERIFIED_DATE}
+          />
+          <div className="technology-prose">
+            <ProseSections sections={articles.onpremise.sections} />
+            <TechnologyFigure
+              language={language}
+              number="09"
+              kind="onpremise"
+              caption={articles.onpremise.figureCaption}
             />
           </div>
         </article>

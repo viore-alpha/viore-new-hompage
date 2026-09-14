@@ -1,4 +1,4 @@
-/* Technology journal — continuous dark paper, source blue, execution red. */
+/* Technology journal — continuous solid black, source blue, execution red. */
 .technology-journal {
   --technology-page: var(--dark-paper-base);
   --technology-paper: var(--dark-paper-image);
@@ -32,108 +32,6 @@
 .technology-page-footer {
   width: min(768px, calc(100vw - 48px));
   margin-inline: auto;
-}
-
-/* Dark route chrome. */
-.site-header.site-header-dark {
-  --technology-page: #111114;
-  --technology-ink: #f5f5f7;
-  color: #f5f5f7;
-  background: rgba(17, 17, 20, .82);
-  border-bottom: 1px solid rgba(245, 245, 247, .09);
-  backdrop-filter: blur(22px) saturate(135%);
-  -webkit-backdrop-filter: blur(22px) saturate(135%);
-}
-
-.site-header.site-header-dark::after {
-  background: linear-gradient(rgba(17, 17, 20, .32), transparent);
-}
-
-.site-header-dark .brand img {
-  filter: invert(1) brightness(1.14);
-}
-
-.site-header-dark .desktop-nav,
-.site-header-dark .nav-link,
-.site-header-dark .contact-link {
-  color: rgba(245, 245, 247, .72);
-}
-
-.site-header-dark .nav-link:hover,
-.site-header-dark .nav-link:focus-visible,
-.site-header-dark .nav-link.is-active {
-  color: #f5f5f7;
-}
-
-.site-header-dark .nav-link.nav-link-disabled,
-.site-header-dark .nav-link.nav-link-disabled:disabled {
-  color: rgba(245, 245, 247, .36);
-}
-
-.site-header-dark .nav-link-disabled small,
-.site-header-dark .mobile-top-link-disabled small {
-  color: rgba(245, 245, 247, .34);
-}
-
-.site-header-dark .language-switch a {
-  color: rgba(245, 245, 247, .44);
-}
-
-.site-header-dark .language-switch a.is-active {
-  color: #f5f5f7;
-}
-
-.site-header-dark .language-switch a.is-active::after,
-.site-header-dark .menu-toggle span {
-  background: #f5f5f7;
-}
-
-.site-header-dark .contact-link {
-  color: #f5f5f7;
-  border-color: rgba(245, 245, 247, .34);
-}
-
-.site-header-dark .contact-link:hover {
-  color: #111114;
-  background: #f5f5f7;
-}
-
-.site-header-dark .dropdown {
-  color: var(--technology-ink);
-  border-color: rgba(245, 245, 247, .12);
-  background: rgba(17, 17, 20, .97);
-  box-shadow: 0 18px 60px rgba(0, 0, 0, .38);
-}
-
-.site-header-dark .dropdown-label,
-.site-header-dark .dropdown a small,
-.site-header-dark .dropdown-disabled small,
-.site-header-dark .mobile-menu-group > span,
-.site-header-dark .mobile-menu-group small {
-  color: rgba(245, 245, 247, .46);
-}
-
-.site-header-dark .dropdown a:hover {
-  background: rgba(255, 255, 255, .065);
-}
-
-.site-header-dark .dropdown-disabled,
-.site-header-dark .mobile-menu-disabled,
-.site-header-dark .mobile-top-link-disabled,
-.site-header-dark .mobile-top-link-disabled:disabled {
-  color: rgba(245, 245, 247, .32);
-}
-
-.site-header-dark .mobile-menu {
-  color: var(--technology-ink);
-  background-color: var(--technology-page);
-  background-image: var(--technology-paper);
-  background-size: var(--dark-paper-size);
-}
-
-.site-header-dark .mobile-menu-group,
-.site-header-dark .mobile-primary-links {
-  border-color: rgba(245, 245, 247, .14);
 }
 
 /* Intro: a reading page, not a poster landing. */
@@ -346,6 +244,36 @@
   letter-spacing: .08em;
 }
 
+.technology-article-nav a > span {
+  min-width: 0;
+}
+
+.technology-article-nav-next-title {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--technology-line);
+}
+
+.technology-article-nav .technology-article-nav-tag {
+  margin-left: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  vertical-align: 1px;
+  color: var(--technology-blue);
+  font: 680 7px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  letter-spacing: .075em;
+  white-space: nowrap;
+}
+
+.technology-article-nav .technology-article-nav-tag::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+}
+
 /* Current independent articles inside one continuously expanding journal. */
 .technology-post {
   scroll-margin-top: calc(var(--header) + 24px);
@@ -476,6 +404,16 @@
   color: var(--technology-blue);
 }
 
+.technology-status-coming-soon,
+.technology-status-in-design {
+  color: var(--technology-blue);
+}
+
+.technology-status-coming-soon::before,
+.technology-status-in-design::before {
+  background: transparent;
+}
+
 .technology-definition {
   margin: 22px 0 0 110px;
   padding-left: 16px;
@@ -512,6 +450,17 @@
 .technology-prose section > p + p,
 .technology-prose > p + p {
   margin-top: 18px;
+}
+
+.technology-prose p a {
+  color: var(--technology-ink);
+  border-bottom: 1px solid var(--technology-line-strong);
+  transition: border-color .18s ease;
+}
+
+.technology-prose p a:hover,
+.technology-prose p a:focus-visible {
+  border-bottom-color: var(--technology-blue);
 }
 
 .technology-prose h3 {
@@ -1953,6 +1902,7 @@
 
   .technology-article-nav-inner {
     width: min(768px, calc(100vw - 48px));
+    min-width: 0;
     min-height: 48px;
     margin: auto;
     padding: 0;
@@ -1976,6 +1926,22 @@
     grid-template-columns: repeat(6, minmax(0, 1fr));
   }
 
+  .technology-article-nav-next-title,
+  .technology-article-nav ol.technology-article-nav-next {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 1px solid var(--technology-line);
+  }
+
+  .technology-article-nav ol.technology-article-nav-next {
+    grid-template-columns: repeat(2, minmax(0, max-content));
+    column-gap: 14px;
+  }
+
+  .technology-post {
+    scroll-margin-top: calc(var(--header) + 96px + 24px);
+  }
+
   .technology-article-nav a {
     min-height: 47px;
     padding: 8px 6px;
@@ -1990,12 +1956,6 @@
 }
 
 @media (max-width: 760px) {
-  .site-header.site-header-dark {
-    background: #111114;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-  }
-
   .technology-raw-diagram.is-enhanced .technology-flow-unit,
   .technology-raw-diagram.is-enhanced.is-active .technology-flow-unit,
   .technology-raw-diagram.is-enhanced .technology-svg-step,
@@ -2044,9 +2004,13 @@
     grid-template-columns: repeat(6, minmax(126px, auto));
   }
 
+  .technology-article-nav ol.technology-article-nav-next {
+    grid-template-columns: repeat(2, minmax(126px, auto));
+  }
+
   .technology-post {
     padding: 56px 0 64px;
-    scroll-margin-top: calc(var(--header) + 48px);
+    scroll-margin-top: calc(var(--header) + 96px + 16px);
   }
 
   .technology-section-header {

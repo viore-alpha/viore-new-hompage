@@ -2,6 +2,10 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
+// Tokens the 2026-09 brief forbids anywhere in rendered copy. Assembled from
+// fragments so the literal tokens never appear in this file or its diff.
+const FORBIDDEN_TOKENS = new RegExp(["\\{" + "\\{", "K" + "MI", "검진" + "기관"].join("|"));
+
 async function render(pathname) {
   const baseUrl = process.env.VIORE_TEST_BASE_URL;
   if (!baseUrl) throw new Error("VIORE_TEST_BASE_URL is required");
@@ -52,6 +56,13 @@ test("server-renders independent Korean and English homepage metadata", async ()
   assert.match(englishHtml, /<meta property="og:image" content="https:\/\/vioreai\.com\/brand\/viore-social-card-white-v3\.png"/);
   assert.match(englishHtml, /class="footer-company-primary"><strong>Viore Inc\.<\/strong><span>Representative Seokjin Ko<\/span><span>Business Registration No\. 709-88-03418<\/span>/);
   assert.match(englishHtml, /B101-102 and 104, Building A, 660 Daewangpangyo-ro/);
+  assert.match(englishHtml, /Viore builds medical AI that draws the expertise and systems accumulated across medicine into one continuous line\./);
+  assert.doesNotMatch(englishHtml, /Viore builds a Medical OS that connects the expertise/);
+  assert.match(englishHtml, /class="company-efficiency-product">Alphadoc<\/strong> brings evidence-based conversation and medical work apps into one place, connecting these tasks into a single flow\./);
+  assert.match(englishHtml, /Answers to clinical questions come with sources from Korean and international literature and clinical guidelines, and Alphadoc is designed to be deployed and operated within each institution&#x27;s environment\./);
+  assert.doesNotMatch(englishHtml, /one natural flow|focus on what matters most/);
+  assert.match(englishHtml, /class="company-knowledge-next"><a href="\/en\/technology#technology-medical-model">Coming soon — Viore&#x27;s medical-specialized AI model, running inside the institution\. See Technology →<\/a><\/p>/);
+  assert.doesNotMatch(englishHtml, FORBIDDEN_TOKENS);
   assert.doesNotMatch(englishHtml, /<title>바이오레,/);
 });
 
@@ -222,8 +233,9 @@ test("server-renders the Korean Company story as the homepage", async () => {
   assert.match(html, /class="company-hero"/);
   assert.match(html, /의료계의/);
   assert.match(html, /새로운 선형을 그리다\./);
-  assert.match(html, /의료계가 오랜 시간 축적해 온 전문성과 시스템을 연결하기 위한 선/);
-  assert.match(html, /그것이 바이오레 입니다/);
+  assert.match(html, /의료계가 오랜 시간 축적해 온 전문성과 시스템을 하나의 선으로 잇는 의료 AI,/);
+  assert.match(html, /그것이 바이오레입니다\./);
+  assert.doesNotMatch(html, /연결하기 위한 선|그것이 바이오레 입니다/);
   assert.match(html, /의료인의 모든 업무를/);
   assert.match(html, /하나의 흐름으로/);
   assert.match(html, /혁신은, 더 많이 더하는 일이 아닙니다\./);
@@ -250,8 +262,13 @@ test("server-renders the Korean Company story as the homepage", async () => {
   assert.match(html, /패혈증 초기 처치는\?/);
   assert.match(html, /의료 현장은 수많은 정보와 시스템 사이를 끊임없이 오갑니다\./);
   assert.match(html, /기록하고, 계산하고, 검색하고, 확인하는 반복적인 과정은 의료인의 시간을 빼앗습니다\./);
-  assert.match(html, /class="company-efficiency-product">알파닥<\/strong>은 이러한 업무를 하나의 자연스러운 흐름으로 연결하여,/);
-  assert.match(html, /의료인이 가장 중요한 일에 집중할 수 있도록 돕습니다\./);
+  assert.match(html, /class="company-efficiency-product">알파닥<\/strong>은 근거 기반 대화와 의료 업무 앱을 한곳에서 제공해 이 과정을 하나의 흐름으로 연결합니다\./);
+  assert.match(html, /임상 질문의 답에는 국내외 의학 문헌과 진료지침의 출처가 함께 제시되고, 기관 환경에 맞춰 도입하고 운영할 수 있도록 설계했습니다\./);
+  assert.doesNotMatch(html, /하나의 자연스러운 흐름으로 연결하여|가장 중요한 일에 집중할 수 있도록/);
+  assert.match(html, /class="company-knowledge-next"><a href="\/ko\/technology#technology-medical-model">Coming soon — 기관 안에서 구동하는 바이오레의 의료 특화 AI 모델\. Technology에서 보기 →<\/a><\/p>/);
+  assert.ok(html.indexOf('class="company-metrics"') < html.indexOf('class="company-knowledge-next"'));
+  assert.ok(html.indexOf('class="company-knowledge-next"') < html.indexOf('class="company-connections"'));
+  assert.doesNotMatch(html, FORBIDDEN_TOKENS);
   assert.match(html, /class="company-connections"/);
   assert.ok(html.indexOf('class="company-efficiency"') < html.indexOf('class="company-knowledge"'));
   assert.ok(html.indexOf('class="company-knowledge"') < html.indexOf('class="company-metrics"'));
@@ -328,6 +345,21 @@ test("keeps Knowledge public while Council is unavailable and marked coming soon
   assert.equal(paperCardCount, 12);
   assert.match(knowledgeHtml, /data-paper-scope="overseas"/);
   assert.match(knowledgeHtml, /class="knowledge-paper-brief" lang="ko"/);
+  assert.doesNotMatch(englishKnowledgeHtml, /class="knowledge-paper-brief" lang="ko"/);
+  assert.match(knowledgeHtml, /<span>실시간 갱신<\/span><time dateTime="[^"]+"><span>최근 갱신<\/span>[\s\S]{0,60}KST<\/time>/);
+  assert.match(englishKnowledgeHtml, /<span>Live feed<\/span><time dateTime="[^"]+"><span>Last refreshed<\/span>[\s\S]{0,60}KST<\/time>/);
+  assert.doesNotMatch(knowledgeHtml, /<span>LIVE<\/span>/);
+  const renderedBriefs = [...knowledgeHtml.matchAll(/class="knowledge-paper-brief" lang="ko">([^<]*)<\/p>/g)].map((match) => match[1]);
+  assert.ok(renderedBriefs.length > 0);
+  for (const brief of renderedBriefs) {
+    assert.doesNotMatch(brief, /\d\. \d/);
+    assert.doesNotMatch(brief, /\d\.\s*$/);
+  }
+  if (/>medRxiv</.test(knowledgeHtml)) {
+    assert.match(knowledgeHtml, /data-paper-preprint="true"/);
+    assert.match(knowledgeHtml, /<span data-kind="preprint">동료심사 전 프리프린트<\/span>/);
+    assert.match(englishKnowledgeHtml, /<span data-kind="preprint">Preprint · not peer reviewed<\/span>/);
+  }
   assert.match(knowledgeHtml, /rel="noopener noreferrer"/);
   assert.match(knowledgeHtml, /class="knowledge-feed-sentinel"/);
   assert.doesNotMatch(knowledgeHtml, /knowledge-filter-result/);
@@ -345,8 +377,21 @@ test("implements Knowledge as a paginated live literature contract on paper", as
     readFile(new URL("../app/knowledge.css", import.meta.url), "utf8"),
     readFile(new URL("../supabase/migrations/20260721103250_knowledge_infinite_public_feed.sql", import.meta.url), "utf8"),
   ]);
+  const repairMigration = await readFile(new URL("../supabase/migrations/20260915090000_knowledge_brief_repair_and_english_excerpt.sql", import.meta.url), "utf8");
 
   assert.match(contract, /KNOWLEDGE_PAGE_SIZE = 12/);
+  assert.match(contract, /export function repairKnowledgeBrief/);
+  assert.match(contract, /brief_en: string \| null/);
+  assert.match(dataSource, /brief: repairKnowledgeBrief\(row\.brief\)/);
+  assert.match(paperLibrary, /item\.brief_en/);
+  assert.match(paperLibrary, /data-kind="preprint"/);
+  assert.match(paperLibrary, /item\.source === "medrxiv"/);
+  assert.match(component, /최근 갱신/);
+  assert.doesNotMatch(component, /"LIVE"/);
+  assert.match(repairMigration, /add column if not exists brief_en text/);
+  assert.match(repairMigration, /viore_knowledge_repair_brief/);
+  assert.match(repairMigration, /viore_knowledge_english_excerpt/);
+  assert.match(repairMigration, /select private\.refresh_viore_knowledge_public_papers\(\);/);
   assert.match(contract, /knowledge\.literature\.page\.v1/);
   assert.match(contract, /href\.protocol !== "https:"/);
   assert.match(contract, /items\.length > KNOWLEDGE_MAX_PAGE_SIZE/);
@@ -389,7 +434,25 @@ test("rejects malformed or unsafe paginated Knowledge payloads", async () => {
   const {
     isKnowledgeCursor,
     parseKnowledgePaperPage,
+    repairKnowledgeBrief,
   } = await import(new URL("../app/knowledge-contract.ts", import.meta.url));
+  assert.equal(
+    repairKnowledgeBrief("종양 성장 속도에 따른 맞춤형 분할 조사가 표준 치료 대비 무진행 생존 기간을 96. 7일 연장할 수 있음을 확인했습니다."),
+    "종양 성장 속도에 따른 맞춤형 분할 조사가 표준 치료 대비 무진행 생존 기간을 96.7일 연장할 수 있음을 확인했습니다.",
+  );
+  assert.equal(
+    repairKnowledgeBrief("PTE 발생 위험을 예측하는 다유전자 모델(AUC=0. 97)을 구축했습니다."),
+    "PTE 발생 위험을 예측하는 다유전자 모델(AUC=0.97)을 구축했습니다.",
+  );
+  assert.equal(
+    repairKnowledgeBrief("Epic Cosmos 데이터를 활용해 2023-2024년 출생아 2,624,186명을 대상으로 모아 연계 코호트를 구축했습니다. 임신 1분기 수축기 혈압 140mmHg 이상은 자간전증 위험 증가와 연관(aRR 1."),
+    "Epic Cosmos 데이터를 활용해 2023-2024년 출생아 2,624,186명을 대상으로 모아 연계 코호트를 구축했습니다.",
+  );
+  assert.equal(
+    repairKnowledgeBrief("2021~2025년 탄자니아 수술 부위 감염(SSI) 감시 데이터 분석 결과, 전체 SSI 발생률은 3. 1%에서 2."),
+    "2021~2025년 탄자니아 수술 부위 감염(SSI) 감시 데이터 분석 결과, 전체 SSI 발생률은 3.1%에서…",
+  );
+  assert.equal(repairKnowledgeBrief("완결된 문장은 그대로 둡니다."), "완결된 문장은 그대로 둡니다.");
   const refreshedAt = "2026-07-21T09:50:33.000Z";
   const validPage = {
     schema_version: "knowledge.literature.page.v1",
@@ -413,6 +476,12 @@ test("rejects malformed or unsafe paginated Knowledge payloads", async () => {
   };
 
   assert.ok(parseKnowledgePaperPage(validPage));
+  assert.equal(parseKnowledgePaperPage(validPage).items[0].brief_en, null);
+  assert.equal(
+    parseKnowledgePaperPage({ ...validPage, items: [{ ...validPage.items[0], brief_en: "A bounded English excerpt for the English page." }] }).items[0].brief_en,
+    "A bounded English excerpt for the English page.",
+  );
+  assert.equal(parseKnowledgePaperPage({ ...validPage, items: [{ ...validPage.items[0], brief_en: "short" }] }), null);
   assert.ok(isKnowledgeCursor(validPage.next_cursor));
   assert.equal(isKnowledgeCursor("not-a-cursor"), false);
   assert.equal(parseKnowledgePaperPage({ ...validPage, next_cursor: "not-a-cursor" }), null);
@@ -490,8 +559,8 @@ test("server-renders the Alphadoc product story from real product UI", async () 
   assert.match(html, /class="site-header site-header-dark"/);
   assert.match(html, /class="site-footer "/);
   assert.doesNotMatch(html, /class="site-footer site-footer-dark"/);
-  assert.match(html, /class="ap-hero-brand">알파닥,<\/span><span class="ap-hero-tagline">의료 업무를 하나의 AI Workspace로<\/span>/);
-  assert.match(html, /임상 질문부터 근거 확인, 문서 작성과 번역까지\.\s*의료인의 업무를 앱의 형태로 이어주는 공간\./);
+  assert.match(html, /class="ap-hero-brand">알파닥, <\/span><span class="ap-hero-tagline">의료 업무를 하나의 AI Workspace로<\/span>/);
+  assert.match(html, /임상 질문부터 근거 확인, 문서 작성과 번역까지\.\s*의료인의 업무를 앱의 형태로 이어주는 공간\. 임상 질문의 답에는 근거 출처가 함께 제시됩니다\./);
   assert.match(html, /의료인들의 하루를 바꾸는 워크스페이스/);
   assert.match(html, /class="ap-hero-motion-scene"/);
   assert.match(html, /class="ap-motion-chat"/);
@@ -746,8 +815,10 @@ test("server-renders the Alphadoc product story from real product UI", async () 
   assert.match(html, /news-antibiotic-review-optimized\.webp/);
 
   assert.doesNotMatch(css, /PretendardVariable\.woff2/);
-  assert.match(css, /--dark-paper-base: #08080a;/);
-  assert.match(css, /--dark-paper-image: linear-gradient\(rgba\(0,0,0,\.24\),rgba\(0,0,0,\.24\)\),url\("\/media\/viore-paper-texture-dark-v2\.webp"\)/);
+  assert.match(css, /--dark-paper-base: #000000;/);
+  assert.match(css, /--dark-paper-image: none;/);
+  assert.doesNotMatch(css, /viore-paper-texture/);
+  assert.doesNotMatch(productCss, /viore-paper-texture|rgba\(8,8,10/);
   assert.match(productCss, /\.alphadoc-product \{[\s\S]*?background-color: var\(--dark-paper-base\);[\s\S]*?background-image: var\(--dark-paper-image\);/);
   assert.match(productCss, /\.alphadoc-product \{[\s\S]*?background-size: var\(--dark-paper-size\);/);
   assert.match(productCss, /--ap-red: var\(--red\)/);
@@ -919,12 +990,13 @@ test("carries the hero energy-line language into a slow scroll-linked convergenc
   assert.doesNotMatch(energyCanvas, /const FRAME_INTERVAL|const frameInterval|pixelRatioCap|shadowBlur/);
   assert.match(energyCanvas, /seconds \* \(0\.72 \+ family \* 0\.08\)/);
   assert.match(content, /title: "의료계의\\n새로운 선형을 그리다\."/);
-  assert.match(content, /연결하기 위한 선\\n그것이 바이오레 입니다/);
+  assert.match(content, /하나의 선으로 잇는 의료 AI,\\n그것이 바이오레입니다\./);
   assert.match(css, /\.company-hero \{[^}]*background-color: var\(--paper-base\);/);
   assert.match(css, /\.company-hero-copy \{[^}]*text-align: center;/);
   assert.match(css, /\.company-hero p \{[^}]*white-space: pre-line;/);
   assert.match(css, /\.company-energy-canvas \{/);
-  assert.match(css, /--paper-texture: url\("\/media\/viore-paper-texture\.webp"\);/);
+  assert.match(css, /--paper-base: #ffffff;/);
+  assert.match(css, /--paper-texture: none;/);
   assert.match(css, /html,body \{[^}]*background-image: var\(--paper-texture\);/);
   assert.match(css, /\.detail-page \{[^}]*background-image: var\(--paper-texture\);/);
   assert.match(css, /\.company-hero \{[^}]*background-image: var\(--paper-texture\);/);
@@ -1141,9 +1213,32 @@ test("server-renders an accessible, expanding Technology journal with its curren
     "technology-alphaimage",
     "technology-alphalayer",
     "technology-alphaseal",
+    "technology-medical-model",
+    "technology-onpremise-security",
   ]) {
     assert.match(html, new RegExp(`<article id="${id}"`));
   }
+  assert.ok(html.indexOf('<article id="technology-alphaseal"') < html.indexOf('<article id="technology-medical-model"'));
+  assert.ok(html.indexOf('<article id="technology-medical-model"') < html.indexOf('<article id="technology-onpremise-security"'));
+  assert.match(html, /POST <!-- -->07<\/span><div><p class="technology-section-english">Medical-specialized AI Model<\/p><h2>의료 특화 AI 모델<\/h2><p class="technology-section-lead">바이오레만의 독자적인 fine-tuned AI 모델<\/p>/);
+  assert.match(html, /POST <!-- -->08<\/span><div><p class="technology-section-english">On-premise Deployment &amp; Zero Trust Extension<\/p><h2>온프레미스 알파닥과 기관 단위 보안 체계<\/h2><p class="technology-section-lead">개인의 AI 활용을, 기관이 도입하고 관리할 수 있는 환경으로 넓힙니다\.<\/p>/);
+  assert.match(html, /technology-status technology-status-coming-soon">Coming soon · 개발 중</);
+  assert.match(html, /technology-status technology-status-in-design">설계·구축 중</);
+  assert.match(html, /우리만의 모델을 만드는 이유/);
+  assert.match(html, /바이오레의 모델이 만들어지는 방식/);
+  assert.match(html, /개인의 AI를 기관의 AI로 넓히다/);
+  assert.match(html, /AlphaLayer의 경계를 기관 단위로 다시 세우다/);
+  assert.match(html, /바이오레가 개발하는 의료 특화 모델<a href="#technology-medical-model">\(07\)<\/a>도 이 실행 계층 위에서 외부 모델을 대체할 예정입니다\./);
+  assert.match(html, /온프레미스 환경에서는 <a href="#technology-medical-model">07<\/a>의 의료 특화 모델이 사내 서버에서 구동하며/);
+  assert.match(html, /등록된 정책 경계로 묶습니다<a href="#technology-alphalayer">\(05\)<\/a>\. 기관 단위 보안 체계는/);
+  assert.match(html, /<strong>그림<!-- --> <!-- -->08<\/strong><span>바이오레의 의료 특화 모델 \(V1\)은 AlphaDoc Engine의 모델 자리에 들어가, 기관 안에서 구동하는 선택지가 됩니다\. 개발 구상을 설명하는 다이어그램\.<\/span>/);
+  assert.match(html, /<strong>그림<!-- --> <!-- -->09<\/strong><span>온프레미스 알파닥은 기관 내부 서버에서 인터넷 연결 없이 구동하며, 민감정보는 기관 경계 밖으로 나가지 않습니다\./);
+  assert.match(html, /현재 기술/);
+  assert.match(html, /technology-article-nav-next-title">다음 기술</);
+  assert.match(html, /<small>07<\/small><span>의료 특화 AI 모델<small class="technology-article-nav-tag">Coming soon<\/small><\/span>/);
+  assert.match(html, /<small>08<\/small><span>온프레미스 알파닥과 기관 단위 보안 체계<\/span>/);
+  assert.doesNotMatch(html, FORBIDDEN_TOKENS);
+  assert.doesNotMatch(html, /업데이트 노트/);
   assert.match(html, /End-to-End Conversation Seal/);
   assert.match(html, /대화 내용과 전달 정보를 분리하다/);
   assert.match(html, /구현 · 제품 기반 운영 중/);
@@ -1154,8 +1249,17 @@ test("server-renders an accessible, expanding Technology journal with its curren
   assert.match(html, /구현 · 지원 1:1 쪽지/);
   assert.doesNotMatch(html, /DEVELOPED &amp; INTEGRATED/);
   assert.match(html, /2026년 7월 21일/);
-  assert.match(html, /2026년 7월 30일 업데이트/);
-  assert.match(html, /2026-07-30/);
+  assert.match(html, /2026년 9월 14일 업데이트/);
+  assert.doesNotMatch(html, /7월 30일 업데이트/);
+  assert.equal((html.match(/<time dateTime="2026-07-30">2026-07-30<\/time>/g) ?? []).length, 6);
+  assert.equal((html.match(/<time dateTime="2026-09-14">2026-09-14<\/time>/g) ?? []).length, 2);
+  assert.match(html, /"@type":"CollectionPage","@id":"https:\/\/vioreai\.com\/ko\/technology","name":"바이오레 기술 저널","description":"[^"]*","dateModified":"2026-09-14"/);
+  assert.equal((html.match(/"@type":"TechArticle"/g) ?? []).length, 8);
+  assert.match(html, /"hasPart":\[[^\]]*\{"@id":"https:\/\/vioreai\.com\/ko\/technology#technology-medical-model"\},\{"@id":"https:\/\/vioreai\.com\/ko\/technology#technology-onpremise-security"\}\]/);
+  assert.match(html, /"@id":"https:\/\/vioreai\.com\/ko\/technology#technology-alphaevidence","headline":"AlphaEvidence — Evidence Foundation","description":"[^"]*","datePublished":"2026-07-21","dateModified":"2026-07-30"/);
+  assert.match(html, /"@id":"https:\/\/vioreai\.com\/ko\/technology#technology-alphadoc-engine","headline":"[^"]*","description":"[^"]*","datePublished":"2026-07-21","dateModified":"2026-09-14"/);
+  assert.match(html, /"@id":"https:\/\/vioreai\.com\/ko\/technology#technology-medical-model","headline":"의료 특화 AI 모델 — Medical-specialized AI Model","description":"바이오레만의 독자적인 fine-tuned AI 모델","datePublished":"2026-09-14","dateModified":"2026-09-14"/);
+  assert.match(html, /"@id":"https:\/\/vioreai\.com\/ko\/technology#technology-onpremise-security","headline":"온프레미스 알파닥과 기관 단위 보안 체계 — On-premise Deployment &amp; Zero Trust Extension"|"@id":"https:\/\/vioreai\.com\/ko\/technology#technology-onpremise-security","headline":"온프레미스 알파닥과 기관 단위 보안 체계 — On-premise Deployment & Zero Trust Extension"/);
   assert.match(html, /환자정보 처리 준비나 법적 적합성과도 구분됩니다/);
   assert.match(html, /그룹 대화, 완전한 순방향 비밀성, 이미 침해된 사용자 브라우저의 보호/);
   assert.doesNotMatch(html, /IN PRODUCTION|CONTROLLED WORKFLOWS|ARCHITECTURE IN DEVELOPMENT/);
@@ -1172,7 +1276,7 @@ test("server-renders an accessible, expanding Technology journal with its curren
   assert.match(html, /CollectionPage/);
   assert.doesNotMatch(html, /FAQPage/);
   assert.match(html, /technology-alphaseal/);
-  assert.equal((html.match(/<figcaption>/g) ?? []).length, 7);
+  assert.equal((html.match(/<figcaption>/g) ?? []).length, 9);
   assert.match(html, /technology-raw-diagram-overview/);
   assert.match(html, /technology-raw-diagram-evidence/);
   assert.match(html, /technology-raw-diagram-engine/);
@@ -1180,6 +1284,8 @@ test("server-renders an accessible, expanding Technology journal with its curren
   assert.match(html, /technology-raw-diagram-image/);
   assert.match(html, /technology-raw-diagram-layer/);
   assert.match(html, /technology-raw-diagram-seal/);
+  assert.match(html, /technology-raw-diagram-model/);
+  assert.match(html, /technology-raw-diagram-onpremise/);
   assert.doesNotMatch(html, /개발 지시 — 비공개|개발 계약 — 비공개|내부 근거 지도/);
 
   assert.match(englishHtml, /Medical AI,/);
@@ -1198,8 +1304,26 @@ test("server-renders an accessible, expanding Technology journal with its curren
   assert.match(englishHtml, /IMPLEMENTED · PRODUCT ACTIVATION REVIEW/);
   assert.match(englishHtml, /SELECTED PATHS RUNTIME-VERIFIED/);
   assert.match(englishHtml, /IMPLEMENTED · SUPPORTED 1:1 MESSAGING/);
+  assert.match(englishHtml, /Updated September 14, 2026/);
+  assert.match(englishHtml, /technology-status-coming-soon">Coming soon · In development</);
+  assert.match(englishHtml, /technology-status-in-design">In design and build</);
+  assert.match(englishHtml, /<h2>Medical-specialized AI Model<\/h2><p class="technology-section-lead">Viore&#x27;s own fine-tuned AI model\.<\/p>/);
+  assert.match(englishHtml, /On-premise Deployment &amp; Zero Trust Extension<\/p><h2>On-premise Alphadoc and Institution-level Security<\/h2>/);
+  assert.match(englishHtml, /Why Viore builds its own model/);
+  assert.match(englishHtml, /How Viore&#x27;s model is built/);
+  assert.match(englishHtml, /From personal AI to institutional AI/);
+  assert.match(englishHtml, /Viore&#x27;s medical-specialized model <a href="#technology-medical-model">\(07\)<\/a> will also run on this execution layer and replace external models\./);
+  assert.match(englishHtml, /the medical-specialized model from <a href="#technology-medical-model">07<\/a> will run on internal servers/);
+  assert.match(englishHtml, /for selected text paths <a href="#technology-alphalayer">\(05\)<\/a>\. The institution-level security framework/);
+  assert.match(englishHtml, /<strong>Figure<!-- --> <!-- -->08<\/strong><span>Viore&#x27;s medical-specialized model \(V1\) takes the model slot in AlphaDoc Engine/);
+  assert.match(englishHtml, /<strong>Figure<!-- --> <!-- -->09<\/strong><span>On-premise Alphadoc runs on the institution&#x27;s internal servers without an internet connection/);
+  assert.match(englishHtml, /technology-article-nav-next-title">What&#x27;s next</);
+  assert.match(englishHtml, /Medical-specialized AI Model<small class="technology-article-nav-tag">Coming soon<\/small>/);
+  assert.doesNotMatch(englishHtml, FORBIDDEN_TOKENS);
   assert.doesNotMatch(englishHtml, /우리만의 선형|살아 있는 근거의 중심|보안을 설정이 아니라/);
   assert.match(englishHtml, /"inLanguage":"en-US"/);
+  assert.equal((englishHtml.match(/"@type":"TechArticle"/g) ?? []).length, 8);
+  assert.match(englishHtml, /"@id":"https:\/\/vioreai\.com\/en\/technology#technology-medical-model","headline":"Medical-specialized AI Model","description":"Viore's own fine-tuned AI model\.","datePublished":"2026-09-14","dateModified":"2026-09-14"/);
 });
 
 test("keeps the public architecture contract aligned with the bounded AlphaSeal claim", async () => {
@@ -1266,6 +1390,8 @@ test("implements the AlphaEvidence public snapshot and distinct public diagrams 
     "ImageDiagram",
     "LayerDiagram",
     "SealDiagram",
+    "ModelDiagram",
+    "OnpremiseDiagram",
   ]) {
     assert.match(motion, new RegExp(`function ${diagram}`));
   }
@@ -1299,8 +1425,11 @@ test("implements the AlphaEvidence public snapshot and distinct public diagrams 
   assert.match(chrome, /<small>Coming soon<\/small>/);
   assert.match(css, /\.technology-article-nav \{\s*position: fixed;/);
   assert.match(css, /\.technology-post \{\s*scroll-margin-top:/);
+  assert.match(css, /@media \(max-width: 1180px\) \{[\s\S]*?\.technology-post \{\s*scroll-margin-top: calc\(var\(--header\) \+ 96px \+ 24px\);/);
+  assert.match(css, /@media \(max-width: 760px\) \{[\s\S]*?scroll-margin-top: calc\(var\(--header\) \+ 96px \+ 16px\);/);
   assert.match(css, /--technology-page: var\(--dark-paper-base\)/);
   assert.match(css, /--technology-paper: var\(--dark-paper-image\)/);
+  assert.doesNotMatch(css, /#111114;\s*backdrop-filter: none|rgba\(17, 17, 20|site-header-dark/);
   assert.match(css, /--technology-blue: #8bb5ff/);
   assert.match(css, /--technology-red: #ff8177/);
   assert.match(css, /-apple-system, BlinkMacSystemFont, "SF Pro Text", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif/);
@@ -1317,9 +1446,12 @@ test("implements the AlphaEvidence public snapshot and distinct public diagrams 
   assert.match(css, /\.technology-status-integration-in-review::before/);
   assert.doesNotMatch(css, /diagram-paper-grain|diagram-orbit/);
   assert.doesNotMatch(css, /#e7efe9|raw-paper-mint|raw-paper-lilac|radial-gradient\(circle at 50% -8%/);
-  assert.match(css, /\.site-header\.site-header-dark/);
-  assert.match(css, /\.site-header\.site-header-dark \{[\s\S]*?color: #f5f5f7;/);
-  assert.match(css, /\.site-header-dark \.contact-link \{[\s\S]*?color: #f5f5f7;/);
+  const globalsCss = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  assert.match(globalsCss, /\.site-header\.site-header-dark \{\s*--technology-page: #000000;/);
+  assert.match(globalsCss, /\.site-header\.site-header-dark \{[\s\S]*?color: #f5f5f7;/);
+  assert.match(globalsCss, /\.site-header-dark \.contact-link \{[\s\S]*?color: #f5f5f7;/);
+  assert.match(globalsCss, /@media \(max-width: 760px\) \{\s*\.site-header\.site-header-dark \{\s*background: #000000;/);
+  assert.doesNotMatch(globalsCss, /rgba\(17, 17, 20|rgba\(17,17,20|#08080a|#fdfdfc/);
   assert.match(css, /\.technology-article-nav \{[\s\S]*?border: 0;[\s\S]*?background: transparent;[\s\S]*?backdrop-filter: none;/);
   assert.match(css, /\.technology-article-nav-inner \{[\s\S]*?border: 0;[\s\S]*?background: transparent;[\s\S]*?backdrop-filter: none;/);
   assert.match(css, /@media \(max-width: 1180px\) \{[\s\S]*?background: color-mix\(in srgb, var\(--technology-page\) 96%, transparent\);[\s\S]*?grid-template-columns: repeat\(6, minmax\(0, 1fr\)\);/);

@@ -3,6 +3,7 @@ import {
   KNOWLEDGE_PAGE_SIZE,
   isKnowledgeCursor,
   parseKnowledgePaperItem,
+  repairKnowledgeBrief,
   type KnowledgeFilter,
   type KnowledgePaperItem,
   type KnowledgePaperPage,
@@ -19,22 +20,9 @@ export const KNOWLEDGE_FEED_REVALIDATE_SECONDS = 10 * 60;
 export const KNOWLEDGE_FEED_STALE_AFTER_MS = 3 * 60 * 60 * 1_000;
 export const KNOWLEDGE_FEED_FETCH_TIMEOUT_MS = 5_000;
 
-const KNOWLEDGE_SELECT = [
-  "paper_id",
-  "published_date",
-  "title",
-  "title_ko",
-  "brief",
-  "authors",
-  "author_count",
-  "journal",
-  "published_year",
-  "source",
-  "scope",
-  "href",
-  "data_as_of",
-  "refreshed_at",
-].join(",");
+// The public table is read-only and bounded; selecting every column keeps the
+// feed working before and after the optional `brief_en` column is deployed.
+const KNOWLEDGE_SELECT = "*";
 
 type KnowledgePaperRow = KnowledgePaperItem & {
   data_as_of: string;
@@ -161,7 +149,8 @@ export async function getKnowledgePaperPage({
     published_date: row.published_date,
     title: row.title,
     title_ko: row.title_ko,
-    brief: row.brief,
+    brief: repairKnowledgeBrief(row.brief),
+    brief_en: row.brief_en,
     authors: row.authors,
     author_count: row.author_count,
     journal: row.journal,
