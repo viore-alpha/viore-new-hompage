@@ -172,7 +172,7 @@ export const siteContent = {
     footer: {
       company: {
         name: "Viore Inc.",
-        representative: "Representative Seokjin Ko",
+        representative: "Representative Seok Jin Go",
         registration: "Business Registration No. 709-88-03418",
         address: "B101-102 and 104, Building A, 660 Daewangpangyo-ro, Bundang-gu, Seongnam, Gyeonggi-do, Korea",
         email: "biz@vioreai.com",

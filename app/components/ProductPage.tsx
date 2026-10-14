@@ -71,7 +71,7 @@ const productCopy = {
       titleRest: "From Workstation to AI Workspace",
       lead: "From clinical questions and evidence review to document creation and translation. A space that connects medical work through apps. Answers to clinical questions come with their sources.",
       primary: "Start Alphadoc",
-      visualLabel: "A complex acid-base question is typed and submitted before Alphadoc Engine opens an evidence-backed chat answer",
+      visualLabel: "A complex acid-base question is typed and submitted before AlphaDoc Engine opens an evidence-backed chat answer",
     },
     anatomy: {
       title: "Three roles in one screen",

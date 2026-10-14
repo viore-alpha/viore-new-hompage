@@ -54,7 +54,7 @@ test("server-renders independent Korean and English homepage metadata", async ()
   assert.match(englishHtml, /<title>Viore, Drawing a New Linearity in Medicine\.<\/title>/);
   assert.match(englishHtml, /<meta property="og:title" content="Viore, Drawing a New Linearity in Medicine\."/);
   assert.match(englishHtml, /<meta property="og:image" content="https:\/\/vioreai\.com\/brand\/viore-social-card-white-v3\.png"/);
-  assert.match(englishHtml, /class="footer-company-primary"><strong>Viore Inc\.<\/strong><span>Representative Seokjin Ko<\/span><span>Business Registration No\. 709-88-03418<\/span>/);
+  assert.match(englishHtml, /class="footer-company-primary"><strong>Viore Inc\.<\/strong><span>Representative Seok Jin Go<\/span><span>Business Registration No\. 709-88-03418<\/span>/);
   assert.match(englishHtml, /B101-102 and 104, Building A, 660 Daewangpangyo-ro/);
   assert.match(englishHtml, /Viore builds medical AI that draws the expertise and systems accumulated across medicine into one continuous line\./);
   assert.doesNotMatch(englishHtml, /Viore builds a Medical OS that connects the expertise/);
