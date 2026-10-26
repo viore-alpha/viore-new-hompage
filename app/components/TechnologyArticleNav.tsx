@@ -5,61 +5,62 @@ import type { Language } from "@/app/site-content";
 
 type NavArticle = {
   id: string;
+  number: string;
   label: string;
   tag?: string;
 };
 
 const CURRENT_ARTICLES: Record<Language, readonly NavArticle[]> = {
   ko: [
-    { id: "technology-alphaevidence", label: "AlphaEvidence" },
-    { id: "technology-alphadoc-engine", label: "AlphaDoc Engine" },
-    { id: "technology-alphadocument", label: "AlphaDocument" },
-    { id: "technology-alphaimage", label: "AlphaImage" },
-    { id: "technology-alphalayer", label: "AlphaLayer" },
-    { id: "technology-alphaseal", label: "AlphaSeal" },
+    { id: "technology-alphaevidence", number: "01", label: "AlphaEvidence" },
+    { id: "technology-alphadoc-engine", number: "02", label: "AlphaDoc Engine" },
+    { id: "technology-alphadocument", number: "03", label: "AlphaDocument" },
+    { id: "technology-alphaimage", number: "04", label: "AlphaImage" },
+    { id: "technology-alphalayer", number: "05", label: "AlphaLayer" },
+    { id: "technology-alphaseal", number: "06", label: "AlphaSeal" },
+    { id: "technology-one-way-architecture", number: "09", label: "일방향 AI 구조" },
   ],
   en: [
-    { id: "technology-alphaevidence", label: "AlphaEvidence" },
-    { id: "technology-alphadoc-engine", label: "AlphaDoc Engine" },
-    { id: "technology-alphadocument", label: "AlphaDocument" },
-    { id: "technology-alphaimage", label: "AlphaImage" },
-    { id: "technology-alphalayer", label: "AlphaLayer" },
-    { id: "technology-alphaseal", label: "AlphaSeal" },
+    { id: "technology-alphaevidence", number: "01", label: "AlphaEvidence" },
+    { id: "technology-alphadoc-engine", number: "02", label: "AlphaDoc Engine" },
+    { id: "technology-alphadocument", number: "03", label: "AlphaDocument" },
+    { id: "technology-alphaimage", number: "04", label: "AlphaImage" },
+    { id: "technology-alphalayer", number: "05", label: "AlphaLayer" },
+    { id: "technology-alphaseal", number: "06", label: "AlphaSeal" },
+    { id: "technology-one-way-architecture", number: "09", label: "One-way AI Architecture" },
   ],
 };
 
 const NEXT_ARTICLES: Record<Language, readonly NavArticle[]> = {
   ko: [
-    { id: "technology-medical-model", label: "의료 특화 AI 모델", tag: "Coming soon" },
-    { id: "technology-onpremise-security", label: "온프레미스 알파닥과 기관 단위 보안 체계" },
+    { id: "technology-medical-model", number: "07", label: "의료 특화 AI 모델", tag: "Coming soon" },
+    { id: "technology-onpremise-security", number: "08", label: "사내망 알파닥과 기관 단위 보안 체계" },
   ],
   en: [
-    { id: "technology-medical-model", label: "Medical-specialized AI Model", tag: "Coming soon" },
-    { id: "technology-onpremise-security", label: "On-premise Alphadoc and Institution-level Security" },
+    { id: "technology-medical-model", number: "07", label: "Our own medical AI model", tag: "Coming soon" },
+    { id: "technology-onpremise-security", number: "08", label: "Alphadoc on your corporate network" },
   ],
 };
 
 function NavList({
   articles,
-  offset,
   activeId,
   className,
 }: {
   articles: readonly NavArticle[];
-  offset: number;
   activeId: string | null;
   className?: string;
 }) {
   return (
     <ol className={className}>
-      {articles.map((article, index) => (
+      {articles.map((article) => (
         <li key={article.id}>
           <a
             className={activeId === article.id ? "is-active" : undefined}
             href={`#${article.id}`}
             aria-current={activeId === article.id ? "location" : undefined}
           >
-            <small>{String(offset + index + 1).padStart(2, "0")}</small>
+            <small>{article.number}</small>
             <span>
               {article.label}
               {article.tag && <small className="technology-article-nav-tag">{article.tag}</small>}
@@ -103,11 +104,10 @@ export function TechnologyArticleNav({ language }: { language: Language }) {
     >
       <div className="technology-article-nav-inner">
         <span>{language === "ko" ? "현재 기술" : "Current Tech"}</span>
-        <NavList articles={currentArticles} offset={0} activeId={activeId} />
+        <NavList articles={currentArticles} activeId={activeId} />
         <span className="technology-article-nav-next-title">{language === "ko" ? "다음 기술" : "What's next"}</span>
         <NavList
           articles={nextArticles}
-          offset={currentArticles.length}
           activeId={activeId}
           className="technology-article-nav-next"
         />

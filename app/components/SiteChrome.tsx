@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element -- Small static brand marks in the header and footer. */
 "use client";
 
 import { useState, type ReactNode } from "react";
@@ -5,6 +6,10 @@ import { usePathname } from "next/navigation";
 import { routeFor, siteContent, technologyRouteFor, type Language, type PageKey } from "@/app/site-content";
 
 type MenuId = "product";
+
+/* NVIDIA requires its trademark notice wherever the Inception badge appears.
+   Replace with the exact sentence from the NVIDIA Inception design guide (design.nvidia.com/partners/inception) before release. */
+const NVIDIA_TRADEMARK_NOTICE = "NVIDIA, the NVIDIA logo, and NVIDIA Inception are trademarks and/or registered trademarks of NVIDIA Corporation in the U.S. and other countries.";
 type MenuItem = { label: string; key?: PageKey; href?: string; badge?: string; disabled?: boolean };
 
 export function SiteChrome({ language, children }: { language: Language; children: ReactNode }) {
@@ -134,11 +139,16 @@ export function SiteChrome({ language, children }: { language: Language; childre
             </address>
           </div>
           <div className="footer-legal">
+            <span className="footer-inception">
+              <img className="footer-inception-badge is-light" src="/brand/partners/nvidia-inception-program-badge-1c-blk.svg" alt="NVIDIA Inception program member" width="72" height="31" loading="lazy" decoding="async" />
+              <img className="footer-inception-badge is-dark" src="/brand/partners/nvidia-inception-program-badge-rgb.svg" alt="NVIDIA Inception program member" width="72" height="31" loading="lazy" decoding="async" />
+            </span>
             <div className="footer-policy-links">
               <a href={`/${language}/legal#privacy`}>{content.footer.privacy}</a>
               <a href={`/${language}/legal#terms`}>{content.footer.terms}</a>
             </div>
             <span className="footer-copyright">{content.footer.copyright}</span>
+            <small className="footer-trademark">{NVIDIA_TRADEMARK_NOTICE}</small>
           </div>
         </div>
       </footer>

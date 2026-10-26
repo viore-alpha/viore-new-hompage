@@ -18,7 +18,7 @@ const contentSecurityPolicy = [
   "default-src 'self'",
   scriptSrc,
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: https://alphadoc.ai",
+  "img-src 'self' data:",
   "font-src 'self'",
   "connect-src 'self'",
   "object-src 'none'",

@@ -19,7 +19,7 @@ const reducedMotionQuery = "(prefers-reduced-motion: reduce)";
 const COUNT_LABELS = [
   ["canonical_papers", "정규화 논문 레코드", "Canonical papers"],
   ["papers_with_abstract", "초록 보유 논문", "Papers with abstract"],
-  ["visible_guidelines", "노출 가능한 진료지침", "Visible guidelines"],
+  ["visible_guidelines", "열람 가능한 진료지침", "Viewable guidelines"],
 ] as const;
 
 function subscribeToReducedMotion(onStoreChange: () => void) {

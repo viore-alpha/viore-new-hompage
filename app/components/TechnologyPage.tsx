@@ -3,6 +3,7 @@ import type { AlphaEvidenceSnapshotResult } from "@/app/alphaevidence-snapshot";
 import { AlphaEvidenceSnapshot } from "@/app/components/AlphaEvidenceSnapshot";
 import { TechnologyArticleNav } from "@/app/components/TechnologyArticleNav";
 import { TechnologyMotion, type TechnologyMotionKind } from "@/app/components/TechnologyMotion";
+import { SITE_UPDATED_AT } from "@/app/seo";
 import { technologyAnchors, type Language } from "@/app/site-content";
 
 type TechnologyStatus =
@@ -13,21 +14,30 @@ type TechnologyStatus =
   | "selected-path-active"
   | "supported-path-implemented"
   | "coming-soon"
-  | "in-design";
+  | "first-site-installed"
+  | "first-site-applied";
 
 type ProseLink = { text: string; href: string };
 type ProseParagraph = string | ReadonlyArray<string | ProseLink>;
 
 const VERIFIED_DATE = "2026-07-30";
-const NEXT_VERIFIED_DATE = "2026-09-14";
 const MODEL_ANCHOR = `#${technologyAnchors["medical-model"]}`;
 const LAYER_ANCHOR = `#${technologyAnchors.alphalayer}`;
+const EVIDENCE_ANCHOR = `#${technologyAnchors.alphaevidence}`;
+
+const ENGLISH_MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+function formatUpdated(language: Language) {
+  const [year, month, day] = SITE_UPDATED_AT.split("-").map(Number);
+  return language === "ko"
+    ? `${year}년 ${month}월 ${day}일 업데이트`
+    : `Updated ${ENGLISH_MONTHS[month - 1]} ${day}, ${year}`;
+}
 
 const sharedCopy = {
   ko: {
     journal: "Journal",
     published: "2026년 7월 21일",
-    updated: "2026년 9월 14일 업데이트",
     hero: <>우리만의 선형을<br />만드는 과정</>,
     author: "Viore Team",
     status: "상태",
@@ -37,27 +47,28 @@ const sharedCopy = {
       "implemented-foundation": "구현 · 제품 기반 운영 중",
       "implemented-capability": "구현 · 제품 기능 운영 중",
       "release-in-review": "구현 · 적용 범위 확대 검토 중",
-      "integration-in-review": "구현 · 제품 활성화 검토 중",
-      "selected-path-active": "선택 경로 운영 검증",
-      "supported-path-implemented": "구현 · 지원 1:1 쪽지",
+      "integration-in-review": "구현 · 제품 적용 검토 중",
+      "selected-path-active": "일부 기능에서 운영 검증",
+      "supported-path-implemented": "구현 · 1:1 쪽지에 적용",
       "coming-soon": "Coming soon · 개발 중",
-      "in-design": "설계·구축 중",
+      "first-site-installed": "첫 기관 설치 · 보안 체계 구축 중",
+      "first-site-applied": "구현 · 첫 기관 적용",
     },
-    introTitle: "하나의 답보다, 그 답이 만들어지는 전체 구조를 설계합니다",
+    introTitle: "답이 만들어지는 과정 전체를 설계합니다",
     intro: [
-      "바이오레는 의료 근거가 어디에서 왔는지, 문서와 이미지가 어떻게 다시 쓰이는지, AI 실행과 의료인 대화가 어떤 경계 안에서 움직이는지를 각각의 기술로 설계합니다. 서로 다른 기술은 확인된 지점에서 연결되고, 그 연결이 알파닥의 의료 업무 경험을 만듭니다.",
-      "구현과 제품 연결, 실제 운영은 같은 말이 아닙니다. 바이오레는 기술을 하나의 완성된 묶음으로 포장하기보다 확인한 범위를 밝히고, 다음 연결을 계속 넓혀갑니다.",
+      "바이오레는 근거가 어디서 왔는지, 문서와 이미지를 어떻게 다시 쓰는지, AI 실행과 대화가 어떤 범위 안에서 움직이는지를 기술별로 나눠 설계합니다. 각 기술은 동작을 확인한 곳에서만 서로 연결되고, 그 연결이 알파닥이 됩니다.",
+      "만든 것, 제품에 붙인 것, 실제로 운영하는 것은 서로 다릅니다. 바이오레는 기술마다 어디까지 확인했는지 밝히고, 연결할 곳을 하나씩 넓혀 갑니다.",
     ],
     quote: {
       first: "모델은 바뀔 수 있습니다.",
-      second: "근거와 업무, 보호의 원칙은 남아야 합니다.",
+      second: "근거와 업무, 보안의 원칙은 남아야 합니다.",
     },
+    overviewCaption: "바이오레는 근거, 문서와 이미지, 업무 실행, 외부 AI 통제, 1:1 대화 보호를 각각 다른 기술로 나눕니다. 각 기술은 검증한 범위 안에서만 알파닥에 연결됩니다.",
   },
   en: {
     journal: "Journal",
     published: "July 21, 2026",
-    updated: "Updated September 14, 2026",
-    hero: <>Medical AI,<br />built as a technology system<br />rather than one model</>,
+    hero: <>Drawing<br />our own linearity.</>,
     author: "Viore Team",
     status: "Status",
     verified: "Verified as of",
@@ -66,21 +77,23 @@ const sharedCopy = {
       "implemented-foundation": "IMPLEMENTED · PRODUCT FOUNDATION ACTIVE",
       "implemented-capability": "IMPLEMENTED · PRODUCT CAPABILITY ACTIVE",
       "release-in-review": "IMPLEMENTED · SCOPE EXPANSION REVIEW",
-      "integration-in-review": "IMPLEMENTED · PRODUCT ACTIVATION REVIEW",
-      "selected-path-active": "SELECTED PATHS RUNTIME-VERIFIED",
-      "supported-path-implemented": "IMPLEMENTED · SUPPORTED 1:1 MESSAGING",
+      "integration-in-review": "IMPLEMENTED · PRODUCT INTEGRATION REVIEW",
+      "selected-path-active": "RUNTIME-VERIFIED IN SELECTED FEATURES",
+      "supported-path-implemented": "IMPLEMENTED · APPLIED TO 1:1 MESSAGES",
       "coming-soon": "Coming soon · In development",
-      "in-design": "In design and build",
+      "first-site-installed": "Installed at first institution · Security framework in progress",
+      "first-site-applied": "IMPLEMENTED · APPLIED AT FIRST INSTITUTION",
     },
-    introTitle: "We design the whole system behind the answer",
+    introTitle: "We design everything behind the answer.",
     intro: [
-      "Viore designs distinct technologies around where medical evidence came from, how documents and images remain reusable, and which boundaries govern AI execution and professional conversations. Those technologies connect where their behavior has been verified, and together they shape the medical-work experience in Alphadoc.",
-      "Implementation, product connection, and live operation are not the same. Rather than presenting the portfolio as one finished bundle, Viore states what has been verified and keeps extending the connections.",
+      "Viore builds a separate technology for each hard question in medical AI: where evidence comes from, how documents and images get reused, and what limits AI execution and conversations stay within. They connect only where we've verified they work, and together they become Alphadoc.",
+      "Built, connected, and running are three different things. For each technology, we say exactly how far we've verified it, and we expand from there.",
     ],
     quote: {
       first: "Models can change.",
-      second: "The principles for evidence, work, and protection should remain.",
+      second: "The principles for evidence, work, and security should stay.",
     },
+    overviewCaption: "Viore splits evidence, documents and images, work execution, external AI control, and one-to-one conversation protection into separate technologies. Each connects to Alphadoc only within its verified scope.",
   },
 } as const;
 
@@ -89,25 +102,24 @@ const articleCopy = {
     evidence: {
       name: "AlphaEvidence",
       englishTitle: "Evidence Foundation",
-      lead: "검색 결과보다 먼저, 출처와 변화가 남는 근거 기반을 만듭니다.",
+      lead: "검색보다 먼저, 출처와 변경 이력이 남는 근거 데이터를 만듭니다.",
       sections: [
         {
           title: "근거는 어디에서 왔는가",
           paragraphs: [
-            "논문과 진료지침은 많이 모았다는 이유만으로 믿을 만한 근거가 되지 않습니다. 어디에서 들어왔고 언제 확인됐는지, 그 뒤 무엇이 달라졌는지가 함께 남아야 의료인이 다시 살필 수 있습니다.",
-            "AlphaEvidence는 문헌과 진료지침의 식별 정보, 출처, 이용 조건과 변화 이력을 이어 둡니다. 답변을 쌓아두는 데이터베이스가 아니라, 판단에 쓰인 근거를 다시 찾아갈 수 있게 하는 기반입니다.",
+            "논문과 진료지침은 많이 모은다고 믿을 수 있는 근거가 되지 않습니다. 어디서 가져왔는지, 언제 확인했는지, 그 뒤 무엇이 바뀌었는지가 남아 있어야 의료인이 다시 확인할 수 있습니다.",
+            "AlphaEvidence는 문헌과 진료지침마다 식별 정보, 출처, 이용 조건, 변경 이력을 묶어 저장합니다. 답변을 저장하지는 않습니다. 답에 쓰인 근거를 나중에 다시 찾아갈 수 있게 하는 것이 목적입니다.",
           ],
         },
         {
-          title: "자료가 판단의 맥락이 되기까지",
+          title: "자료가 근거가 되기까지",
           paragraphs: [
-            "확인 가능한 자료가 들어오면 출처와 식별 정보를 맞추고, 같은 자료의 변화와 품질 신호를 이어 붙입니다. AlphaDoc Engine에는 이 계보가 보존된 근거 맥락을 전달합니다.",
-            "AlphaEvidence Foundation은 알파닥의 근거 경로에 연결돼 있습니다. 공개 집계는 문헌 레코드와 진료지침의 규모를 보여주는 지표이며, 개별 레코드의 임상 검증 완료 건수와는 구분됩니다.",
+            "새 자료가 들어오면 출처와 식별 정보를 맞추고, 같은 자료의 이전 버전과 품질 정보를 연결합니다. AlphaDoc Engine은 이렇게 이력이 붙은 근거를 받아 답에 씁니다.",
+            "AlphaEvidence는 알파닥이 근거를 찾는 경로에 연결돼 있습니다. 아래 공개 집계는 보유한 문헌과 진료지침의 수이며, 임상 검증을 마친 자료의 수가 아닙니다.",
           ],
         },
       ],
-      figureTitle: "Evidence that keeps its lineage",
-      figureCaption: "AlphaEvidence는 확인 가능한 자료를 출처와 변화가 남는 계보로 정리해, AlphaDoc Engine과 의료인이 다시 살필 수 있는 근거 맥락으로 전달합니다.",
+      figureCaption: "AlphaEvidence는 자료를 출처와 변경 이력이 남는 형태로 정리해 AlphaDoc Engine과 의료인에게 전달합니다.",
       snapshotTitle: "현재 확인할 수 있는 AlphaEvidence DB",
     },
     engine: {
@@ -118,47 +130,45 @@ const articleCopy = {
         {
           title: "질문 다음의 일을 설계하다",
           paragraphs: [
-            "같은 질문이라도 근거를 찾는 일, 문서를 다루는 일, 번역하거나 기록을 정리하는 일은 필요한 입력과 검토가 다릅니다. AlphaDoc Engine은 어떤 모델을 쓸지보다 사용자가 지금 무엇을 하려는지부터 구분합니다.",
+            "근거를 찾는 일, 문서를 다루는 일, 기록을 정리하는 일은 필요한 입력도 확인할 점도 다릅니다. AlphaDoc Engine은 어떤 모델을 쓸지보다 사용자가 지금 하려는 일이 무엇인지를 먼저 구분합니다.",
             [
-              "그 목적에 맞는 근거와 문서 맥락, 도구와 결과 형태를 조합합니다. AlphaDoc Engine은 자체 거대언어모델이 아니라, 바이오레의 기술을 의료 업무에 맞게 연결하는 실행 계층입니다. 바이오레가 개발하는 의료 특화 모델",
-              { text: "(07)", href: MODEL_ANCHOR },
-              "도 이 실행 계층 위에서 외부 모델을 대체할 예정입니다.",
+              "그다음 그 일에 맞는 근거와 문서, 도구, 답의 형식을 고릅니다. AlphaDoc Engine은 바이오레가 만든 거대언어모델이 아니라, 바이오레의 기술을 의료 업무에 맞게 묶어 실행하는 계층입니다. 바이오레가 개발 중인 ",
+              { text: "의료 특화 AI 모델", href: MODEL_ANCHOR },
+              "도 이 계층에서 지금 쓰는 모델을 대신할 예정입니다.",
             ],
           ],
         },
         {
-          title: "업무의 목적이 다음 행동으로 이어지는 길",
+          title: "목적을 확인하고 다음 작업으로",
           paragraphs: [
-            "업무 목적을 확인한 뒤 필요한 AlphaEvidence 근거와 사용 가능한 문서·이미지 아티팩트를 불러옵니다. 보호가 필요한 외부 실행은 AlphaLayer가 적용된 경로로 보내고, 결과는 사용자의 검토와 다음 작업으로 돌아옵니다.",
-            "이 실행 구조는 여러 알파닥 기능에서 동작합니다. 근거 품질을 평가하는 범위와 방식은 기능에 따라 달라집니다.",
+            "할 일을 확인하면 AlphaEvidence의 근거와 쓸 수 있는 문서, 이미지 데이터를 불러옵니다. 외부 AI 실행에 보호가 필요한 요청은 AlphaLayer가 적용된 경로로 보내고, 결과는 사용자가 확인한 뒤 다음 작업으로 넘어갑니다.",
+            "이 구조는 알파닥의 여러 기능에서 동작합니다. 근거의 품질을 평가하는 범위와 방법은 기능마다 다릅니다.",
           ],
         },
       ],
-      figureTitle: "From purpose to the next medical task",
-      figureCaption: "AlphaDoc Engine은 업무 목적에 맞는 근거와 사용 가능한 아티팩트, 선택된 보호 실행 경로를 조합하고 결과를 사용자 검토와 다음 작업으로 돌려보냅니다.",
+      figureCaption: "AlphaDoc Engine은 할 일에 맞는 근거와 문서, 실행 경로를 고르고, 결과를 사용자 확인과 다음 작업으로 넘깁니다.",
     },
     document: {
       name: "AlphaDocument",
       englishTitle: "Deterministic Document-to-Artifact Engine",
-      lead: "문서를 한 번 읽고 버리는 텍스트가 아니라, 다시 쓸 수 있는 지식으로 바꿉니다.",
+      lead: "한 번 읽은 문서를 다시 쓸 수 있는 데이터로 바꿉니다.",
       sections: [
         {
           title: "읽은 문서를 다시 쓰는 지식으로",
           paragraphs: [
-            "PDF, DOCX, HWP, CSV는 구조를 표현하는 방식이 서로 다릅니다. 텍스트만 뽑아내면 표와 문단, 원문의 위치와 처리 이력이 빠지기 쉽습니다.",
-            "AlphaDocument는 지원되는 문서를 구조와 출처가 함께 남는 Document Artifact로 바꿉니다. 같은 입력과 처리 기준에서 결과를 다시 확인할 수 있게 만들고, 문서 지식을 특정 화면 하나에 가두지 않습니다.",
+            "PDF, DOCX, HWP, CSV는 구조를 담는 방식이 서로 다릅니다. 글자만 뽑아내면 표와 문단 구분, 원문의 위치, 처리 이력이 빠지기 쉽습니다.",
+            "AlphaDocument는 지원하는 문서를 구조와 출처가 남는 Document Artifact로 바꿉니다. 같은 문서를 같은 기준으로 처리하면 같은 결과가 나와 다시 확인할 수 있고, 변환한 내용은 알파닥의 여러 기능에서 다시 씁니다.",
           ],
         },
         {
-          title: "문서가 아티팩트로 이어지는 과정",
+          title: "문서가 아티팩트가 되는 과정",
           paragraphs: [
-            "지원 문서를 읽고 보존할 수 있는 구조와 원문 위치를 정리한 뒤, 처리 기준과 무결성 정보를 묶습니다. 만들어진 아티팩트는 알파닥에서 문서 맥락이 필요한 기능에 다시 쓰입니다.",
-            "핵심 엔진과 제품 연결 경로는 구현돼 있으며, 적용 범위를 넓히는 단계입니다. 보존 가능한 요소는 형식마다 다르므로 원본의 모든 표·이미지·페이지 배치를 그대로 재현하는 기술은 아닙니다.",
+            "문서를 읽어 남길 수 있는 구조와 원문 위치를 정리하고, 처리 기준과 무결성 정보를 붙입니다. 이렇게 만든 아티팩트는 알파닥에서 문서 내용이 필요한 기능에 다시 쓰입니다.",
+            "핵심 엔진과 제품 연결은 구현돼 있고, 적용 범위를 넓히고 있습니다. 남길 수 있는 요소는 파일 형식마다 달라서 원본의 표, 이미지, 페이지 배치를 모두 그대로 재현하지는 못합니다.",
           ],
         },
       ],
-      figureTitle: "A document that remains reusable",
-      figureCaption: "지원되는 문서는 AlphaDocument에서 보존 가능한 구조와 출처가 남는 아티팩트가 되고, 알파닥의 문서 맥락이 필요한 기능에서 다시 쓰입니다.",
+      figureCaption: "지원하는 문서는 AlphaDocument를 거쳐 구조와 출처가 남는 아티팩트가 되고, 알파닥의 여러 기능에서 다시 쓰입니다.",
     },
     image: {
       name: "AlphaImage",
@@ -166,309 +176,351 @@ const articleCopy = {
       lead: "이미지를 해석하기 전에, 같은 기준으로 다룰 수 있는 입력으로 만듭니다.",
       sections: [
         {
-          title: "해석 전에 입력을 바로 세우다",
+          title: "해석하기 전에 입력부터 맞추다",
           paragraphs: [
-            "같은 이미지라도 형식과 방향, 크기와 좌표 기준이 다르면 다음 단계는 서로 다른 대상을 보게 됩니다. 원본과 변환본을 따로 다루면 무엇이 어디서 바뀌었는지도 놓치기 쉽습니다.",
-            "AlphaImage는 지원되는 정적 이미지를 일관된 표현과 좌표 체계로 정리하고, 원본과 기존 주석의 계보를 함께 남기는 Image Artifact를 만듭니다.",
+            "같은 이미지라도 파일 형식, 방향, 크기, 좌표 기준이 다르면 다음 단계에서는 다른 이미지처럼 다뤄집니다. 원본과 변환본을 따로 관리하면 어디서 무엇이 바뀌었는지도 알기 어렵습니다.",
+            "AlphaImage는 지원하는 정적 이미지를 같은 형식과 좌표계로 정리하고, 원본과 기존 주석의 이력을 남긴 Image Artifact를 만듭니다.",
           ],
         },
         {
           title: "서로 다른 이미지를 하나의 기준으로",
           paragraphs: [
-            "허용된 입력인지 확인한 뒤 안전한 공통 표현으로 바꾸고, 좌표 변환과 기존 주석의 출처를 아티팩트에 연결합니다. 후속 기능은 이 공통 기반을 다시 사용합니다.",
-            "기술 구현과 제한된 합성 입력의 실행 검증을 마쳤고, 알파닥 사용자 경로 활성화는 검토 중입니다. AlphaImage는 영상을 판독하거나 진단하는 기술이 아니며, 환자정보 처리 준비나 법적 적합성까지 확인한 상태도 아닙니다.",
+            "허용된 입력인지 확인한 뒤 안전한 공통 형식으로 바꾸고, 좌표 변환 내역과 기존 주석의 출처를 아티팩트에 기록합니다. 이후 기능은 이 결과를 다시 씁니다.",
+            "구현과 합성 이미지를 사용한 제한된 실행 검증을 마쳤고, 알파닥 사용자 화면에 적용할지는 검토 중입니다. AlphaImage는 영상을 판독하거나 진단하지 않으며, 환자정보 처리 준비나 법적 적합성은 확인하지 않았습니다.",
           ],
         },
       ],
-      figureTitle: "A consistent foundation before interpretation",
-      figureCaption: "AlphaImage는 지원되는 정적 이미지를 공통 표현과 좌표로 정리하고 원본과 기존 주석의 계보를 이어, 후속 기능이 다시 쓸 수 있는 기반으로 만듭니다.",
+      figureCaption: "AlphaImage는 지원하는 정적 이미지를 같은 형식과 좌표로 정리하고 원본과 주석의 이력을 남겨, 이후 기능이 다시 쓸 수 있게 합니다.",
     },
     layer: {
       name: "AlphaLayer",
       englishTitle: "Protected Inference Gateway",
-      lead: "외부 AI가 필요한 선택 경로를 하나의 통제 경계로 묶습니다.",
+      lead: "외부 AI를 쓰는 일부 기능을 하나의 통제 지점으로 모읍니다.",
       sections: [
         {
-          title: "LLM의 자율성과 보안의 경계를 바로잡다",
+          title: "외부 AI를 쓸 때의 경계를 정하다",
           paragraphs: [
-            "몇 개의 문자열을 가렸다고 의료 AI 실행이 통제되는 것은 아닙니다. 어떤 업무가 어떤 조건으로 외부 AI를 쓰는지 확인하고, 허용되지 않은 요청은 경계 밖으로 나가기 전에 멈춰야 합니다.",
-            "AlphaLayer는 AlphaDoc Engine과 외부 AI 실행 사이에서 등록된 목적과 요청 조건을 확인합니다. 지원되는 데이터 유형과 텍스트 범위에 정책을 적용하고, 필요한 실행 맥락만 다음 단계로 보냅니다.",
+            "일부 글자를 가린다고 외부 AI 사용이 통제되지는 않습니다. 어떤 기능이 어떤 조건에서 외부 AI를 쓰는지 확인하고, 허용되지 않은 요청은 밖으로 나가기 전에 막아야 합니다.",
+            "AlphaLayer는 AlphaDoc Engine과 외부 AI 사이에서 요청이 등록된 목적과 조건에 맞는지 확인합니다. 지원하는 데이터 유형과 텍스트에 정책을 적용하고, 실행에 필요한 내용만 넘깁니다.",
           ],
         },
         {
-          title: "선택된 실행만 경계를 건너는 길",
+          title: "허용된 요청만 밖으로",
           paragraphs: [
-            "선택된 보호 텍스트는 등록된 정책 경계를 거쳐 외부에서 실행됩니다. 돌아온 결과가 같은 요청에 속하는지 확인한 뒤 알파닥에 전달하고, 운영에 필요한 범위의 기록만 남기는 것이 원칙입니다.",
-            "현재 알파닥의 선택된 텍스트 기능에서 운영 검증됐습니다. 보호 범위는 모든 기능·식별정보 유형·이미지·원문 파일로 자동 확장되지 않으며, 환자정보 처리 준비나 법적 적합성과도 구분됩니다.",
+            "보호 대상으로 지정된 텍스트는 등록된 정책을 거친 뒤에만 외부 AI에서 실행됩니다. 돌아온 결과가 원래 요청의 것인지 확인한 뒤 알파닥에 전달하고, 기록은 운영에 필요한 만큼만 남기는 것을 원칙으로 합니다.",
+            "현재 알파닥의 일부 텍스트 기능에서 운영 검증을 마쳤습니다. 모든 기능, 모든 식별정보 유형, 이미지, 원본 파일까지 보호하는 것은 아니며, 환자정보 처리 준비나 법적 적합성을 뜻하지도 않습니다.",
           ],
         },
       ],
-      figureTitle: "One boundary for selected external execution",
-      figureCaption: "AlphaLayer는 선택된 보호 텍스트를 등록된 정책 경계에서 확인하고, 통제된 외부 실행과 제한된 결과 반환을 같은 요청 맥락으로 잇습니다.",
+      figureCaption: "AlphaLayer는 보호 대상 텍스트를 등록된 정책으로 확인한 뒤 외부 AI에서 실행하고, 결과가 같은 요청으로 돌아왔는지 확인합니다.",
     },
     seal: {
       name: "AlphaSeal",
       englishTitle: "End-to-End Conversation Seal",
-      lead: "지원되는 1:1 쪽지의 본문을 참여자의 브라우저 사이에서 암호화합니다.",
+      lead: "지원하는 1:1 쪽지의 본문을 보내는 사람과 받는 사람의 브라우저 사이에서 암호화합니다.",
       sections: [
         {
           title: "대화 내용과 전달 정보를 분리하다",
           paragraphs: [
-            "전송 구간만 암호화하면 보관 단계에서는 서버가 내용을 읽을 수 있습니다. AlphaSeal이 적용된 1:1 쪽지는 본문을 참여자의 브라우저에서 암호화하고, 일반 저장 경로에는 암호문을 남깁니다.",
-            "발신자와 수신자, 시각, 읽음 상태처럼 전달에 필요한 메타데이터는 따로 남습니다. 신고된 내용은 당사자가 복호화해 제출할 수 있습니다. 따라서 AlphaSeal을 모든 대화 정보가 보이지 않는 기술로 표현하지 않습니다.",
+            "전송 구간만 암호화하면 서버에 저장된 내용은 서버가 읽을 수 있습니다. AlphaSeal을 적용한 1:1 쪽지는 보내는 사람의 브라우저에서 본문을 암호화하므로, 서버의 일반 저장소에는 암호문으로 남습니다.",
+            "보낸 사람, 받는 사람, 시각, 읽음 여부처럼 전달에 필요한 정보는 암호화하지 않고 따로 남습니다. 신고할 때는 당사자가 복호화한 내용을 제출할 수 있습니다. 그래서 AlphaSeal이 대화의 모든 정보를 숨기는 것은 아닙니다.",
           ],
         },
         {
           title: "브라우저에서 봉인하고 상대의 브라우저에서 열다",
           paragraphs: [
-            "지원되는 새 쪽지는 대화 맥락과 발신 순서에 묶여 암호화되고, 수신자의 브라우저에서 검증과 복호화를 거칩니다. 지원 환경과 복구 설정에 따라 키를 보호하고 기기 변경 경로를 제공합니다.",
-            "현재 적용 범위는 지원되는 1:1 쪽지입니다. 그룹 대화, 완전한 순방향 비밀성, 이미 침해된 사용자 브라우저의 보호, 환자정보 전송 적합성은 이 범위에 포함되지 않습니다.",
+            "새 쪽지는 대화와 보낸 순서 정보를 묶어 암호화되고, 받는 사람의 브라우저에서 검증한 뒤 복호화됩니다. 키는 지원 환경과 복구 설정에 따라 보호되고, 기기를 바꿀 때 쓸 수 있는 복구 방법을 제공합니다.",
+            "현재 적용 범위는 지원하는 1:1 쪽지입니다. 그룹 대화, 완전한 순방향 비밀성, 이미 침해된 사용자 브라우저의 보호, 환자정보 전송 적합성은 포함하지 않습니다.",
           ],
         },
       ],
-      figureTitle: "Message body sealed between participant browsers",
-      figureCaption: "AlphaSeal이 적용된 1:1 쪽지 본문은 발신자 브라우저에서 암호화돼 일반 저장 경로에 암호문으로 남고, 수신자 브라우저에서 열립니다. 전달 메타데이터와 신고 경로는 별도입니다.",
+      figureCaption: "1:1 쪽지 본문은 보내는 사람의 브라우저에서 암호화돼 서버에 암호문으로 저장되고, 받는 사람의 브라우저에서 열립니다. 전달 정보와 신고 경로는 따로 처리됩니다.",
     },
     model: {
       name: "의료 특화 AI 모델",
       englishTitle: "Medical-specialized AI Model",
-      lead: "바이오레만의 독자적인 fine-tuned AI 모델",
+      lead: "바이오레가 직접 미세조정하는 의료 AI 모델",
       sections: [
         {
-          title: "우리만의 모델을 만드는 이유",
+          title: "모델을 직접 만드는 이유",
           paragraphs: [
-            "의료기관 가운데는 환자 정보와 내부 자료를 외부 클라우드의 상용 AI로 보낼 수 없는 곳이 많습니다. 이런 기관에 의료 AI를 제공하려면 프론티어 API 없이 기관 안에서 구동하는 모델이 필요합니다. 바이오레가 모델을 직접 만드는 첫 번째 이유입니다. 두 번째는 효율입니다. 의료 답변의 품질을 유지하면서 더 적은 연산자원과 더 짧은 응답 시간으로 구동해야 기관이 감당할 수 있는 비용으로 운영할 수 있습니다. 세 번째는 검증입니다. 어떤 자료로 무엇을 학습했고 어떤 기준으로 평가했는지를 밝힐 수 있어야 의료인과 기관이 모델을 신뢰할 수 있습니다.",
+            "의료기관 중에는 환자 정보와 내부 자료를 외부 클라우드의 상용 AI로 보낼 수 없는 곳이 많습니다. 이런 기관에는 외부 API 없이 기관 안에서 돌아가는 모델이 필요합니다. 모델을 직접 만드는 첫째 이유입니다. 둘째는 비용입니다. 답의 품질을 지키면서 더 적은 연산으로 더 빨리 답해야 기관이 감당할 수 있는 비용으로 운영할 수 있습니다. 셋째는 검증입니다. 어떤 데이터로 무엇을 학습했고 어떤 기준으로 평가했는지 밝힐 수 있어야 의료인과 기관이 모델을 믿고 쓸 수 있습니다.",
           ],
         },
         {
-          title: "바이오레의 모델이 만들어지는 방식",
+          title: "모델을 만드는 방법",
           paragraphs: [
-            "검증된 공개 기반 모델 위에 의료 지식을 학습·최적화하는 접근입니다. 파운데이션 모델을 처음부터 학습하는 것이 아니라, 의료 업무에 필요한 성능을 더 작은 모델에서 끌어내는 데 집중합니다. 의료 성능은 AlphaEvidence의 근거 체계를 기준으로 프론티어 모델·대형 모델과 같은 조건에서 비교 평가합니다. AlphaDoc Engine은 처음부터 모델에 의존하지 않도록 설계했기 때문에, 바이오레의 모델은 외부 모델과 같은 자리에 들어갑니다. 기관 환경에서는 외부 모델을 대체하고, 클라우드 환경에서는 기관 정책에 따라 선택됩니다. 이후에는 기관이 허용한 범위와 적법한 권한 안에서 기관별 전용 모델로 확장하려 합니다.",
+            "검증된 공개 기반 모델에 의료 지식을 추가로 학습시키고 최적화합니다. 기반 모델을 처음부터 만드는 대신, 더 작은 모델에서 의료 업무에 필요한 성능을 끌어내는 데 집중합니다. 의료 성능은 AlphaEvidence의 근거를 기준으로 대형 상용 모델과 같은 조건에서 비교해 평가합니다. AlphaDoc Engine은 처음부터 특정 모델에 묶이지 않게 설계했기 때문에, 이 모델은 현재 기관 환경에서 돌아가는 공개 기반 모델의 자리에 그대로 들어갑니다. 사내망과 분리 클라우드 모두 기관 환경 안의 모델로 답하며, 외부 모델을 부르지 않습니다. 이후에는 기관이 허용한 범위와 적법한 권한 안에서 기관별 전용 모델로 넓히려 합니다.",
           ],
         },
       ],
-      figureCaption: "바이오레의 의료 특화 모델 (V1)은 AlphaDoc Engine의 모델 자리에 들어가, 기관 안에서 구동하는 선택지가 됩니다. 개발 구상을 설명하는 다이어그램.",
+      figureCaption: "바이오레의 의료 특화 AI 모델(V1)은 AlphaDoc Engine에서 지금의 공개 기반 모델이 있던 자리를 그대로 대신합니다. 개발 구상을 설명하는 다이어그램.",
     },
     onpremise: {
-      name: "온프레미스 알파닥과 기관 단위 보안 체계",
-      englishTitle: "On-premise Deployment & Zero Trust Extension",
-      lead: "개인의 AI 활용을, 기관이 도입하고 관리할 수 있는 환경으로 넓힙니다.",
+      name: "사내망 알파닥과 기관 단위 보안 체계",
+      englishTitle: "Corporate Network Deployment & Zero Trust Extension",
+      lead: "개인이 쓰던 AI를 기관이 도입하고 관리할 수 있게 만듭니다.",
       sections: [
         {
           title: "개인의 AI를 기관의 AI로 넓히다",
           paragraphs: [
             [
-              "의료인들은 이미 개인 계정으로 AI를 업무에 쓰고 있습니다. 그러나 기관이 이를 업무 도구로 도입하려면 의료 업무에 맞는 기능만으로는 부족합니다. 데이터 보호와 사용 권한, 운영 기준과 감사 기록이 함께 갖춰져야 합니다. 바이오레는 이 요구를 두 갈래로 다룹니다. 하나는 기관 내부 서버나 폐쇄망에 설치하는 온프레미스 알파닥이고, 다른 하나는 기관의 정책에 따라 접근 권한과 민감정보 처리를 통제하는 기관 단위 보안 체계입니다. 온프레미스 환경에서는 ",
-              { text: "07", href: MODEL_ANCHOR },
-              "의 의료 특화 모델이 사내 서버에서 구동하며, 외부 모델 호출을 대체할 예정입니다.",
+              "의료인은 이미 개인 계정으로 AI를 업무에 쓰고 있습니다. 하지만 기관이 이를 업무 도구로 들이려면 기능만으로는 부족하고, 데이터 보호, 사용 권한, 운영 기준, 감사 기록이 갖춰져야 합니다. 바이오레는 이를 두 가지로 준비합니다. 하나는 사내망이나 분리 클라우드에 설치하는 알파닥이고, 다른 하나는 기관의 정책에 따라 접근 권한과 민감정보 처리를 통제하는 기관 단위 보안 체계입니다. 사내망 알파닥은 KMI 한국의학연구소에 설치를 마쳤고 기관 환경에서 공개 기반 모델로 돌아갑니다. 이 모델은 바이오레의 ",
+              { text: "의료 특화 AI 모델", href: MODEL_ANCHOR },
+              "로 바꿀 예정입니다.",
             ],
           ],
         },
         {
-          title: "AlphaLayer의 경계를 기관 단위로 다시 세우다",
+          title: "AlphaLayer의 통제를 기관 전체로",
           paragraphs: [
             [
-              "현재 AlphaLayer는 선택된 텍스트 경로에서 외부 AI 실행을 등록된 정책 경계로 묶습니다",
-              { text: "(05)", href: LAYER_ANCHOR },
-              ". 기관 단위 보안 체계는 이 경계를, 요청마다 인증과 접근 권한을 확인하고, 민감정보를 탐지·치환해 토큰으로 매핑하고, 입력과 첨부 자료를 검증하고, 허용된 모델만 호출하며, 응답의 누출과 복원 권한을 점검한 뒤 기관별 감사 기록과 보관 정책을 적용하는 구조로 넓히는 설계입니다. 검증에 실패한 요청은 경계 밖으로 나가기 전에 차단하는 것이 원칙입니다.",
+              { text: "AlphaLayer", href: LAYER_ANCHOR },
+              "는 지금 일부 텍스트 기능에서 외부 AI 실행을 등록된 정책으로 통제합니다. 기관 단위 보안 체계는 이 통제를 기관 전체로 넓히는 설계입니다. 요청마다 인증과 접근 권한을 확인하고, 민감정보를 찾아 토큰으로 바꾸고, 입력과 첨부 자료를 검사한 뒤 허용된 모델만 부릅니다. 응답은 정보 누출과 복원 권한을 점검한 뒤 전달하고, 기관별 감사 기록과 보관 정책을 적용합니다. 검사를 통과하지 못한 요청은 처리하지 않고 막는 것을 원칙으로 합니다.",
             ],
           ],
         },
       ],
-      figureCaption: "온프레미스 알파닥은 기관 내부 서버에서 인터넷 연결 없이 구동하며, 민감정보는 기관 경계 밖으로 나가지 않습니다. 기관 단위 보안 체계가 요청 인증부터 감사 기록까지 경계 안에서 통제합니다. 개발 구상을 설명하는 다이어그램.",
+      figureCaption: "사내망에서 답을 만드는 모델은 인터넷에 연결되지 않고, 의학 자료는 바이오레에서 한 방향으로만 받습니다. 요청 인증부터 감사 기록까지는 기관 단위 보안 체계가 기관 안에서 통제합니다. 개발 구상을 설명하는 다이어그램.",
+    },
+    oneway: {
+      name: "일방향 AI 구조",
+      englishTitle: "One-way AI Architecture",
+      lead: "의학 근거는 기관 환경으로 보내고, 기관의 데이터는 그 안에 둡니다.",
+      sections: [
+        {
+          title: "데이터가 머무는 곳을 먼저 정하다",
+          paragraphs: [
+            "의료기관과 의료기업은 생성형 AI를 들이지 못하는 이유로 보안과 내부 전문 인력 부족을 꼽습니다. 문서와 기록을 외부 AI로 보내는 구조라면, 그 경로를 기관이 직접 확인하고 관리해야 합니다.",
+            "알파닥은 답을 만드는 모델과 자료를 기관 환경 안에 둡니다. 사내망이나 분리 클라우드에 설치하고, 답변에 외부 AI를 쓰지 않습니다. 개인 노트는 나만 보는 것이 기본이고, 조직에 공유하는 범위는 기관이 정합니다.",
+          ],
+        },
+        {
+          title: "근거를 한 방향으로 보내다",
+          paragraphs: [
+            [
+              "새 지침과 문헌은 ",
+              { text: "AlphaEvidence", href: EVIDENCE_ANCHOR },
+              "에서 정리한 뒤 각 기관 환경으로 보냅니다. 모델과 보안 업데이트도 같은 방향으로만 보냅니다. 기관의 문서, 질문, 답변은 이 경로를 거꾸로 타고 바이오레로 오지 않습니다.",
+            ],
+            "이 구조는 KMI 한국의학연구소의 사내망에 적용돼 있습니다. 일방향 구조는 데이터가 어디에 머물고 어디로 흐르는지에 대한 설계이며, 기관의 개인정보 처리 근거나 법적 적합성까지 확인해 주지는 않습니다.",
+          ],
+        },
+      ],
+      figureCaption: "의학 근거는 바이오레에서 각 기관으로 한 방향으로만 갱신되고, 알파닥은 기관 안의 모델과 자료로 답합니다. 기관의 문서와 노트는 기관 환경에 남습니다.",
     },
   },
   en: {
     evidence: {
       name: "AlphaEvidence",
       englishTitle: "Evidence Foundation",
-      lead: "Before retrieval, we build an evidence foundation that keeps source and change intact.",
+      lead: "Before search, an evidence base that keeps every source and every change.",
       sections: [
         {
           title: "Where did the evidence come from?",
           paragraphs: [
-            "A large collection of papers and guidelines is not automatically trustworthy evidence. Clinicians need to see where material came from, when it was observed, and what changed later.",
-            "AlphaEvidence keeps identity, provenance, usage context, and change history connected. It is not a database of stored answers; it is a foundation that lets people return to the evidence behind a judgment.",
+            "Collecting more papers and guidelines doesn't make them trustworthy. Clinicians need to know where something came from, when it was checked, and what has changed since.",
+            "AlphaEvidence stores identity, source, terms of use, and change history for every paper and guideline. It doesn't store answers. It lets you trace an answer back to the evidence behind it.",
           ],
         },
         {
-          title: "From source material to a reviewable judgment",
+          title: "From source to evidence",
           paragraphs: [
-            "When verifiable material enters the system, AlphaEvidence aligns its source and identity and connects later change and quality signals. AlphaDoc Engine receives evidence context with this lineage intact.",
-            "AlphaEvidence Foundation is connected to evidence paths in Alphadoc. Public counts describe the scale of literature records and guidelines; they are separate from any count of records that have completed clinical validation.",
+            "When new material arrives, AlphaEvidence matches its source and identity, then links earlier versions and quality signals. AlphaDoc Engine answers with that history attached.",
+            "AlphaEvidence is connected to how Alphadoc finds evidence. The public counts below show how many papers and guidelines we hold. They are not counts of clinically validated records.",
           ],
         },
       ],
-      figureTitle: "Evidence that keeps its lineage",
-      figureCaption: "AlphaEvidence organizes verifiable material into source- and change-aware lineage, then supplies evidence context that AlphaDoc Engine and clinicians can review again.",
-      snapshotTitle: "A current public view of AlphaEvidence DB",
+      figureCaption: "AlphaEvidence keeps source and change history with every record, then passes that evidence to AlphaDoc Engine and to clinicians.",
+      snapshotTitle: "AlphaEvidence DB, right now",
     },
     engine: {
       name: "AlphaDoc Engine",
       englishTitle: "Medical Workflow Orchestration",
-      lead: "A question should lead beyond an answer to the next medical task.",
+      lead: "An answer shouldn't be the end. It should lead to the next task.",
       sections: [
         {
-          title: "Designing what happens after the question",
+          title: "Designing what comes after the question",
           paragraphs: [
-            "Evidence discovery, document work, translation, and record preparation need different inputs and review. AlphaDoc Engine identifies what the user is trying to do before it considers model execution.",
+            "Finding evidence, working with documents, and organizing records each need different inputs and different checks. So before choosing a model, AlphaDoc Engine works out what you're actually trying to do.",
             [
-              "It combines the evidence, document context, tools, and output form appropriate to that purpose. AlphaDoc Engine is not Viore's own large language model; it is the execution layer connecting Viore technologies to medical work. Viore's medical-specialized model ",
-              { text: "(07)", href: MODEL_ANCHOR },
-              " will also run on this execution layer and replace external models.",
+              "Then it picks the evidence, documents, tools, and answer format that fit. AlphaDoc Engine isn't Viore's own large language model. It's the execution layer that ties Viore's technologies to medical work. Viore's ",
+              { text: "medical AI model", href: MODEL_ANCHOR },
+              ", now in development, will take the place of the model used here today.",
             ],
           ],
         },
         {
-          title: "How purpose leads to the next action",
+          title: "From purpose to the next step",
           paragraphs: [
-            "After identifying the task, the Engine brings in the required AlphaEvidence context and available document or image artifacts. External execution that needs protection uses an AlphaLayer-covered path, and the result returns to user review and the next task.",
-            "This execution structure operates across several Alphadoc features. The scope and method of evidence-quality evaluation vary by feature.",
+            "Once the task is clear, the engine pulls in AlphaEvidence and any usable documents or images. Requests that need protection on their way to external AI go through AlphaLayer, and results come back for your review before the next step.",
+            "This structure runs across Alphadoc features. How evidence quality is evaluated depends on the feature.",
           ],
         },
       ],
-      figureTitle: "From purpose to the next medical task",
-      figureCaption: "AlphaDoc Engine combines evidence, available artifacts, and selected protected execution paths around the task, then returns the result to user review and the next action.",
+      figureCaption: "AlphaDoc Engine matches evidence, documents, and an execution path to the task, then hands the result back for review and the next step.",
     },
     document: {
       name: "AlphaDocument",
       englishTitle: "Deterministic Document-to-Artifact Engine",
-      lead: "Documents become reusable knowledge instead of disposable text.",
+      lead: "Read a document once. Use what's in it again and again.",
       sections: [
         {
-          title: "From a document read once to knowledge reused",
+          title: "From read once to reused",
           paragraphs: [
-            "PDF, DOCX, HWP, and CSV files express structure differently. Extracting text alone can lose tables, paragraphs, source locations, and processing history.",
-            "AlphaDocument turns supported documents into Document Artifacts that keep recoverable structure and provenance together. Results can be checked again under the same input and processing basis, without trapping document knowledge inside one screen.",
+            "PDF, DOCX, HWP, and CSV all store structure differently. Pull out only the text, and you lose tables, paragraph breaks, source locations, and processing history.",
+            "AlphaDocument turns supported documents into Document Artifacts that keep structure and source together. Same document, same rules, same result, so you can always check it again. The converted content then works across Alphadoc.",
           ],
         },
         {
           title: "How a document becomes an artifact",
           paragraphs: [
-            "AlphaDocument reads a supported document, organizes the structure and source locations it can preserve, and binds them to processing and integrity context. Alphadoc features that need document context can reuse the resulting artifact.",
-            "The core engine and product connection paths are implemented, while the scope of use continues to expand. What can be preserved varies by format, so the technology does not reproduce every table, image, or page layout exactly.",
+            "It reads the document, maps the structure and source locations it can keep, and attaches the processing rules and integrity data. Any Alphadoc feature that needs the document can reuse the artifact.",
+            "The core engine and product connections are built, and coverage is growing. What can be preserved varies by format, so not every table, image, or page layout is reproduced exactly.",
           ],
         },
       ],
-      figureTitle: "A document that remains reusable",
-      figureCaption: "A supported document becomes an artifact carrying the structure and provenance AlphaDocument can preserve, ready for reuse in Alphadoc features that need document context.",
+      figureCaption: "Supported documents pass through AlphaDocument and become artifacts that keep structure and source, ready to reuse across Alphadoc.",
     },
     image: {
       name: "AlphaImage",
       englishTitle: "Deterministic Image Artifact Compiler",
-      lead: "Before interpretation, images need a consistent and reusable foundation.",
+      lead: "Before an image is interpreted, make it consistent.",
       sections: [
         {
-          title: "Set the input straight before interpretation",
+          title: "Get the input right first",
           paragraphs: [
-            "Format, orientation, dimensions, and coordinate conventions can make the same image appear different downstream. Separating source and transformed images also makes it easy to lose where a change occurred.",
-            "AlphaImage organizes supported static images into consistent representations and coordinates while keeping source and existing-annotation lineage inside an Image Artifact.",
+            "The same image can look like a different one downstream if its format, orientation, size, or coordinates differ. Keep the original and the converted copy apart, and it's hard to tell what changed and where.",
+            "AlphaImage brings supported static images to one format and coordinate system, and creates an Image Artifact that keeps the history of the original and its existing annotations.",
           ],
         },
         {
-          title: "Bringing different images onto one reference",
+          title: "One standard for every image",
           paragraphs: [
-            "After checking that an input is supported, AlphaImage produces a safe shared representation and keeps coordinate transformations and existing annotation sources connected. Downstream features can reuse this common foundation.",
-            "Implementation and bounded synthetic-input runtime verification are complete, while activation in Alphadoc user paths remains under review. AlphaImage does not interpret or diagnose images, and patient-information readiness or legal suitability has not been established.",
+            "It checks that the input is allowed, converts it to a safe common format, and records coordinate changes and annotation sources in the artifact. Later features reuse that result.",
+            "It's built and has passed limited runtime checks with synthetic images. Whether to bring it to Alphadoc's user-facing features is still under review. AlphaImage does not read or diagnose images, and patient-information readiness and legal suitability have not been established.",
           ],
         },
       ],
-      figureTitle: "A consistent foundation before interpretation",
-      figureCaption: "AlphaImage organizes supported static images into common representations and coordinates, keeping source and existing-annotation lineage available for downstream reuse.",
+      figureCaption: "AlphaImage aligns supported static images to one format and coordinate system and keeps the history of originals and annotations for later reuse.",
     },
     layer: {
       name: "AlphaLayer",
       englishTitle: "Protected Inference Gateway",
-      lead: "Selected paths that need external AI execution pass through one control boundary.",
+      lead: "One checkpoint for the features that use external AI.",
       sections: [
         {
-          title: "Resetting the boundary between LLM autonomy and security",
+          title: "Drawing the line for external AI",
           paragraphs: [
-            "Masking a few strings does not govern medical AI execution. The system must identify which task is using external AI under which conditions and stop requests that do not meet them before they leave the boundary.",
-            "AlphaLayer checks registered purpose and request conditions between AlphaDoc Engine and external AI execution. It applies policy to supported data types and text scopes and passes only the execution context that the covered path needs.",
+            "Masking a few words doesn't control how external AI gets used. You have to know which feature uses external AI and under what conditions, and stop anything that isn't allowed before it leaves.",
+            "AlphaLayer sits between AlphaDoc Engine and external AI and checks each request against its registered purpose and conditions. It applies policy to supported data types and text, and sends only what execution needs.",
           ],
         },
         {
-          title: "Only selected execution crosses the boundary",
+          title: "Only approved requests go out",
           paragraphs: [
-            "Selected protected text passes through a registered policy boundary for external execution. The returning result is checked against the request context before Alphadoc receives it, and only records needed to operate the covered path are retained.",
-            "Selected text capabilities in Alphadoc are runtime-verified through AlphaLayer. The protection scope does not automatically extend to every feature, identifier type, image, or source file, and remains distinct from patient-information readiness or legal suitability.",
+            "Text marked for protection reaches external AI only after passing the registered policy. Results are checked against the original request before Alphadoc receives them, and logs are kept only to the extent operations require.",
+            "It's runtime-verified in selected Alphadoc text features. It doesn't cover every feature, every identifier type, images, or original files, and it doesn't establish patient-information readiness or legal suitability.",
           ],
         },
       ],
-      figureTitle: "One boundary for selected external execution",
-      figureCaption: "AlphaLayer checks selected protected text against a registered policy boundary and keeps controlled external execution and bounded result return in the same request context.",
+      figureCaption: "AlphaLayer checks protected text against registered policy, runs it on external AI, and confirms the result belongs to the same request.",
     },
     seal: {
       name: "AlphaSeal",
       englishTitle: "End-to-End Conversation Seal",
-      lead: "AlphaSeal encrypts message bodies on supported one-to-one paths between participant browsers.",
+      lead: "Supported one-to-one messages, encrypted between the sender's and the recipient's browsers.",
       sections: [
         {
-          title: "Separating conversation content from delivery data",
+          title: "Separating what you say from how it's delivered",
           paragraphs: [
-            "Transport encryption alone can still leave stored content readable to a server. On supported one-to-one paths, AlphaSeal encrypts message bodies in participant browsers and leaves ciphertext in the ordinary storage path.",
-            "Delivery metadata such as sender, recipient, time, and read state remains separate. A participant can also decrypt and submit a reported message. AlphaSeal therefore does not mean that every piece of conversation information is invisible.",
+            "If only the connection is encrypted, the server can still read what it stores. With AlphaSeal, the sender's browser encrypts the message body, so what lands in the server's regular storage is ciphertext.",
+            "Delivery details such as sender, recipient, time, and read status aren't encrypted and are stored separately. For a report, a participant can decrypt and submit the message. So AlphaSeal doesn't hide everything about a conversation.",
           ],
         },
         {
           title: "Sealed in one browser, opened in the other",
           paragraphs: [
-            "Supported new messages are encrypted with conversation and sender-order context, then verified and decrypted in the recipient browser. Key protection and device-change paths depend on the supported environment and recovery setup.",
-            "The current scope is supported one-to-one messaging. Group conversations, perfect forward secrecy, protection after a participant browser is compromised, and suitability for transmitting patient information are outside that scope.",
+            "Each new message is encrypted together with its conversation and send order, then verified and decrypted in the recipient's browser. Keys are protected based on the supported environment and recovery setup, with a recovery path for switching devices.",
+            "Today this covers supported one-to-one messages. Group conversations, perfect forward secrecy, protection for an already compromised browser, and suitability for sending patient information are out of scope.",
           ],
         },
       ],
-      figureTitle: "Message body sealed between participant browsers",
-      figureCaption: "On supported one-to-one paths, the sender browser encrypts the message body, ordinary storage retains ciphertext, and the recipient browser opens it. Delivery metadata and reporting paths remain separate.",
+      figureCaption: "A one-to-one message is encrypted in the sender's browser, stored on the server as ciphertext, and opened in the recipient's browser. Delivery details and reporting are handled separately.",
     },
     model: {
-      name: "Medical-specialized AI Model",
+      name: "Our own medical AI model",
       englishTitle: "Medical-specialized AI Model",
-      lead: "Viore's own fine-tuned AI model.",
+      lead: "Fine-tuned by Viore, built for medicine.",
       sections: [
         {
-          title: "Why Viore builds its own model",
+          title: "Why we build our own model",
           paragraphs: [
-            "Many medical institutions cannot send patient information or internal documents to commercial AI in external clouds. Serving these institutions requires a model that runs inside the institution without a frontier API. That is the first reason Viore builds its own model. The second is efficiency. A model that keeps the quality of medical answers while running on less compute with shorter response times is what makes operation affordable for an institution. The third is verification. Clinicians and institutions can trust a model only when we can state what it learned from which data and how it was evaluated.",
+            "Many institutions can't send patient data or internal documents to commercial AI in the cloud. They need a model that runs inside the institution, with no external API. That's the first reason. The second is cost: answers have to stay good while using less compute and coming back faster, or institutions can't afford to run them. The third is trust. Clinicians and institutions should be able to see what data the model learned from and how it was evaluated.",
           ],
         },
         {
-          title: "How Viore's model is built",
+          title: "How we build it",
           paragraphs: [
-            "Our approach trains and optimizes medical knowledge on top of a proven open base model. Rather than training a foundation model from scratch, we focus on drawing the performance medical work requires out of a smaller model. Medical performance is evaluated against AlphaEvidence's evidence framework, under the same conditions as frontier and large models. Because AlphaDoc Engine was designed from the start not to depend on any single model, Viore's model takes the same place as external models: in institutional environments it replaces them, and in cloud environments it is selected according to institutional policy. Beyond that, we intend to extend it into institution-specific models within the scope each institution permits and with lawful authority.",
+            "We start from a proven open base model and train and optimize it on medical knowledge. Instead of building a foundation model from scratch, we focus on getting the performance medical work needs out of a smaller model. We evaluate it against AlphaEvidence, under the same conditions as large commercial models. Because AlphaDoc Engine was never tied to one model, ours takes the place of the open base model running in institutions today. On corporate networks and in separate clouds alike, answers come from models inside the institution's environment. No external models are called. Next, within what each institution allows and with lawful authority, we plan to extend it into institution-specific models.",
           ],
         },
       ],
-      figureCaption: "Viore's medical-specialized model (V1) takes the model slot in AlphaDoc Engine and becomes an option that runs inside the institution. A diagram describing the development concept.",
+      figureCaption: "Viore's medical AI model (V1) takes over the slot in AlphaDoc Engine now held by the open base model. A diagram of the development concept.",
     },
     onpremise: {
-      name: "On-premise Alphadoc and Institution-level Security",
-      englishTitle: "On-premise Deployment & Zero Trust Extension",
-      lead: "Extending individual AI use into an environment institutions can adopt and govern.",
+      name: "Alphadoc on your corporate network, with institution-level security",
+      englishTitle: "Corporate Network Deployment & Zero Trust Extension",
+      lead: "From AI you use on your own to AI your institution can run and govern.",
       sections: [
         {
           title: "From personal AI to institutional AI",
           paragraphs: [
             [
-              "Clinicians already use AI for work through personal accounts. But for an institution to adopt it as a work tool, medical-specific features alone are not enough. Data protection, access rights, operating rules, and audit records have to come together. Viore addresses this in two strands: on-premise Alphadoc, installed on an institution's internal servers or in a closed network, and an institution-level security framework that governs access rights and sensitive-data handling according to institutional policy. In on-premise environments, the medical-specialized model from ",
-              { text: "07", href: MODEL_ANCHOR },
-              " will run on internal servers and replace calls to external models.",
+              "Clinicians already use AI at work through personal accounts. But for an institution to adopt it, features aren't enough. It also needs data protection, access rights, operating rules, and audit records. Viore is building for this in two ways: Alphadoc installed on a corporate network or in a separate cloud, and an institution-level security framework that controls access and sensitive-data handling by institutional policy. Corporate-network Alphadoc is installed at KMI (Korea Medical Institute) and runs on an open base model inside the institution's environment. Viore's ",
+              { text: "medical AI model", href: MODEL_ANCHOR },
+              " will replace it.",
             ],
           ],
         },
         {
-          title: "Extending the AlphaLayer boundary to the institution",
+          title: "Extending AlphaLayer across the institution",
           paragraphs: [
             [
-              "Today, AlphaLayer binds external AI execution to a registered policy boundary for selected text paths ",
-              { text: "(05)", href: LAYER_ANCHOR },
-              ". The institution-level security framework is a design that widens this boundary: authenticating and checking access rights on every request, detecting and substituting sensitive data with token mapping, validating inputs and attachments, calling only permitted models, checking responses for leakage and restoration rights, and then applying institution-specific audit records and retention policies. Requests that fail validation are blocked before they leave the boundary.",
+              "Today, ",
+              { text: "AlphaLayer", href: LAYER_ANCHOR },
+              " governs external AI execution with registered policies in selected text features. The institution-level security framework extends that control across the whole institution. Every request is authenticated and checked for access rights. Sensitive data is detected and swapped for tokens. Inputs and attachments are validated, and only permitted models are called. Responses are checked for leaks and restoration rights before delivery, and each institution's audit and retention policies apply. As a rule, requests that fail a check are blocked.",
             ],
           ],
         },
       ],
-      figureCaption: "On-premise Alphadoc runs on the institution's internal servers without an internet connection, and sensitive data never leaves the institutional boundary. The institution-level security framework governs everything from request authentication to audit records inside that boundary. A diagram describing the development concept.",
+      figureCaption: "On the corporate network, the model that answers isn't connected to the internet, and medical data arrives from Viore in one direction only. The institution-level security framework controls everything from request authentication to audit records, inside the institution. A diagram of the development concept.",
+    },
+    oneway: {
+      name: "One-way AI Architecture",
+      englishTitle: "One-way AI Architecture",
+      lead: "Evidence flows in. Your data stays put.",
+      sections: [
+        {
+          title: "Decide where the data lives, first",
+          paragraphs: [
+            "Healthcare providers and healthcare companies point to security and a lack of in-house expertise as the barriers to adopting generative AI. If documents and records have to go to an external AI, the institution has to check and manage that path itself.",
+            "Alphadoc keeps the model that answers, and the materials it uses, inside the institution's environment. It's installed on a corporate network or in a separate cloud, and it doesn't use external AI to answer. Personal notes are private by default, and the institution decides how widely they can be shared.",
+          ],
+        },
+        {
+          title: "Evidence moves in one direction",
+          paragraphs: [
+            [
+              "New guidelines and literature are organized in ",
+              { text: "AlphaEvidence", href: EVIDENCE_ANCHOR },
+              " and sent to each institution's environment. Model and security updates take the same route. The institution's documents, questions, and answers don't travel back to Viore.",
+            ],
+            "This architecture runs on the corporate network at KMI (Korea Medical Institute). It defines where data stays and how it flows. It doesn't establish an institution's legal basis for processing personal data, or its legal suitability.",
+          ],
+        },
+      ],
+      figureCaption: "Medical evidence updates flow from Viore to each institution in one direction, and Alphadoc answers with the models and materials inside the institution. Documents and notes stay in the institution's environment.",
     },
   },
 } as const;
@@ -590,7 +642,7 @@ export function TechnologyPage({
       <header className="technology-hero" id="technology-overview">
         <div className="technology-hero-meta">
           <span>{page.journal}</span>
-          <p><time dateTime="2026-07-21">{page.published}</time><small>{page.updated}</small></p>
+          <p><time dateTime="2026-07-21">{page.published}</time><small>{formatUpdated(language)}</small></p>
         </div>
 
         <h1>{page.hero}</h1>
@@ -609,9 +661,7 @@ export function TechnologyPage({
           language={language}
           number="01"
           kind="overview"
-          caption={language === "ko"
-            ? "바이오레는 근거, 문서·이미지, 업무 실행, 외부 AI 통제와 1:1 대화 보호를 서로 다른 기술로 나눕니다. 각 기술은 검증된 범위에서만 알파닥과 연결됩니다."
-            : "Viore separates evidence, documents and images, work orchestration, external AI control, and one-to-one conversation protection into distinct technologies. Each connects to Alphadoc only within its verified scope."}
+          caption={page.overviewCaption}
         />
       </header>
 
@@ -750,7 +800,7 @@ export function TechnologyPage({
             englishTitle={articles.model.englishTitle}
             lead={articles.model.lead}
             status="coming-soon"
-            verified={NEXT_VERIFIED_DATE}
+            verified={SITE_UPDATED_AT}
           />
           <div className="technology-prose">
             <ProseSections sections={articles.model.sections} />
@@ -763,15 +813,15 @@ export function TechnologyPage({
           </div>
         </article>
 
-        <article id={technologyAnchors["onpremise-security"]} className="technology-post" data-tech-status="in-design">
+        <article id={technologyAnchors["onpremise-security"]} className="technology-post" data-tech-status="first-site-installed">
           <TechnologySectionHeader
             language={language}
             index="08"
             name={articles.onpremise.name}
             englishTitle={articles.onpremise.englishTitle}
             lead={articles.onpremise.lead}
-            status="in-design"
-            verified={NEXT_VERIFIED_DATE}
+            status="first-site-installed"
+            verified={SITE_UPDATED_AT}
           />
           <div className="technology-prose">
             <ProseSections sections={articles.onpremise.sections} />
@@ -780,6 +830,27 @@ export function TechnologyPage({
               number="09"
               kind="onpremise"
               caption={articles.onpremise.figureCaption}
+            />
+          </div>
+        </article>
+
+        <article id={technologyAnchors["one-way-architecture"]} className="technology-post" data-tech-status="first-site-applied">
+          <TechnologySectionHeader
+            language={language}
+            index="09"
+            name={articles.oneway.name}
+            englishTitle={articles.oneway.englishTitle}
+            lead={articles.oneway.lead}
+            status="first-site-applied"
+            verified={SITE_UPDATED_AT}
+          />
+          <div className="technology-prose">
+            <ProseSections sections={articles.oneway.sections} />
+            <TechnologyFigure
+              language={language}
+              number="10"
+              kind="oneway"
+              caption={articles.oneway.figureCaption}
             />
           </div>
         </article>

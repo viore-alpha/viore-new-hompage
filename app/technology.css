@@ -400,17 +400,18 @@
 }
 
 .technology-status-selected-path-active,
-.technology-status-supported-path-implemented {
+.technology-status-supported-path-implemented,
+.technology-status-first-site-applied {
   color: var(--technology-blue);
 }
 
 .technology-status-coming-soon,
-.technology-status-in-design {
+.technology-status-first-site-installed {
   color: var(--technology-blue);
 }
 
 .technology-status-coming-soon::before,
-.technology-status-in-design::before {
+.technology-status-first-site-installed::before {
   background: transparent;
 }
 
@@ -1923,7 +1924,7 @@
 
   .technology-article-nav ol {
     display: grid;
-    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-columns: repeat(7, minmax(0, 1fr));
   }
 
   .technology-article-nav-next-title,
@@ -2001,7 +2002,7 @@
 
   .technology-article-nav ol {
     width: max-content;
-    grid-template-columns: repeat(6, minmax(126px, auto));
+    grid-template-columns: repeat(7, minmax(126px, auto));
   }
 
   .technology-article-nav ol.technology-article-nav-next {
