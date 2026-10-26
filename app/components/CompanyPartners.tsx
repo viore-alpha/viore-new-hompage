@@ -4,9 +4,13 @@ import type { Language } from "@/app/site-content";
 /* Home Partners and Recognitions, in the same heading and rule style as the connections grid.
    KMI's name and logo appear only here (public contract rule 13). */
 
-/* Set once KMI provides its official logo file. Use the version made for dark backgrounds,
-   for example { src: "/brand/partners/kmi-logo-white.svg", width: 180, height: 48 }. */
-const KMI_LOGO: { src: string; width: number; height: number } | null = null;
+/* KMI's official logo, cropped to its edges with colors unchanged. Its dark lettering sits on
+   a white tile, sized like the white box of the NVIDIA badge below. Set to null to show the name. */
+const KMI_LOGO: { src: string; width: number; height: number } | null = {
+  src: "/brand/partners/kmi-logo.png",
+  width: 349,
+  height: 41,
+};
 
 /* NVIDIA asks for its trademark notice wherever the Inception badge appears.
    Replace with the exact sentence from the NVIDIA Inception design guide before release. */
@@ -27,15 +31,17 @@ export function CompanyPartners({ language }: { language: Language }) {
       <ul className="company-logo-row">
         <li className="company-logo-item">
           {KMI_LOGO ? (
-            <img
-              className="company-partner-logo"
-              src={KMI_LOGO.src}
-              alt={kmiName[language]}
-              width={KMI_LOGO.width}
-              height={KMI_LOGO.height}
-              loading="lazy"
-              decoding="async"
-            />
+            <span className="company-partner-tile">
+              <img
+                className="company-partner-logo"
+                src={KMI_LOGO.src}
+                alt={kmiName[language]}
+                width={KMI_LOGO.width}
+                height={KMI_LOGO.height}
+                loading="lazy"
+                decoding="async"
+              />
+            </span>
           ) : (
             <span className="company-logo-wordmark">{kmiName[language]}</span>
           )}

@@ -290,7 +290,7 @@ test("server-renders the Korean Company story as the homepage", async () => {
   assert.match(html, /One connected flow/);
   assert.match(html, /for medicine\./);
   assert.match(html, /<h2 id="company-partners-title">Partners<\/h2>/);
-  assert.match(html, /class="company-logo-wordmark">KMI 한국의학연구소<\/span>/);
+  assert.match(html, /class="company-partner-tile"><img class="company-partner-logo" src="\/brand\/partners\/kmi-logo\.png" alt="KMI 한국의학연구소" width="349" height="41"/);
   assert.match(html, /<h2 id="company-recognitions-title">Recognitions<\/h2>/);
   assert.match(html, /class="company-recognition-badge" src="\/brand\/partners\/nvidia-inception-program-badge-rgb\.svg" alt="NVIDIA Inception program member"/);
   assert.match(html, /class="company-trademark">NVIDIA, the NVIDIA logo, and NVIDIA Inception are trademarks/);
@@ -298,6 +298,8 @@ test("server-renders the Korean Company story as the homepage", async () => {
   assert.ok(html.indexOf('class="company-logo-section company-partners"') < html.indexOf('class="company-logo-section company-recognitions"'));
   assert.ok(html.indexOf('class="company-logo-section company-recognitions"') < html.indexOf('id="company-join"'));
   assert.doesNotMatch(html, /footer-inception|footer-trademark/);
+  const kmiLogo = await readFile(new URL("../public/brand/partners/kmi-logo.png", import.meta.url));
+  assert.ok(kmiLogo.length > 2_000 && kmiLogo.length < 60_000);
   assert.match(html, /보안을 고려한 설계/);
   assert.match(html, /더 직관적인 경험/);
   assert.match(html, /올인원 워크스페이스/);
