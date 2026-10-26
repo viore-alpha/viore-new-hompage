@@ -53,7 +53,7 @@
 .a2-sec-tokenized { animation-name: a2-sec-tokenized; }
 .a2-sec-tokenized mark { color: var(--a2-primary); background: var(--a2-primary-tint-strong); font-weight: 600; }
 
-.a2-sec-body { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 28%; gap: .7em; }
+.a2-sec-body { flex: 1; min-height: 0; display: grid; }
 
 .a2-sec-steps { position: relative; align-self: start; display: grid; align-content: start; gap: .42em; }
 .a2-sec-rail,
@@ -104,29 +104,6 @@
 }
 .a2-sec-step-done svg { width: 1.1em; height: 1.1em; }
 
-.a2-sec-vault {
-  align-self: center;
-  padding: .55em;
-  display: grid;
-  gap: .4em;
-  border: 1px dashed var(--a2-fill-strong);
-  border-radius: .7em;
-  background: #fafafa;
-  animation-name: a2-sec-vault;
-}
-.a2-sec-vault-head { display: flex; align-items: center; gap: .3em; font-size: .6em; font-weight: 650; }
-.a2-sec-vault-head svg { width: 1.05em; height: 1.05em; color: var(--a2-muted); }
-.a2-sec-vault-row {
-  padding: .3em .4em;
-  display: grid;
-  gap: .1em;
-  border-radius: .45em;
-  background: #fff;
-  box-shadow: 0 0 0 1px var(--a2-line);
-  font-size: .56em;
-}
-.a2-sec-vault-row > span:first-child { color: var(--a2-primary); font-weight: 650; }
-.a2-sec-vault-value { color: var(--a2-muted); letter-spacing: .1em; }
 
 .a2-sec-response {
   padding: .7em .85em;
@@ -157,11 +134,6 @@
   0%, 8% { transform: scaleY(0); }
   58%, 92% { transform: scaleY(1); }
   97%, 100% { transform: scaleY(0); }
-}
-@keyframes a2-sec-vault {
-  0%, 21% { opacity: 0; transform: translateX(.6em); }
-  26%, 92% { opacity: 1; transform: none; }
-  97%, 100% { opacity: 0; transform: none; }
 }
 @keyframes a2-sec-response {
   0%, 61% { opacity: 0; transform: translateY(.6em); }

@@ -597,6 +597,7 @@ test("server-renders the Alphadoc 2.0 product story", async () => {
   assert.match(html, /구축 중/);
   assert.match(html, /\[이름 1\]/);
   assert.match(html, /\[전화 1\]/);
+  assert.doesNotMatch(html, /토큰 볼트|Token vault|a2-sec-vault/);
   assert.match(html, /\/brand\/alphadoc-alpha\.png/);
 
   assert.match(html, /모든 것이 하나의 화면 안에/);
@@ -680,8 +681,8 @@ test("server-renders the Alphadoc 2.0 product story", async () => {
   assert.match(productCss, /--ap-red: var\(--red\)/);
   assert.match(productCss, /\.ap-button-primary \{[^}]*background: var\(--ap-red\);[^}]*color: #fff;/);
   assert.match(productCss, /#general,#clinical,#alphadocs \{ scroll-margin-top: calc\(var\(--header\) \+ 44px\); \}/);
-  assert.match(productCss, /\.ap-hero-tagline \{[^}]*white-space: nowrap;/);
-  assert.match(productCss, /\.ap-hero-tagline \{ margin-top: 12px;[^}]*white-space: normal; word-break: keep-all; text-wrap: balance; \}/);
+  assert.match(productCss, /\.ap-hero-tagline \{[^}]*white-space: normal; word-break: keep-all; text-wrap: balance; \}/);
+  assert.doesNotMatch(productCss, /\.ap-hero-tagline \{[^}]*nowrap/);
   assert.match(productCss, /\.ap-feature-rail \{[^}]*scroll-behavior: auto;/);
   assert.match(productCss, /\.ap-feature-gallery\.is-playing \.ap-feature-card\.is-motion-visible \{ --ap-feature-play-state:running; \}/);
   assert.match(productCss, /\.ap-final-cta\.is-playing \.ap-final-logo-stage::before/);
@@ -707,6 +708,7 @@ test("server-renders the English Alphadoc product page in its own voice", async 
   assert.match(html, /Sources: Internal board/);
   assert.match(html, /Institution-level security/);
   assert.match(html, /\[Name 1\]/);
+  assert.doesNotMatch(html, /Token vault|a2-sec-vault/);
   assert.match(html, /Every moment of information,\s*handled with clarity and care\./);
   assert.match(html, /class="ap-deploy-proof-label">First deployed at<\/span><span class="ap-deploy-proof-name">KMI \(Korea Medical Institute\)<\/span>/);
   assert.match(html, /Viore(?:&#x27;|')s first linearity\./);
