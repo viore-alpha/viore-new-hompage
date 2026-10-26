@@ -47,11 +47,18 @@ function usePrefersReducedMotion() {
   return useSyncExternalStore(subscribeToReducedMotion, getReducedMotionSnapshot, () => true);
 }
 
-function SearchIcon() {
+function PlusIcon() {
   return (
     <svg viewBox="0 0 32 32" aria-hidden="true">
-      <circle cx="13" cy="13" r="8.5" />
-      <path d="m19.5 19.5 8 8" />
+      <path d="M16 7v18M7 16h18" />
+    </svg>
+  );
+}
+
+function ChevronIcon() {
+  return (
+    <svg viewBox="0 0 16 16" aria-hidden="true">
+      <path d="m4 6 4 4 4-4" />
     </svg>
   );
 }
@@ -139,11 +146,12 @@ export function CompanyQuestionLoop({ language }: { language: Language }) {
       role="img"
       aria-label={label}
     >
-      <span className="company-question-search" aria-hidden="true"><SearchIcon /></span>
+      <span className="company-question-search" aria-hidden="true"><PlusIcon /></span>
       <span className="company-question-typed" aria-hidden="true">
         {visibleQuestion}
         {!reduceMotion && <i className="company-question-cursor" />}
       </span>
+      <span className="company-question-scope" aria-hidden="true">{language === "ko" ? "자료" : "Sources"}<ChevronIcon /></span>
       <span className="company-question-submit" aria-hidden="true"><SubmitIcon /></span>
     </div>
   );

@@ -3,6 +3,8 @@ import type { Language } from "@/app/site-content";
 
 export const SITE_ORIGIN = "https://vioreai.com";
 export const SITE_NAME = "바이오레 | Viore";
+// Date of the Alphadoc 2.0 site update. Set to the production release day (KST).
+export const SITE_UPDATED_AT = "2026-10-26";
 export const SQUARE_LOGO_PATH = "/brand/viore-v-square-white-v2.png";
 export const SOCIAL_IMAGE_PATHS: Record<Language, string> = {
   ko: "/brand/viore-social-card-white-v3.png",
@@ -22,14 +24,14 @@ export const HOME_SEO: Record<
   ko: {
     title: "바이오레, 새로운 선형을 그리다.",
     description:
-      "의료의 전문성과 시스템을 연결해 의료인의 질문, 근거, 문서와 도구가 하나의 흐름으로 이어지는 Medical OS를 만드는 주식회사 바이오레 공식 홈페이지입니다.",
+      "의료의 전문성과 시스템을 연결해 의료기관과 의료기업이 안전하게 쓰는 AI 에이전트 워크스페이스 알파닥을 만드는 주식회사 바이오레 공식 홈페이지입니다.",
     locale: "ko_KR",
     language: "ko-KR",
   },
   en: {
     title: "Viore, Drawing a New Linearity in Medicine.",
     description:
-      "Viore builds a Medical OS that connects clinical questions, evidence, documents, and tools into one continuous flow for healthcare professionals.",
+      "Viore builds Alphadoc, the AI agent workspace healthcare organizations can use with confidence.",
     locale: "en_US",
     language: "en-US",
   },
@@ -40,24 +42,24 @@ export const PAGE_SEO = {
     ko: {
       title: "바이오레 기술 | 의료 AI를 하나의 기술 체계로",
       description:
-        "바이오레가 AlphaEvidence, AlphaDoc Engine, AlphaDocument, AlphaImage, AlphaLayer, AlphaSeal을 설계하고 알파닥에 연결하는 원칙과 현재 구현 범위를 소개합니다.",
+        "바이오레가 AlphaEvidence, AlphaDoc Engine, AlphaDocument, AlphaImage, AlphaLayer, AlphaSeal을 설계하고 알파닥에 연결하는 원칙과 현재 구현 범위, 사내망 알파닥의 일방향 AI 구조를 소개합니다.",
     },
     en: {
-      title: "Viore Technology | Medical AI as a Technology System",
+      title: "Viore Technology | Medical AI, Built as a System",
       description:
-        "Explore the principles and current implementation scope behind AlphaEvidence, AlphaDoc Engine, AlphaDocument, AlphaImage, AlphaLayer, AlphaSeal, and their connections to Alphadoc.",
+        "How Viore designs AlphaEvidence, AlphaDoc Engine, AlphaDocument, AlphaImage, AlphaLayer, and AlphaSeal, how far each is verified, and how a one-way AI architecture keeps institution data inside corporate-network Alphadoc.",
     },
   },
   product: {
     ko: {
-      title: "알파닥 | 의료 업무를 잇는 AI Medical Workspace",
+      title: "알파닥 | 의료기관과 의료기업을 위한 AI 에이전트 워크스페이스",
       description:
-        "알파닥은 질문과 근거 탐색, 진료노트, 진료서류, 문서 번역과 의료 공지를 하나의 흐름으로 잇는 AI Medical Workspace입니다.",
+        "알파닥은 의료기관과 의료기업을 위한 AI 에이전트 워크스페이스입니다. 근거를 찾는 일도, 노트를 쓰는 일도 알파닥에게 맡길 수 있습니다.",
     },
     en: {
-      title: "Alphadoc | AI Medical Workspace by Viore",
+      title: "Alphadoc | The AI Agent Workspace for Healthcare",
       description:
-        "Alphadoc is an AI Medical Workspace connecting questions, evidence discovery, clinical notes, forms, translation, and medical updates in one flow.",
+        "Alphadoc is the AI agent workspace for healthcare providers and healthcare companies. Hand off evidence searches and note-writing, and keep your data inside.",
     },
   },
   knowledge: {
@@ -80,10 +82,11 @@ export const SEO_KEYWORDS = [
   "주식회사 바이오레",
   "의료 AI",
   "의료 AI 스타트업",
-  "Medical OS",
   "알파닥",
   "Alphadoc",
   "AI Medical Workspace",
+  "AI 에이전트 워크스페이스",
+  "AI agent workspace",
   "AlphaDoc Engine",
   "AlphaEvidence",
 ];

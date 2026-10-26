@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { CompanyPage } from "@/app/components/CompanyPage";
 import {
   HOME_SEO,
+  SITE_UPDATED_AT,
   SITE_NAME,
   SITE_ORIGIN,
   SOCIAL_IMAGE_PATHS,
@@ -85,7 +86,7 @@ export default async function LanguageHome({ params }: { params: LanguageRoutePa
         name: seo.title,
         description: seo.description,
         inLanguage: seo.language,
-        dateModified: "2026-07-27",
+        dateModified: SITE_UPDATED_AT,
         isPartOf: { "@id": `${SITE_ORIGIN}/#website` },
         about: { "@id": `${SITE_ORIGIN}/#organization` },
         primaryEntity: { "@id": `${SITE_ORIGIN}/#organization` },
@@ -101,8 +102,8 @@ export default async function LanguageHome({ params }: { params: LanguageRoutePa
         operatingSystem: "Web",
         description:
           lang === "ko"
-            ? "의료인의 질문, 근거, 문서와 도구를 하나의 흐름으로 연결하는 바이오레의 AI Medical Workspace입니다."
-            : "Viore's AI Medical Workspace connecting clinical questions, evidence, documents, and tools in one flow.",
+            ? "의료기관과 의료기업을 위한 바이오레의 AI 에이전트 워크스페이스"
+            : "The AI agent workspace for healthcare, from Viore.",
         author: { "@id": `${SITE_ORIGIN}/#organization` },
       },
     ],

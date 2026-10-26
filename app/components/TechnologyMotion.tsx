@@ -11,7 +11,8 @@ export type TechnologyMotionKind =
   | "layer"
   | "seal"
   | "model"
-  | "onpremise";
+  | "onpremise"
+  | "oneway";
 
 type DiagramTone = "ink" | "blue" | "red" | "muted";
 type DiagramCopy = {
@@ -23,65 +24,69 @@ const diagramCopy: Record<Language, Record<TechnologyMotionKind, DiagramCopy>> =
   ko: {
     overview: {
       title: "바이오레 기술 체계",
-      description: "근거와 문서·이미지 아티팩트, 의료 업무 실행, 선택된 외부 AI 경계, 지원되는 1:1 대화 보호가 각각의 책임을 유지한 채 연결되는 구조입니다.",
+      description: "근거, 문서와 이미지 데이터, 업무 실행, 외부 AI 통제, 1:1 대화 보호가 각자 맡은 일을 나눈 채 연결되는 구조입니다.",
     },
     evidence: {
-      title: "AlphaEvidence 근거 계보",
-      description: "문헌과 진료지침이 출처 식별과 변화 이력을 거쳐 다시 확인할 수 있는 근거 맥락으로 이어지는 구조입니다.",
+      title: "AlphaEvidence 근거 이력",
+      description: "문헌과 진료지침에 출처와 변경 이력을 붙여, 나중에 다시 확인할 수 있는 근거로 만드는 구조입니다.",
     },
     engine: {
       title: "AlphaDoc Engine 의료 업무 실행 구조",
-      description: "업무 목적과 근거, 사용할 수 있는 문서와 이미지 맥락을 실행 계층에서 조합한 뒤 사용자 검토를 거쳐 다음 행동으로 이어지는 구조입니다.",
+      description: "할 일에 맞는 근거와 문서, 이미지를 실행 계층에서 모은 뒤, 사용자 확인을 거쳐 다음 작업으로 넘기는 구조입니다.",
     },
     document: {
       title: "AlphaDocument 문서 아티팩트 구조",
-      description: "지원 문서에서 보존 가능한 구조와 원문 위치를 분리해 확인하고 다시 쓸 수 있는 문서 아티팩트로 묶는 구조입니다.",
+      description: "지원하는 문서에서 남길 수 있는 구조와 원문 위치를 정리해, 다시 쓸 수 있는 문서 아티팩트로 묶는 구조입니다.",
     },
     image: {
       title: "AlphaImage 이미지 아티팩트 구조",
-      description: "지원되는 정적 이미지의 표현과 방향, 좌표를 일관되게 맞추고 원본과 기존 주석의 계보를 보존하는 구조입니다.",
+      description: "지원하는 정적 이미지의 형식, 방향, 좌표를 맞추고 원본과 기존 주석의 이력을 남기는 구조입니다.",
     },
     layer: {
-      title: "AlphaLayer 보호 실행 경계",
-      description: "선택된 보호 텍스트는 등록된 조건을 확인한 경우에만 외부 실행 경계를 건너며 결과는 같은 요청에 묶여 돌아옵니다.",
+      title: "AlphaLayer 외부 AI 실행 통제",
+      description: "보호 대상 텍스트는 등록된 조건을 통과할 때만 외부 AI에서 실행되고, 결과는 같은 요청으로 돌아옵니다.",
     },
     seal: {
       title: "AlphaSeal 지원 1:1 쪽지 보호 구조",
-      description: "지원되는 1:1 쪽지 본문이 발신자 브라우저에서 암호화되고 일반 저장 경로에는 암호문으로 남은 뒤 수신자 브라우저에서 열리는 구조입니다.",
+      description: "1:1 쪽지 본문을 보내는 사람의 브라우저에서 암호화해 서버에는 암호문으로 저장하고, 받는 사람의 브라우저에서 여는 구조입니다.",
     },
     model: {
       title: "바이오레 의료 특화 모델과 AlphaDoc Engine 모델 자리",
-      description: "바이오레의 의료 특화 모델 (V1)은 AlphaDoc Engine의 모델 자리에 들어가, 기관 안에서 구동하는 선택지가 됩니다. 개발 구상을 설명하는 다이어그램.",
+      description: "바이오레의 의료 특화 AI 모델(V1)은 AlphaDoc Engine에서 지금의 공개 기반 모델이 있던 자리를 그대로 대신합니다. 개발 구상을 설명하는 다이어그램.",
     },
     onpremise: {
-      title: "온프레미스 알파닥과 기관 단위 보안 체계",
-      description: "온프레미스 알파닥은 기관 내부 서버에서 인터넷 연결 없이 구동하며, 민감정보는 기관 경계 밖으로 나가지 않습니다. 기관 단위 보안 체계가 요청 인증부터 감사 기록까지 경계 안에서 통제합니다. 개발 구상을 설명하는 다이어그램.",
+      title: "사내망 알파닥과 기관 단위 보안 체계",
+      description: "사내망에서 답을 만드는 모델은 인터넷에 연결되지 않고, 의학 자료는 바이오레에서 한 방향으로만 받습니다. 요청 인증부터 감사 기록까지는 기관 단위 보안 체계가 기관 안에서 통제합니다. 개발 구상을 설명하는 다이어그램.",
+    },
+    oneway: {
+      title: "일방향 AI 구조",
+      description: "의학 근거는 바이오레에서 각 기관으로 한 방향으로만 갱신되고, 알파닥은 기관 안의 모델과 자료로 답합니다. 기관의 문서와 노트는 기관 환경에 남습니다.",
     },
   },
   en: {
     overview: {
       title: "Viore technology system",
-      description: "Evidence, document and image artifacts, medical-work execution, selected external AI boundaries, and supported one-to-one conversation protection remain separate responsibilities connected to the product.",
+      description: "Evidence, documents and images, work execution, external AI control, and one-to-one conversation protection each do their own job and connect to the product.",
     },
     evidence: {
       title: "AlphaEvidence provenance structure",
-      description: "Literature and guidelines retain source identity and observed change before becoming evidence context that people can revisit.",
+      description: "Literature and guidelines get their source and change history attached, so people can check the evidence again later.",
     },
     engine: {
       title: "AlphaDoc Engine medical-work execution structure",
-      description: "Work purpose, evidence, and available document or image context converge in an execution layer and return through user review to the next action.",
+      description: "Evidence, documents, and images that fit the task come together in the execution layer, then pass through user review to the next step.",
     },
     document: {
       title: "AlphaDocument artifact structure",
-      description: "Preservable document structure and source positions are separated, checked, and bound into a reusable document artifact.",
+      description: "Supported documents are mapped for the structure and source positions that can be kept, then bound into a reusable document artifact.",
     },
     image: {
       title: "AlphaImage artifact structure",
-      description: "Supported static-image representation, orientation, and coordinates are aligned while source and existing-annotation lineage remain connected.",
+      description: "Supported static images are aligned in format, orientation, and coordinates while the history of originals and annotations stays attached.",
     },
     layer: {
-      title: "AlphaLayer protected execution boundary",
-      description: "Selected protected text crosses the external execution boundary only after registered conditions are checked, and the result returns bound to the same request.",
+      title: "AlphaLayer external AI execution control",
+      description: "Protected text runs on external AI only after passing registered conditions, and the result returns to the same request.",
     },
     seal: {
       title: "AlphaSeal supported one-to-one message protection",
@@ -89,11 +94,15 @@ const diagramCopy: Record<Language, Record<TechnologyMotionKind, DiagramCopy>> =
     },
     model: {
       title: "Viore medical-specialized model in the AlphaDoc Engine model slot",
-      description: "Viore's medical-specialized model (V1) takes the model slot in AlphaDoc Engine and becomes an option that runs inside the institution. A diagram describing the development concept.",
+      description: "Viore's medical AI model (V1) takes over the slot in AlphaDoc Engine now held by the open base model. A diagram of the development concept.",
     },
     onpremise: {
-      title: "On-premise Alphadoc and institution-level security",
-      description: "On-premise Alphadoc runs on the institution's internal servers without an internet connection, and sensitive data never leaves the institutional boundary. The institution-level security framework governs everything from request authentication to audit records inside that boundary. A diagram describing the development concept.",
+      title: "Alphadoc on the corporate network and institution-level security",
+      description: "On the corporate network, the model that answers isn't connected to the internet, and medical data arrives from Viore in one direction only. The institution-level security framework controls everything from request authentication to audit records, inside the institution. A diagram of the development concept.",
+    },
+    oneway: {
+      title: "One-way AI architecture",
+      description: "Medical evidence updates flow from Viore to each institution in one direction, and Alphadoc answers with the models and materials inside the institution. Documents and notes stay in the institution's environment.",
     },
   },
 };
@@ -390,11 +399,11 @@ function OverviewDiagram({ language, mobile }: { language: Language; mobile: boo
   if (mobile) {
     return (
       <DiagramSvg id={id} kind="overview" language={language} mobile height={650}>
-        <Module x={24} y={34} width={172} height={78} label={["AlphaEvidence"]} annotation={pick(language, "근거 계보", "Evidence lineage")} tone="blue" step={1} />
+        <Module x={24} y={34} width={172} height={78} label={["AlphaEvidence"]} annotation={pick(language, "근거 이력", "Evidence history")} tone="blue" step={1} />
         <Module x={224} y={34} width={172} height={78} label={["AlphaDocument", "AlphaImage"]} annotation={pick(language, "아티팩트", "Artifacts")} tone="ink" step={1} />
         <Boundary x={93} y={178} width={234} height={134} label="ALPHADOC ENGINE" tone="red" step={2} solid />
         <Module x={122} y={220} width={176} height={64} label={[pick(language, "목적에 맞춘 실행", "Purpose-defined execution")]} tone="red" step={3} strong />
-        <Module x={24} y={376} width={172} height={76} label={["AlphaLayer"]} annotation={pick(language, "선택된 외부 경계", "Selected external path")} tone="red" step={4} dashed />
+        <Module x={24} y={376} width={172} height={76} label={["AlphaLayer"]} annotation={pick(language, "외부 AI 통제", "External AI control")} tone="red" step={4} dashed />
         <Module x={224} y={376} width={172} height={76} label={["AlphaSeal"]} annotation={pick(language, "지원 1:1 본문", "Supported 1:1 content")} tone="blue" step={4} />
         <Module x={94} y={508} width={232} height={74} label={["Alphadoc"]} annotation={pick(language, "검토와 다음 행동", "Review and next action")} tone="blue" step={5} />
         <Link id={id} d="M 110 112 C 110 148 148 164 180 178" tone="blue" step={6} />
@@ -403,10 +412,10 @@ function OverviewDiagram({ language, mobile }: { language: Language; mobile: boo
         <Link id={id} d="M 265 312 C 300 338 310 350 310 376" tone="blue" step={7} />
         <Link id={id} d="M 110 452 C 110 478 150 492 180 508" tone="red" step={8} dashed />
         <Link id={id} d="M 310 452 C 310 478 270 492 240 508" tone="blue" step={8} />
-        <Annotation x={210} y={153} text={pick(language, "서로 다른 책임이 한 실행 계층에서 만납니다", "Distinct responsibilities meet in one execution layer")} anchor="middle" step={9} />
+        <Annotation x={210} y={153} text={pick(language, "서로 다른 기술이 한 실행 계층에서 만납니다", "Different technologies meet in one execution layer")} anchor="middle" step={9} />
         <Footnote
           lines={language === "ko"
-            ? ["구현·제품 연결·운영 검증은 같은 상태로 묶지 않습니다."]
+            ? ["구현, 제품 연결, 운영 검증은 서로 다른 상태로 표시합니다."]
             : ["Implementation, product connection, and runtime", "verification remain distinct."]}
           x={24}
           y={610}
@@ -423,7 +432,7 @@ function OverviewDiagram({ language, mobile }: { language: Language; mobile: boo
       <Module x={42} y={240} width={196} height={86} label={["AlphaDocument", "AlphaImage"]} annotation={pick(language, "다시 쓰는 아티팩트", "Reusable artifacts")} tone="ink" step={1} />
       <Boundary x={354} y={106} width={252} height={176} label="ALPHADOC ENGINE" tone="red" step={2} solid />
       <Module x={394} y={160} width={172} height={72} label={[pick(language, "목적에 맞춘", "Purpose-defined"), pick(language, "의료 업무 실행", "medical-work execution")]} tone="red" step={3} strong />
-      <Module x={722} y={54} width={196} height={86} label={["AlphaLayer"]} annotation={pick(language, "선택된 외부 AI 경계", "Selected external AI boundary")} tone="red" step={4} dashed />
+      <Module x={722} y={54} width={196} height={86} label={["AlphaLayer"]} annotation={pick(language, "외부 AI 통제", "External AI control")} tone="red" step={4} dashed />
       <Module x={722} y={240} width={196} height={86} label={["AlphaSeal"]} annotation={pick(language, "지원되는 1:1 본문 보호", "Protected 1:1 message content")} tone="blue" step={4} />
       <Module x={714} y={160} width={212} height={58} label={["Alphadoc"]} annotation={pick(language, "검토 · 다음 행동", "Review · next action")} tone="blue" step={5} />
       <Link id={id} d="M 238 97 C 292 97 310 145 354 165" tone="blue" step={6} />
@@ -432,11 +441,11 @@ function OverviewDiagram({ language, mobile }: { language: Language; mobile: boo
       <Link id={id} d="M 606 194 H 706" tone="blue" step={7} />
       <Link id={id} d="M 606 236 C 656 276 674 283 722 283" tone="blue" step={7} />
       <Link id={id} d="M 820 240 V 218" tone="blue" step={8} />
-      <Annotation x={286} y={82} text={pick(language, "근거 맥락", "Evidence context")} tone="blue" anchor="middle" step={8} />
-      <Annotation x={286} y={312} text={pick(language, "문서·이미지 맥락", "Document · image context")} anchor="middle" step={8} />
+      <Annotation x={286} y={82} text={pick(language, "정리된 근거", "Curated evidence")} tone="blue" anchor="middle" step={8} />
+      <Annotation x={286} y={312} text={pick(language, "문서와 이미지", "Documents and images")} anchor="middle" step={8} />
       <Annotation x={664} y={86} text={pick(language, "조건이 맞는 경로만", "Only conforming paths")} tone="red" anchor="middle" step={8} />
       <Footnote
-        lines={[pick(language, "각 기술의 책임을 분리하고 확인된 지점에서만 연결합니다.", "Each responsibility remains separate and connects only where verified.")]}
+        lines={[pick(language, "기술마다 맡은 일을 나누고, 확인된 곳에서만 연결합니다.", "Each technology does its own job and connects only where verified.")]}
         x={42}
         y={362}
         width={876}
@@ -484,14 +493,14 @@ function EvidenceDiagram({ language, mobile }: { language: Language; mobile: boo
                 pick(language, "처음 확인", "First observed"),
                 pick(language, "같은 자료 연결", "Same item linked"),
                 pick(language, "변화 이력", "Change history"),
-                pick(language, "현재 맥락", "Current context"),
+                pick(language, "현재 작업", "Current task"),
               ][index]}
               tone={index === 3 ? "red" : "muted"}
               step={7 + index}
             />
           </g>
         ))}
-        <Module x={92} y={484} width={236} height={84} label={[pick(language, "다시 확인할 수 있는", "Evidence context"), pick(language, "근거 맥락", "people can revisit")]} tone="red" step={12} strong />
+        <Module x={92} y={484} width={236} height={84} label={[pick(language, "다시 확인할 수 있는", "Evidence"), pick(language, "근거", "people can revisit")]} tone="red" step={12} strong />
         <Link id={id} d="M 210 442 V 484" tone="red" step={13} />
         <Link id={id} d="M 92 526 C 42 526 42 182 103 182" tone="muted" step={14} dashed />
         <Annotation x={24} y={350} text={pick(language, "검토 결과가", "Review informs")} step={15} />
@@ -538,7 +547,7 @@ function EvidenceDiagram({ language, mobile }: { language: Language; mobile: boo
               pick(language, "처음 확인", "First observed"),
               pick(language, "동일 자료", "Same item"),
               pick(language, "변화 이력", "Change history"),
-              pick(language, "현재 맥락", "Current context"),
+              pick(language, "현재 작업", "Current task"),
             ][index]}
             tone={index === 3 ? "red" : "muted"}
             anchor="middle"
@@ -546,13 +555,13 @@ function EvidenceDiagram({ language, mobile }: { language: Language; mobile: boo
           />
         </g>
       ))}
-      <Module x={754} y={111} width={166} height={120} label={[pick(language, "검토 가능한", "Reviewable"), pick(language, "근거 맥락", "evidence context")]} tone="red" step={12} strong />
+      <Module x={754} y={111} width={166} height={120} label={[pick(language, "검토 가능한", "Reviewable"), pick(language, "근거", "evidence")]} tone="red" step={12} strong />
       <Link id={id} d="M 414 171 H 470" tone="blue" step={13} />
       <Link id={id} d="M 704 171 H 754" tone="red" step={13} />
       <Link id={id} d="M 837 231 C 837 310 330 326 330 222" tone="muted" step={14} dashed />
-      <Annotation x={584} y={302} text={pick(language, "검토 결과는 다음 확인에 다시 쓰입니다", "Review returns as context for the next check")} anchor="middle" step={15} />
+      <Annotation x={584} y={302} text={pick(language, "검토 결과는 다음 확인에 다시 쓰입니다", "Review feeds the next check")} anchor="middle" step={15} />
       <Footnote
-        lines={[pick(language, "출처·변화·검토의 연결을 남기지만 개별 자료의 임상 검증 완료를 뜻하지는 않습니다.", "Source, change, and review remain connected without implying clinical validation of every item.")]}
+        lines={[pick(language, "출처와 변경, 검토 기록을 남기지만 자료마다 임상 검증을 마쳤다는 뜻은 아닙니다.", "Source, change, and review remain connected without implying clinical validation of every item.")]}
         x={42}
         y={362}
         width={878}
@@ -569,11 +578,11 @@ function EngineDiagram({ language, mobile }: { language: Language; mobile: boole
     return (
       <DiagramSvg id={id} kind="engine" language={language} mobile height={720}>
         <Module x={22} y={32} width={176} height={68} label={[pick(language, "업무 목적", "Work purpose")]} tone="ink" step={1} />
-        <Module x={222} y={32} width={176} height={68} label={[pick(language, "근거 맥락", "Evidence context")]} tone="blue" step={1} />
+        <Module x={222} y={32} width={176} height={68} label={[pick(language, "정리된 근거", "Curated evidence")]} tone="blue" step={1} />
         <Module x={22} y={120} width={176} height={68} label={[pick(language, "문서·이미지", "Document · image")]} tone="blue" step={2} />
         <Module x={222} y={120} width={176} height={68} label={[pick(language, "사용 가능한 기능", "Available capability")]} tone="ink" step={2} />
         <Boundary x={58} y={246} width={304} height={194} label="ALPHADOC ENGINE" tone="red" step={3} solid />
-        <Module x={82} y={290} width={116} height={58} label={[pick(language, "맥락 조합", "Assemble context")]} tone="blue" step={4} />
+        <Module x={82} y={290} width={116} height={58} label={[pick(language, "정보 조합", "Assemble inputs")]} tone="blue" step={4} />
         <Module x={222} y={290} width={116} height={58} label={[pick(language, "통제된 실행", "Controlled run")]} tone="red" step={4} strong />
         <Module x={152} y={366} width={116} height={48} label={[pick(language, "결과 구성", "Shape result")]} tone="ink" step={5} />
         <Link id={id} d="M 110 188 C 110 220 138 228 152 246" tone="blue" step={6} />
@@ -583,11 +592,11 @@ function EngineDiagram({ language, mobile }: { language: Language; mobile: boole
         <Link id={id} d="M 210 440 C 210 470 141 470 141 496" tone="blue" step={8} />
         <Link id={id} d="M 204 529 H 230" tone="red" step={8} />
         <Link id={id} d="M 141 562 C 141 608 46 608 46 342 C 46 310 58 310 58 310" tone="muted" step={9} dashed />
-        <Annotation x={58} y={596} text={pick(language, "검토 결과를 다음 실행에 반영", "Review returns to execution context")} step={10} />
+        <Annotation x={58} y={596} text={pick(language, "확인 결과를 다음 실행에 반영", "Review feeds the next run")} step={10} />
         <Footnote
           lines={language === "ko"
-            ? ["실행에 앞서 업무 목적과 사용할 수 있는 맥락을 구분합니다."]
-            : ["Work purpose and available context are resolved", "before execution."]}
+            ? ["실행에 앞서 할 일과 쓸 수 있는 정보를 구분합니다."]
+            : ["The task and the inputs it can use are sorted out", "before execution."]}
           x={22}
           y={650}
           width={376}
@@ -600,10 +609,10 @@ function EngineDiagram({ language, mobile }: { language: Language; mobile: boole
   return (
     <DiagramSvg id={id} kind="engine" language={language} mobile={false} height={420}>
       <Module x={42} y={44} width={158} height={64} label={[pick(language, "업무 목적", "Work purpose")]} tone="ink" step={1} />
-      <Module x={42} y={138} width={158} height={64} label={[pick(language, "근거 맥락", "Evidence context")]} tone="blue" step={2} />
+      <Module x={42} y={138} width={158} height={64} label={[pick(language, "정리된 근거", "Curated evidence")]} tone="blue" step={2} />
       <Module x={42} y={232} width={158} height={64} label={[pick(language, "문서·이미지", "Document · image")]} tone="blue" step={3} />
       <Boundary x={286} y={54} width={392} height={242} label="ALPHADOC ENGINE" tone="red" step={4} solid />
-      <Module x={314} y={99} width={142} height={70} label={[pick(language, "필요한 맥락", "Required context"), pick(language, "조합", "assembly")]} tone="blue" step={5} />
+      <Module x={314} y={99} width={142} height={70} label={[pick(language, "필요한 정보", "Required input"), pick(language, "조합", "assembly")]} tone="blue" step={5} />
       <Module x={508} y={99} width={142} height={70} label={[pick(language, "목적에 맞춘", "Purpose-defined"), pick(language, "통제된 실행", "controlled run")]} tone="red" step={5} strong />
       <Module x={411} y={206} width={142} height={58} label={[pick(language, "결과 구성", "Result shaping")]} tone="ink" step={6} />
       <Link id={id} d="M 200 76 C 242 76 252 118 286 126" tone="ink" step={7} />
@@ -616,7 +625,7 @@ function EngineDiagram({ language, mobile }: { language: Language; mobile: boole
       <Link id={id} d="M 678 175 C 722 175 728 127 764 127" tone="blue" step={10} />
       <Link id={id} d="M 841 163 V 218" tone="red" step={10} />
       <Link id={id} d="M 764 254 C 722 326 482 342 482 296" tone="muted" step={11} dashed />
-      <Annotation x={626} y={330} text={pick(language, "검토 결과는 다음 실행의 맥락에 반영됩니다", "Review returns as context for the next execution")} anchor="middle" step={12} />
+      <Annotation x={626} y={330} text={pick(language, "확인한 결과는 다음 실행에 반영됩니다", "Review feeds the next execution")} anchor="middle" step={12} />
       <Footnote
         lines={[pick(language, "이 실행 구조는 여러 기능에서 쓰이지만 근거 평가 범위는 기능마다 다릅니다.", "The execution structure serves multiple features; evidence evaluation scope varies by feature.")]}
         x={42}
@@ -719,7 +728,7 @@ function DocumentDiagram({ language, mobile }: { language: Language; mobile: boo
         <Link id={id} d="M 186 204 C 208 204 206 185 228 185" tone="ink" step={7} />
         <ArtifactLayers x={80} y={292} width={260} labels={layerLabels} step={8} />
         <Link id={id} d="M 311 232 C 311 266 254 268 254 292" tone="red" step={9} />
-        <Module x={42} y={496} width={152} height={62} label={[pick(language, "근거 맥락", "Evidence context")]} tone="blue" step={10} />
+        <Module x={42} y={496} width={152} height={62} label={[pick(language, "정리된 근거", "Curated evidence")]} tone="blue" step={10} />
         <Module x={226} y={496} width={152} height={62} label={[pick(language, "문서 업무", "Document work")]} tone="ink" step={10} />
         <Link id={id} d="M 160 454 C 160 476 118 478 118 496" tone="blue" step={11} />
         <Link id={id} d="M 260 454 C 260 476 302 478 302 496" tone="ink" step={11} />
@@ -750,7 +759,7 @@ function DocumentDiagram({ language, mobile }: { language: Language; mobile: boo
       <Link id={id} d="M 228 246 C 278 246 282 224 330 224" tone="ink" step={7} />
       <ArtifactLayers x={618} y={76} width={264} labels={layerLabels} step={8} />
       <Link id={id} d="M 540 178 H 618" tone="red" step={9} />
-      <Module x={618} y={272} width={120} height={52} label={[pick(language, "근거 맥락", "Evidence context")]} tone="blue" step={10} />
+      <Module x={618} y={272} width={120} height={52} label={[pick(language, "정리된 근거", "Curated evidence")]} tone="blue" step={10} />
       <Module x={762} y={272} width={120} height={52} label={[pick(language, "문서 업무", "Document work")]} tone="ink" step={10} />
       <Link id={id} d="M 750 238 C 712 252 690 258 678 272" tone="blue" step={11} />
       <Link id={id} d="M 750 238 C 788 252 810 258 822 272" tone="ink" step={11} />
@@ -820,7 +829,7 @@ function ImageDiagram({ language, mobile }: { language: Language; mobile: boolea
   const id = `viore-${language}-image-${mobile ? "mobile" : "desktop"}`;
   const lineage = [
     pick(language, "원본", "Source"),
-    pick(language, "표현·방향", "Representation"),
+    pick(language, "형식·방향", "Format"),
     pick(language, "좌표 연결", "Coordinates"),
     pick(language, "기존 주석", "Existing annotation"),
   ];
@@ -838,7 +847,7 @@ function ImageDiagram({ language, mobile }: { language: Language; mobile: boolea
           y={280}
           width={92}
           height={52}
-          label={language === "ko" ? ["안전한 표현"] : ["Safe", "representation"]}
+          label={language === "ko" ? ["공통 형식"] : ["Safe", "common format"]}
           tone="ink"
           step={5}
         />
@@ -854,7 +863,7 @@ function ImageDiagram({ language, mobile }: { language: Language; mobile: boolea
             </g>
           );
         })}
-        <Annotation x={210} y={482} text={pick(language, "변환 뒤에도 원본과 주석의 계보가 이어집니다", "Source and annotation lineage survive the transform")} anchor="middle" step={11} />
+        <Annotation x={210} y={482} text={pick(language, "변환 뒤에도 원본과 주석의 이력이 남습니다", "Source and annotation history stay after the transform")} anchor="middle" step={11} />
         <Footnote
           lines={language === "ko"
             ? ["입력 기준을 일관되게 맞추지만", "판독이나 진단은 수행하지 않습니다."]
@@ -872,7 +881,7 @@ function ImageDiagram({ language, mobile }: { language: Language; mobile: boolea
     <DiagramSvg id={id} kind="image" language={language} mobile={false} height={420}>
       <ImageFrame x={46} y={48} width={268} height={232} normalized={false} step={1} />
       <ImageFrame x={646} y={48} width={268} height={232} normalized step={2} />
-      <Module x={382} y={62} width={196} height={58} label={[pick(language, "안전한 공통 표현", "Safe shared representation")]} tone="ink" step={3} />
+      <Module x={382} y={62} width={196} height={58} label={[pick(language, "안전한 공통 형식", "Safe common format")]} tone="ink" step={3} />
       <Module x={382} y={136} width={196} height={58} label={[pick(language, "방향 기준", "Orientation basis")]} tone="blue" step={4} />
       <Module x={382} y={210} width={196} height={58} label={[pick(language, "좌표 연결", "Coordinate mapping")]} tone="red" step={5} />
       <Link id={id} d="M 314 104 H 382" tone="ink" step={6} />
@@ -894,7 +903,7 @@ function ImageDiagram({ language, mobile }: { language: Language; mobile: boolea
         );
       })}
       <Footnote
-        lines={[pick(language, "표현과 좌표를 맞추고 계보를 보존하지만 영상 판독이나 진단을 수행하지 않습니다.", "Representation and coordinates align while lineage remains; the system does not interpret or diagnose.")]}
+        lines={[pick(language, "형식과 좌표를 맞추고 이력을 남기지만 영상 판독이나 진단은 하지 않습니다.", "Format and coordinates align and history stays; it does not read or diagnose images.")]}
         x={46}
         y={370}
         width={868}
@@ -911,7 +920,7 @@ function LayerDiagram({ language, mobile }: { language: Language; mobile: boolea
     return (
       <DiagramSvg id={id} kind="layer" language={language} mobile height={720}>
         <Boundary x={20} y={28} width={380} height={314} label={pick(language, "알파닥 경계 안", "Inside Alphadoc boundary")} tone="blue" step={1} solid />
-        <Module x={46} y={78} width={140} height={68} label={[pick(language, "선택된", "Selected"), pick(language, "보호 텍스트", "protected text")]} tone="ink" step={2} />
+        <Module x={46} y={78} width={140} height={68} label={[pick(language, "보호 대상", "Protected"), pick(language, "텍스트", "text")]} tone="ink" step={2} />
         <Module x={230} y={70} width={142} height={92} label={[pick(language, "등록된 목적과", "Registered purpose"), pick(language, "요청 조건", "and request conditions")]} tone="red" step={3} strong />
         <Link id={id} d="M 186 112 H 230" tone="red" step={4} />
         <Module x={46} y={226} width={140} height={64} label={[pick(language, "경계 안에서", "Stopped inside"), pick(language, "중단", "the boundary")]} tone="muted" step={5} dashed />
@@ -925,8 +934,8 @@ function LayerDiagram({ language, mobile }: { language: Language; mobile: boolea
         <Link id={id} d="M 88 578 C 34 578 34 130 46 130" tone="blue" step={12} dashed />
         <Footnote
           lines={[
-            pick(language, "선택된 텍스트 경로의 경계입니다.", "A boundary for selected text paths."),
-            pick(language, "모든 기능·파일·법적 적합성을 포괄하지 않습니다.", "It does not cover every feature or file,"),
+            pick(language, "일부 텍스트 기능에만 적용됩니다.", "Applies to selected text features only."),
+            pick(language, "모든 기능, 파일, 법적 적합성을 다루지는 않습니다.", "It does not cover every feature or file,"),
             ...(language === "ko" ? [] : ["or every legal-suitability question."]),
           ]}
           x={20}
@@ -944,7 +953,7 @@ function LayerDiagram({ language, mobile }: { language: Language; mobile: boolea
       <rect x="520" y="34" width="410" height="294" rx="10" className="diagram-external-zone technology-svg-step" style={stepStyle(1)} />
       <line x1="520" y1="34" x2="520" y2="328" className="diagram-trust-boundary technology-svg-step" style={stepStyle(2)} />
       <Annotation x={540} y={55} text={pick(language, "외부 실행 통제 영역", "Controlled external execution")} tone="red" step={2} />
-      <Module x={70} y={112} width={176} height={82} label={[pick(language, "선택된", "Selected"), pick(language, "보호 텍스트", "protected text")]} tone="ink" step={3} />
+      <Module x={70} y={112} width={176} height={82} label={[pick(language, "보호 대상", "Protected"), pick(language, "텍스트", "text")]} tone="ink" step={3} />
       <Module x={330} y={92} width={154} height={122} label={[pick(language, "등록된 목적", "Registered purpose"), pick(language, "요청 조건", "Request conditions")]} annotation={pick(language, "경계 통과 확인", "Boundary check")} tone="red" step={4} strong />
       <Link id={id} d="M 246 153 H 330" tone="red" step={5} />
       <Module x={302} y={252} width={182} height={58} label={[pick(language, "조건 불충족 · 중단", "Nonconforming · stop")]} tone="muted" step={6} dashed />
@@ -956,7 +965,7 @@ function LayerDiagram({ language, mobile }: { language: Language; mobile: boolea
       <Link id={id} d="M 626 267 C 566 267 558 190 484 190" tone="blue" step={12} dashed />
       <Annotation x={553} y={251} text={pick(language, "반환 확인", "Return check")} tone="blue" anchor="middle" step={13} />
       <Footnote
-        lines={[pick(language, "선택된 보호 텍스트 경로의 경계이며 모든 기능·원문 파일·법적 적합성을 포괄하지 않습니다.", "This boundary applies to selected protected text paths, not every feature, source file, or legal-suitability question.")]}
+        lines={[pick(language, "일부 텍스트 기능에만 적용되며, 모든 기능과 원본 파일, 법적 적합성을 다루지는 않습니다.", "Applies to selected text features only, not every feature, source file, or legal-suitability question.")]}
         x={30}
         y={362}
         width={900}
@@ -1068,7 +1077,7 @@ function SealDiagram({ language, mobile }: { language: Language; mobile: boolean
       <BrowserFrame x={42} y={54} width={238} height={204} label={pick(language, "발신자 브라우저", "Sender browser")} content={[pick(language, "쪽지 본문", "Message body"), pick(language, "브라우저에서 암호화", "Encrypted in browser")]} tone="ink" step={1} />
       <BrowserFrame x={680} y={54} width={238} height={204} label={pick(language, "수신자 브라우저", "Recipient browser")} content={[pick(language, "검증 후 복호화", "Verify and open"), pick(language, "브라우저에서 본문 열기", "in the browser")]} tone="blue" step={2} />
       <Link id={id} d="M 280 118 H 680" tone="red" step={3} />
-      <Annotation x={480} y={101} text={pick(language, "대화 맥락과 순서에 묶인 암호문", "Ciphertext bound to conversation context and order")} tone="red" anchor="middle" step={3} />
+      <Annotation x={480} y={101} text={pick(language, "대화와 보낸 순서에 묶인 암호문", "Ciphertext bound to the conversation and send order")} tone="red" anchor="middle" step={3} />
       <Module x={380} y={176} width={200} height={102} label={[pick(language, "암호문만 저장", "Ciphertext only")]} annotation={pick(language, "일반 저장 경로", "Ordinary storage")} tone="muted" step={4} />
       <CipherBlocks x={424} y={252} columns={9} rows={2} step={5} />
       <Link id={id} d="M 360 118 C 360 154 420 154 420 176" tone="red" step={6} />
@@ -1135,14 +1144,14 @@ function ModelDiagram({ language, mobile }: { language: Language; mobile: boolea
   const engineLabel = pick(language, "AlphaDoc Engine (실행 계층)", "AlphaDoc Engine (execution layer)");
   const questionLabel = [pick(language, "의료인의 질문", "Question from clinician")];
   const slotLabel = [pick(language, "모델 자리", "Model slot")];
-  const cloudLabel = [pick(language, "외부 프론티어 모델 · 클라우드", "External frontier model · cloud")];
+  const cloudLabel = language === "ko" ? ["공개 기반 모델 · 기관 환경 (현재)"] : (mobile ? ["Open base model ·", "institution environment (current)"] : ["Open base model · institution", "environment (current)"]);
   const vioreLabelEn = mobile
-    ? ["Viore medical-specialized", "model V1 · institution's", "internal server"]
-    : ["Viore medical-specialized model V1 ·", "institution's internal server"];
+    ? ["Viore medical-specialized", "model V1 · institution", "environment"]
+    : ["Viore medical-specialized model V1 ·", "institution environment"];
   const vioreLabel = language === "ko"
-    ? ["바이오레 의료 특화 모델 V1 ·", "기관 내부 서버"]
+    ? ["바이오레 의료 특화 모델 V1 ·", "기관 환경"]
     : vioreLabelEn;
-  const policyLabel = pick(language, "기관 정책에 따라 선택", "Selected by institutional policy");
+  const policyLabel = pick(language, "같은 자리에서 교체", "Replaced in the same slot");
   const outputLabel = language === "ko"
     ? ["근거 · 문서 · 도구 · 결과"]
     : ["Evidence · documents ·", "tools · results"];
@@ -1150,8 +1159,8 @@ function ModelDiagram({ language, mobile }: { language: Language; mobile: boolea
 
   if (mobile) {
     const policyLines = language === "ko"
-      ? ["기관 정책에", "따라 선택"]
-      : ["Selected by", "institutional", "policy"];
+      ? ["같은 자리에서", "교체"]
+      : ["Replaced in", "the same", "slot"];
 
     return (
       <DiagramSvg id={id} kind="model" language={language} mobile height={640}>
@@ -1193,8 +1202,8 @@ function ModelDiagram({ language, mobile }: { language: Language; mobile: boolea
 
 function OnpremiseDiagram({ language, mobile }: { language: Language; mobile: boolean }) {
   const id = `viore-${language}-onpremise-${mobile ? "mobile" : "desktop"}`;
-  const networkLabel = pick(language, "기관 내부망 (폐쇄망)", "Institution's internal network (closed)");
-  const clinicianLabel = [pick(language, "의료인", "Clinician")];
+  const networkLabel = pick(language, "사내망", "Corporate network");
+  const clinicianLabel = [pick(language, "기관 구성원", "Institution member")];
   const securityTitle = [pick(language, "기관 단위 보안 체계", "Institution-level security")];
   const securityRows: readonly (readonly string[])[] = language === "ko"
     ? [
@@ -1216,23 +1225,18 @@ function OnpremiseDiagram({ language, mobile }: { language: Language; mobile: bo
   const securityRowsY = language === "ko" ? 56 : 50;
   const securityRowLineHeight = language === "ko" ? 19 : 14;
   const storeTokenLabel = [pick(language, "토큰 볼트", "Token vault")];
-  const externalLabel = language === "ko"
-    ? ["외부 인터넷 ·", "외부 클라우드 AI"]
-    : ["External internet ·", "external cloud AI"];
-  const noLeaveLines = language === "ko" ? ["민감정보 반출 없음"] : ["No sensitive", "data leaves"];
-  const noInternetLines = language === "ko" ? ["인터넷 연결 불필요"] : ["No internet", "connection required"];
+  const externalLabel = [pick(language, "외부 AI", "External AI")];
+  const noLeaveLines = language === "ko" ? ["기관 데이터는 사내망에"] : ["Institution data stays", "on the corporate network"];
+  const updateLabel = language === "ko" ? ["바이오레 자료 갱신", "(한 방향)"] : ["Viore data updates", "(one way)"];
   const footnote = [pick(language, "개발 구상", "Development concept")];
 
   if (mobile) {
-    const claimsY = 664;
-    const secondClaimY = claimsY + noLeaveLines.length * 15 + 10;
-
     return (
-      <DiagramSvg id={id} kind="onpremise" language={language} mobile height={800}>
+      <DiagramSvg id={id} kind="onpremise" language={language} mobile height={840}>
         <Boundary x={20} y={28} width={380} height={604} label={networkLabel} tone="blue" step={1} solid />
         <Module x={92} y={68} width={236} height={54} label={clinicianLabel} tone="ink" step={2} />
         <Link id={id} d="M 196 122 V 156" tone="ink" step={3} />
-        <Module x={92} y={156} width={236} height={58} label={[pick(language, "온프레미스 알파닥", "On-premise Alphadoc")]} tone="blue" step={4} />
+        <Module x={92} y={156} width={236} height={58} label={[pick(language, "사내망 알파닥", "Corporate-network Alphadoc")]} tone="blue" step={4} />
         <Link id={id} d="M 196 214 V 248" tone="ink" step={5} />
         <ListPanel x={92} y={248} width={236} height={176} title={securityTitle} rows={securityRows} rowsY={securityRowsY} rowLineHeight={securityRowLineHeight} step={6} />
         <Link id={id} d="M 196 424 V 458" tone="ink" step={7} />
@@ -1241,7 +1245,7 @@ function OnpremiseDiagram({ language, mobile }: { language: Language; mobile: bo
           y={458}
           width={236}
           height={68}
-          label={language === "ko" ? ["사내 서버 ·", "의료 특화 모델 V1 (07)"] : ["Internal server ·", "medical-specialized model V1 (07)"]}
+          label={language === "ko" ? ["기관 환경 모델 · V1 (07)"] : ["Institution model · V1 (07)"]}
           tone="red"
           step={8}
           strong
@@ -1257,27 +1261,25 @@ function OnpremiseDiagram({ language, mobile }: { language: Language; mobile: bo
         <Link id={id} d="M 265 625 L 279 639" tone="red" step={12} arrow={false} />
         <Link id={id} d="M 279 625 L 265 639" tone="red" step={12} arrow={false} />
         <g className="technology-svg-step" style={stepStyle(13)}>
-          <Lines lines={noLeaveLines} x={28} y={claimsY} lineHeight={15} anchor="start" className="diagram-annotation diagram-text-red" />
-          <Lines lines={noInternetLines} x={28} y={secondClaimY} lineHeight={15} anchor="start" className="diagram-annotation diagram-text-red" />
+          <Lines lines={noLeaveLines} x={196} y={658} lineHeight={15} anchor="start" className="diagram-annotation diagram-text-red" />
         </g>
-        <rect x="196" y="658" width="152" height="64" rx="7" className="diagram-external-zone technology-svg-step" style={stepStyle(14)} />
+        <rect x="196" y="700" width="152" height="56" rx="7" className="diagram-external-zone technology-svg-step" style={stepStyle(14)} />
         <g className="technology-svg-step" style={stepStyle(14)}>
-          <Lines lines={externalLabel} x={272} y={687} className="diagram-architecture-label diagram-text-muted" />
+          <Lines lines={externalLabel} x={272} y={732} className="diagram-architecture-label diagram-text-muted" />
         </g>
-        <Footnote lines={footnote} x={20} y={750} width={380} step={15} />
+        <Module x={28} y={700} width={150} height={56} label={updateLabel} tone="blue" step={14} />
+        <Link id={id} d="M 103 700 V 640" tone="blue" step={14} />
+        <Footnote lines={footnote} x={20} y={790} width={380} step={15} />
       </DiagramSvg>
     );
   }
-
-  const claimsY = 72;
-  const secondClaimY = claimsY + noLeaveLines.length * 15 + 10;
 
   return (
     <DiagramSvg id={id} kind="onpremise" language={language} mobile={false} height={444}>
       <Boundary x={30} y={34} width={734} height={332} label={networkLabel} tone="blue" step={1} solid />
       <Module x={54} y={145} width={100} height={64} label={clinicianLabel} tone="ink" step={2} />
       <Link id={id} d="M 154 169 H 190" tone="ink" step={3} />
-      <Module x={190} y={141} width={130} height={72} label={language === "ko" ? ["온프레미스 알파닥"] : ["On-premise", "Alphadoc"]} tone="blue" step={4} />
+      <Module x={190} y={141} width={130} height={72} label={language === "ko" ? ["사내망 알파닥"] : ["Corporate-network", "Alphadoc"]} tone="blue" step={4} />
       <Link id={id} d="M 320 169 H 356" tone="ink" step={5} />
       <ListPanel x={356} y={88} width={200} height={178} title={securityTitle} rows={securityRows} rowsY={securityRowsY} rowLineHeight={securityRowLineHeight} step={6} />
       <Link id={id} d="M 556 169 H 592" tone="ink" step={7} />
@@ -1286,7 +1288,7 @@ function OnpremiseDiagram({ language, mobile }: { language: Language; mobile: bo
         y={137}
         width={144}
         height={80}
-        label={language === "ko" ? ["사내 서버 ·", "의료 특화 모델", "V1 (07)"] : ["Internal server ·", "medical-specialized", "model V1 (07)"]}
+        label={language === "ko" ? ["기관 환경 모델 ·", "V1 (07)"] : ["Institution model ·", "V1 (07)"]}
         tone="red"
         step={8}
         strong
@@ -1302,14 +1304,117 @@ function OnpremiseDiagram({ language, mobile }: { language: Language; mobile: bo
       <Link id={id} d="M 757 170 L 771 184" tone="red" step={12} arrow={false} />
       <Link id={id} d="M 771 170 L 757 184" tone="red" step={12} arrow={false} />
       <g className="technology-svg-step" style={stepStyle(13)}>
-        <Lines lines={noLeaveLines} x={776} y={claimsY} lineHeight={15} anchor="start" className="diagram-annotation diagram-text-red" />
-        <Lines lines={noInternetLines} x={776} y={secondClaimY} lineHeight={15} anchor="start" className="diagram-annotation diagram-text-red" />
+        <Lines lines={noLeaveLines} x={776} y={72} lineHeight={15} anchor="start" className="diagram-annotation diagram-text-red" />
       </g>
+      <Module x={790} y={258} width={140} height={60} label={updateLabel} tone="blue" step={14} />
+      <Link id={id} d="M 790 288 H 768" tone="blue" step={14} />
       <rect x="790" y="145" width="140" height="64" rx="7" className="diagram-external-zone technology-svg-step" style={stepStyle(14)} />
       <g className="technology-svg-step" style={stepStyle(14)}>
         <Lines lines={externalLabel} x={860} y={174} className="diagram-architecture-label diagram-text-muted" />
       </g>
       <Footnote lines={footnote} x={30} y={394} width={900} step={15} />
+    </DiagramSvg>
+  );
+}
+
+function OnewayDiagram({ language, mobile }: { language: Language; mobile: boolean }) {
+  const id = `viore-${language}-oneway-${mobile ? "mobile" : "desktop"}`;
+  const sourceLabel = pick(language, "바이오레 · AlphaEvidence", "Viore · AlphaEvidence");
+  const guidelineLabel = [pick(language, "지침", "Guidelines")];
+  const literatureLabel = [pick(language, "문헌", "Literature")];
+  const flowLabel = pick(language, "지침 · 문헌 · 업데이트", "Guidelines · literature · updates");
+  const institutions = [
+    pick(language, "기관 A · 사내망", "Institution A · corporate network"),
+    pick(language, "기관 B · 분리 클라우드", "Institution B · separate cloud"),
+    pick(language, "기관 C · 분리 클라우드", "Institution C · separate cloud"),
+  ];
+  const cells = [
+    { label: [pick(language, "알파닥", "Alphadoc")], tone: "blue" as const, dashed: false },
+    { label: [pick(language, "모델", "Model")], tone: "ink" as const, dashed: false },
+    { label: [pick(language, "기관 문서", "Institution documents")], tone: "muted" as const, dashed: true },
+    { label: [pick(language, "내 노트", "My notes")], tone: "muted" as const, dashed: true },
+  ];
+  const externalLabel = [pick(language, "외부 AI", "External AI")];
+  const stayLabel = pick(language, "기관 데이터는 기관 환경에", "Institution data stays inside");
+
+  if (mobile) {
+    const boxes = [196, 340, 484];
+    return (
+      <DiagramSvg id={id} kind="oneway" language={language} mobile height={744}>
+        <Boundary x={40} y={28} width={340} height={100} label={sourceLabel} tone="red" step={1} solid />
+        <Module x={64} y={60} width={140} height={48} label={guidelineLabel} tone="ink" step={2} />
+        <Module x={216} y={60} width={140} height={48} label={literatureLabel} tone="ink" step={2} />
+        <Link id={id} d="M 220 128 V 192" tone="blue" step={3} />
+        <Link id={id} d="M 120 128 C 120 150 40 150 40 180 V 544" tone="blue" step={3} arrow={false} />
+        <Link id={id} d="M 40 400 H 56" tone="blue" step={3} />
+        <Link id={id} d="M 40 544 H 56" tone="blue" step={3} />
+        <Annotation x={232} y={166} text={flowLabel} tone="blue" step={4} />
+        {boxes.map((boxY, index) => (
+          <g key={institutions[index]}>
+            <Boundary x={60} y={boxY} width={320} height={120} label={institutions[index]} tone="blue" step={5 + index} solid />
+            {cells.map((cell, cellIndex) => (
+              <Module
+                key={`${institutions[index]}-${cellIndex}`}
+                x={76 + (cellIndex % 2) * 148}
+                y={boxY + 34 + Math.floor(cellIndex / 2) * 42}
+                width={140}
+                height={34}
+                label={cell.label}
+                tone={cell.tone}
+                step={5 + index}
+                dashed={cell.dashed}
+              />
+            ))}
+          </g>
+        ))}
+        <Annotation x={60} y={626} text={stayLabel} tone="red" step={8} />
+        <rect x="212" y="648" width="168" height="52" rx="7" className="diagram-external-zone technology-svg-step" style={stepStyle(9)} />
+        <g className="technology-svg-step" style={stepStyle(9)}>
+          <Lines lines={externalLabel} x={296} y={678} className="diagram-architecture-label diagram-text-muted" />
+        </g>
+        <Link id={id} d="M 296 604 V 648" tone="muted" step={9} dashed arrow={false} />
+        <Link id={id} d="M 289 619 L 303 633" tone="red" step={9} arrow={false} />
+        <Link id={id} d="M 303 619 L 289 633" tone="red" step={9} arrow={false} />
+      </DiagramSvg>
+    );
+  }
+
+  const boxes = [30, 340, 650];
+  return (
+    <DiagramSvg id={id} kind="oneway" language={language} mobile={false} height={404}>
+      <Boundary x={300} y={30} width={360} height={104} label={sourceLabel} tone="red" step={1} solid />
+      <Module x={326} y={64} width={146} height={50} label={guidelineLabel} tone="ink" step={2} />
+      <Module x={488} y={64} width={146} height={50} label={literatureLabel} tone="ink" step={2} />
+      <Link id={id} d="M 400 134 C 400 168 170 166 170 198" tone="blue" step={3} />
+      <Link id={id} d="M 480 134 V 198" tone="blue" step={3} />
+      <Link id={id} d="M 560 134 C 560 168 790 166 790 198" tone="blue" step={3} />
+      <Annotation x={492} y={170} text={flowLabel} tone="blue" step={4} />
+      {boxes.map((boxX, index) => (
+        <g key={institutions[index]}>
+          <Boundary x={boxX} y={198} width={280} height={164} label={institutions[index]} tone="blue" step={5 + index} solid />
+          {cells.map((cell, cellIndex) => (
+            <Module
+              key={`${institutions[index]}-${cellIndex}`}
+              x={boxX + 16 + (cellIndex % 2) * 128}
+              y={234 + Math.floor(cellIndex / 2) * 58}
+              width={120}
+              height={48}
+              label={language === "en" && cell.label[0] === "Institution documents" ? ["Institution", "documents"] : cell.label}
+              tone={cell.tone}
+              step={5 + index}
+              dashed={cell.dashed}
+            />
+          ))}
+        </g>
+      ))}
+      <Annotation x={30} y={386} text={stayLabel} tone="red" step={8} />
+      <rect x="770" y="40" width="160" height="52" rx="7" className="diagram-external-zone technology-svg-step" style={stepStyle(9)} />
+      <g className="technology-svg-step" style={stepStyle(9)}>
+        <Lines lines={externalLabel} x={850} y={70} className="diagram-architecture-label diagram-text-muted" />
+      </g>
+      <Link id={id} d="M 850 92 V 198" tone="muted" step={9} dashed arrow={false} />
+      <Link id={id} d="M 843 138 L 857 152" tone="red" step={9} arrow={false} />
+      <Link id={id} d="M 857 138 L 843 152" tone="red" step={9} arrow={false} />
     </DiagramSvg>
   );
 }
@@ -1344,6 +1449,9 @@ function DiagramPair({
   }
   if (kind === "onpremise") {
     return <><OnpremiseDiagram language={language} mobile={false} /><OnpremiseDiagram language={language} mobile /></>;
+  }
+  if (kind === "oneway") {
+    return <><OnewayDiagram language={language} mobile={false} /><OnewayDiagram language={language} mobile /></>;
   }
   return <><SealDiagram language={language} mobile={false} /><SealDiagram language={language} mobile /></>;
 }

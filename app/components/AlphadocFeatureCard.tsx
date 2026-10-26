@@ -1,22 +1,27 @@
-/* eslint-disable @next/next/no-img-element -- External Alphadoc app icons are served from the product asset registry. */
 "use client";
 
 import { lazy, memo, Suspense, type PointerEvent as ReactPointerEvent } from "react";
 import type { Language } from "@/app/site-content";
-import type { AlphadocFeatureId } from "@/app/components/AlphadocFeatureMotionSvg";
+import { A2NavIcon, type A2NavKey } from "@/app/components/alphadoc2/kit";
+import type { AlphadocFeatureId } from "@/app/components/alphadoc2/FeatureScene";
 
-const AlphadocFeatureMotionSvg = lazy(async () => {
-  const loadedModule = await import("@/app/components/AlphadocFeatureMotionSvg");
-  return { default: loadedModule.AlphadocFeatureMotionSvg };
+const AlphadocV2FeatureScene = lazy(async () => {
+  const loadedModule = await import("@/app/components/alphadoc2/FeatureScene");
+  return { default: loadedModule.AlphadocV2FeatureScene };
 });
 
-const ALPHADOC_ASSET_ROOT = "https://alphadoc.ai";
+const featureIcons: Record<AlphadocFeatureId, A2NavKey> = {
+  "evidence-chat": "chat",
+  notes: "note",
+  board: "board",
+  guidelines: "guidelines",
+  papers: "papers",
+  favorites: "favorites",
+};
 
 export interface AlphadocFeatureItem {
   id: AlphadocFeatureId;
   label: string;
-  icon: string;
-  note?: string;
   title: string;
   body: string;
 }
@@ -51,29 +56,15 @@ export const AlphadocFeatureCard = memo(function AlphadocFeatureCard({ active, c
       <div className="ap-feature-motion">
         {motionVisible ? (
           <Suspense fallback={<span className="ap-feature-motion-placeholder" aria-hidden="true" />}>
-            <AlphadocFeatureMotionSvg
-              featureId={item.id}
-              icon={item.icon}
-              label={item.label}
-              language={language}
-            />
+            <AlphadocV2FeatureScene featureId={item.id} language={language} />
           </Suspense>
         ) : <span className="ap-feature-motion-placeholder" aria-hidden="true" />}
       </div>
 
       <div className="ap-feature-card-copy">
         <div className="ap-feature-card-label">
-          <img
-            src={`${ALPHADOC_ASSET_ROOT}${item.icon}`}
-            alt=""
-            aria-hidden="true"
-            width="48"
-            height="48"
-            loading="lazy"
-            decoding="async"
-          />
+          <span className="ap-feature-card-icon"><A2NavIcon nav={featureIcons[item.id]} /></span>
           <span>{item.label}</span>
-          {item.note ? <small>{item.note}</small> : null}
         </div>
         <h3>{item.title}</h3>
         <p>{item.body}</p>

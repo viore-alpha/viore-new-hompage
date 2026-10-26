@@ -2,6 +2,8 @@ import { CompanyConnections } from "@/app/components/CompanyConnections";
 import { CompanyEnergyCanvas } from "@/app/components/CompanyEnergyCanvas";
 import { CompanyMetrics } from "@/app/components/CompanyMetrics";
 import { CompanyNetworkBackdrop } from "@/app/components/CompanyNetworkBackdrop";
+import { CompanyNoteMotion } from "@/app/components/CompanyNoteMotion";
+import { CompanyPartners, CompanyRecognitions } from "@/app/components/CompanyPartners";
 import { CompanyQuestionLoop } from "@/app/components/CompanyQuestionLoop";
 import { getCompanyMetrics } from "@/app/company-metrics";
 import { detailContent, routeFor, technologyRouteFor, type Language } from "@/app/site-content";
@@ -44,7 +46,10 @@ export async function CompanyPage({ language }: { language: Language }) {
                     </span>
                   ))}
                 </h2>
-                <CompanyQuestionLoop language={language} />
+                <div className="company-efficiency-demo">
+                  <CompanyQuestionLoop language={language} />
+                  <CompanyNoteMotion language={language} />
+                </div>
               </div>
               <p>
                 <span>{page.efficiency.context}</span>
@@ -69,27 +74,29 @@ export async function CompanyPage({ language }: { language: Language }) {
             </section>
           )}
           {page.connections && <CompanyConnections content={page.connections} />}
+          <CompanyPartners language={language} />
+          <CompanyRecognitions />
         </section>
 
         <section className="detail-next company-join" id="company-join">
-          <h2>{language === "ko" ? "우리가 그리는 새로운 선형에\n합류하세요." : "Join the new line\nwe are drawing."}</h2>
+          <h2>{language === "ko" ? "우리가 그리는 새로운 선형에\n합류하세요." : "Be part of\nthe new linearity."}</h2>
           <div className="company-join-links">
             <a className="company-join-product" href={routeFor(language, "alphadoc")}>
               <span>
-                {language === "ko" ? "그 첫 번째 선형, " : "The first line, "}
+                {language === "ko" ? "그 첫 번째 선형, " : "Our first linearity: "}
                 <span className="company-join-product-name">{language === "ko" ? "알파닥 Alphadoc" : "Alphadoc"}</span>
               </span>
               <i aria-hidden="true">↗</i>
             </a>
             <a id="partnership-inquiry" className="company-join-contact" href="mailto:biz@vioreai.com">
-              <small>{language === "ko" ? "파트너십 문의" : "Partnership inquiries"}</small>
+              <small>{language === "ko" ? "도입 및 파트너십 문의" : "Deployment and partnerships"}</small>
               <span>biz@vioreai.com <i aria-hidden="true">↗</i></span>
             </a>
             <p className="company-join-next">
               <a href={technologyRouteFor(language, "medical-model")}>
                 {language === "ko"
                   ? "Coming soon — 기관 안에서 구동하는 바이오레의 의료 특화 AI 모델. Technology 보기 →"
-                  : "Coming soon — Viore's medical-specialized AI model, running inside the institution. See Technology →"}
+                  : "Coming soon: Viore's own medical AI model, built to run inside your institution. See Technology →"}
               </a>
             </p>
           </div>

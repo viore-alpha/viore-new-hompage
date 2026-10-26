@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import "../../../product.css";
+import "../../../alphadoc-v2.css";
+import "../../../alphadoc-v2-chat.css";
+import "../../../alphadoc-v2-papers.css";
+import "../../../alphadoc-v2-features.css";
+import "../../../alphadoc-v2-security.css";
 import { ProductPage } from "@/app/components/ProductPage";
 import { buildPageMetadata, PAGE_SEO } from "@/app/seo";
 import { isLanguage } from "@/app/site-content";
