@@ -289,6 +289,15 @@ test("server-renders the Korean Company story as the homepage", async () => {
   assert.doesNotMatch(html, /기존의 가치를 대체하지 않으며/);
   assert.match(html, /One connected flow/);
   assert.match(html, /for medicine\./);
+  assert.match(html, /<h2 id="company-partners-title">Partners<\/h2>/);
+  assert.match(html, /class="company-logo-wordmark">KMI 한국의학연구소<\/span>/);
+  assert.match(html, /<h2 id="company-recognitions-title">Recognitions<\/h2>/);
+  assert.match(html, /class="company-recognition-badge" src="\/brand\/partners\/nvidia-inception-program-badge-rgb\.svg" alt="NVIDIA Inception program member"/);
+  assert.match(html, /class="company-trademark">NVIDIA, the NVIDIA logo, and NVIDIA Inception are trademarks/);
+  assert.ok(html.indexOf('class="company-connections"') < html.indexOf('class="company-logo-section company-partners"'));
+  assert.ok(html.indexOf('class="company-logo-section company-partners"') < html.indexOf('class="company-logo-section company-recognitions"'));
+  assert.ok(html.indexOf('class="company-logo-section company-recognitions"') < html.indexOf('id="company-join"'));
+  assert.doesNotMatch(html, /footer-inception|footer-trademark/);
   assert.match(html, /보안을 고려한 설계/);
   assert.match(html, /더 직관적인 경험/);
   assert.match(html, /올인원 워크스페이스/);
@@ -617,8 +626,7 @@ test("server-renders the Alphadoc 2.0 product story", async () => {
   assert.match(html, /<h3>Zero Trust<\/h3>/);
   assert.match(html, /일방향 학습형 AI 구조로서 기관 데이터를 학습에 쓰지 않고 밖으로 내보내지 않습니다\./);
   assert.match(html, /입력, 경로, 응답까지 검증 로직을 더한 보안 체계를 구현하고 있습니다\./);
-  assert.match(html, /class="ap-deploy-proof-label">사내망 첫 적용<\/span><span class="ap-deploy-proof-name">KMI 한국의학연구소<\/span>/);
-  assert.match(productSource, /const KMI_LOGO_SRC: string \| null = null;/);
+  assert.doesNotMatch(html, /KMI|한국의학연구소|ap-deploy-proof/);
   assert.match(html, /바이오레의 첫번째 선형,/);
   assert.match(html, /이제 시작해보세요\./);
   assert.match(html, /class="ap-button ap-button-primary" href="https:\/\/alphadoc\.ai"[^>]*>알파닥 시작하기/);
@@ -710,7 +718,7 @@ test("server-renders the English Alphadoc product page in its own voice", async 
   assert.match(html, /\[Name 1\]/);
   assert.doesNotMatch(html, /Token vault|a2-sec-vault/);
   assert.match(html, /Every moment of information,\s*handled with clarity and care\./);
-  assert.match(html, /class="ap-deploy-proof-label">First deployed at<\/span><span class="ap-deploy-proof-name">KMI \(Korea Medical Institute\)<\/span>/);
+  assert.doesNotMatch(html, /KMI|Korea Medical Institute|ap-deploy-proof/);
   assert.match(html, /Viore(?:&#x27;|')s first linearity\./);
   assert.match(html, /Start here\./);
   assert.match(html, /"inLanguage":"en-US"/);
@@ -985,12 +993,26 @@ test("server-renders an accessible, expanding Technology journal with its curren
   ]) {
     assert.match(html, new RegExp(`<article id="${id}"`));
   }
-  assert.ok(html.indexOf('<article id="technology-alphaseal"') < html.indexOf('<article id="technology-medical-model"'));
-  assert.ok(html.indexOf('<article id="technology-medical-model"') < html.indexOf('<article id="technology-onpremise-security"'));
-  assert.ok(html.indexOf('<article id="technology-onpremise-security"') < html.indexOf('<article id="technology-one-way-architecture"'));
-  assert.match(html, /POST <!-- -->07<\/span><div><p class="technology-section-english">Medical-specialized AI Model<\/p><h2>의료 특화 AI 모델<\/h2><p class="technology-section-lead">바이오레가 직접 미세조정하는 의료 AI 모델<\/p>/);
-  assert.match(html, /POST <!-- -->08<\/span><div><p class="technology-section-english">Corporate Network Deployment &amp; Zero Trust Extension<\/p><h2>사내망 알파닥과 기관 단위 보안 체계<\/h2><p class="technology-section-lead">개인이 쓰던 AI를 기관이 도입하고 관리할 수 있게 만듭니다\.<\/p>/);
-  assert.match(html, /POST <!-- -->09<\/span><div><p class="technology-section-english">One-way AI Architecture<\/p><h2>일방향 AI 구조<\/h2><p class="technology-section-lead">의학 근거는 기관 환경으로 보내고, 기관의 데이터는 그 안에 둡니다\.<\/p>/);
+  const postOrder = [
+    "technology-one-way-architecture",
+    "technology-onpremise-security",
+    "technology-medical-model",
+    "technology-alphaseal",
+    "technology-alphalayer",
+    "technology-alphaimage",
+    "technology-alphadocument",
+    "technology-alphadoc-engine",
+    "technology-alphaevidence",
+  ];
+  for (let index = 1; index < postOrder.length; index += 1) {
+    assert.ok(html.indexOf(`<article id="${postOrder[index - 1]}"`) < html.indexOf(`<article id="${postOrder[index]}"`), `${postOrder[index - 1]} comes before ${postOrder[index]}`);
+  }
+  assert.equal((html.match(/<article id="technology-[^"]+" class="technology-post"/g) ?? []).length, 9);
+  assert.equal((html.match(/aria-expanded="false" aria-controls="technology-[^"]+-body"/g) ?? []).length, 9);
+  assert.equal((html.match(/class="technology-post-panel" id="technology-[^"]+-body" hidden=""/g) ?? []).length, 9);
+  assert.match(html, /POST <!-- -->07<\/p><p class="technology-section-english">Medical-specialized AI Model<\/p><h2><button type="button" class="technology-post-toggle"[^>]*><span>의료 특화 AI 모델<\/span>/);
+  assert.match(html, /POST <!-- -->08<\/p><p class="technology-section-english">Corporate Network Deployment &amp; Zero Trust Extension<\/p><h2><button[^>]*><span>사내망 알파닥과 기관 단위 보안 체계<\/span>[\s\S]*?<p class="technology-section-lead">개인이 쓰던 AI를 기관이 도입하고 관리할 수 있게 만듭니다\.<\/p>/);
+  assert.match(html, /POST <!-- -->09<\/p><p class="technology-section-english">One-way AI Architecture<\/p><h2><button[^>]*><span>일방향 AI 구조<\/span>[\s\S]*?<p class="technology-section-lead">의학 근거는 기관 환경으로 보내고, 기관의 데이터는 그 안에 둡니다\.<\/p>/);
   assert.match(html, /technology-status technology-status-coming-soon">Coming soon · 개발 중</);
   assert.match(html, /technology-status technology-status-first-site-installed">첫 기관 설치 · 보안 체계 구축 중</);
   assert.match(html, /technology-status technology-status-first-site-applied">구현 · 첫 기관 적용</);
@@ -999,22 +1021,19 @@ test("server-renders an accessible, expanding Technology journal with its curren
   assert.match(html, /사내망과 분리 클라우드 모두 기관 환경 안의 모델로 답하며, 외부 모델을 부르지 않습니다\./);
   assert.match(html, /개인의 AI를 기관의 AI로 넓히다/);
   assert.match(html, /AlphaLayer의 통제를 기관 전체로/);
-  assert.match(html, /사내망 알파닥은 KMI 한국의학연구소에 설치를 마쳤고 기관 환경에서 공개 기반 모델로 돌아갑니다\./);
+  assert.match(html, /사내망 알파닥은 첫 기관에 설치를 마쳤고 기관 환경에서 공개 기반 모델로 돌아갑니다\./);
   assert.match(html, /이 모델은 바이오레의 <a href="#technology-medical-model">의료 특화 AI 모델<\/a>로 바꿀 예정입니다\./);
   assert.match(html, /<a href="#technology-alphalayer">AlphaLayer<\/a>는 지금 일부 텍스트 기능에서/);
   assert.match(html, /데이터가 머무는 곳을 먼저 정하다/);
   assert.match(html, /근거를 한 방향으로 보내다/);
   assert.match(html, /새 지침과 문헌은 <a href="#technology-alphaevidence">AlphaEvidence<\/a>에서 정리한 뒤 각 기관 환경으로 보냅니다\./);
-  assert.match(html, /이 구조는 KMI 한국의학연구소의 사내망에 적용돼 있습니다\./);
+  assert.match(html, /이 구조는 첫 기관의 사내망에 적용돼 있습니다\./);
+  assert.doesNotMatch(html, /KMI|한국의학연구소/);
   assert.match(html, /법적 적합성까지 확인해 주지는 않습니다/);
   assert.match(html, /<strong>그림<!-- --> <!-- -->08<\/strong><span>바이오레의 의료 특화 AI 모델\(V1\)은 AlphaDoc Engine에서 지금의 공개 기반 모델이 있던 자리를 그대로 대신합니다\. 개발 구상을 설명하는 다이어그램\.<\/span>/);
   assert.match(html, /<strong>그림<!-- --> <!-- -->09<\/strong><span>사내망에서 답을 만드는 모델은 인터넷에 연결되지 않고, 의학 자료는 바이오레에서 한 방향으로만 받습니다\./);
   assert.match(html, /<strong>그림<!-- --> <!-- -->10<\/strong><span>의학 근거는 바이오레에서 각 기관으로 한 방향으로만 갱신되고/);
-  assert.match(html, /현재 기술/);
-  assert.match(html, /technology-article-nav-next-title">다음 기술</);
-  assert.match(html, /<small>09<\/small><span>일방향 AI 구조<\/span>/);
-  assert.match(html, /<small>07<\/small><span>의료 특화 AI 모델<small class="technology-article-nav-tag">Coming soon<\/small><\/span>/);
-  assert.match(html, /<small>08<\/small><span>사내망 알파닥과 기관 단위 보안 체계<\/span>/);
+  assert.doesNotMatch(html, /technology-article-nav|현재 기술|다음 기술/);
   assert.doesNotMatch(html, FORBIDDEN_TOKENS);
   assert.doesNotMatch(html, /온프레미스|폐쇄망|기관 내부 서버|업데이트 노트|\(0[0-9]\)<\/a>/);
   assert.doesNotMatch(html, /계보|선택 경로 운영 검증|노출 가능한 진료지침/);
@@ -1065,14 +1084,12 @@ test("server-renders an accessible, expanding Technology journal with its curren
   assert.match(englishHtml, /technology-status-first-site-installed">Installed at first institution · Security framework in progress</);
   assert.match(englishHtml, /technology-status-first-site-applied">IMPLEMENTED · APPLIED AT FIRST INSTITUTION</);
   assert.match(englishHtml, /Updated October 26, 2026/);
-  assert.match(englishHtml, /<h2>Our own medical AI model<\/h2><p class="technology-section-lead">Fine-tuned by Viore, built for medicine\.<\/p>/);
-  assert.match(englishHtml, /<h2>Alphadoc on your corporate network, with institution-level security<\/h2>/);
-  assert.match(englishHtml, /<h2>One-way AI Architecture<\/h2><p class="technology-section-lead">Evidence flows in\. Your data stays put\.<\/p>/);
-  assert.match(englishHtml, /Corporate-network Alphadoc is installed at KMI \(Korea Medical Institute\)/);
-  assert.match(englishHtml, /This architecture runs on the corporate network at KMI \(Korea Medical Institute\)\./);
-  assert.match(englishHtml, /technology-article-nav-next-title">What&#x27;s next</);
-  assert.match(englishHtml, /Our own medical AI model<small class="technology-article-nav-tag">Coming soon<\/small>/);
-  assert.match(englishHtml, /<small>09<\/small><span>One-way AI Architecture<\/span>/);
+  assert.match(englishHtml, /<span>Our own medical AI model<\/span><i class="technology-post-toggle-icon" aria-hidden="true"><\/i><\/button><\/h2><p class="technology-section-lead">Fine-tuned by Viore, built for medicine\.<\/p>/);
+  assert.match(englishHtml, /<span>Alphadoc on your corporate network, with institution-level security<\/span>/);
+  assert.match(englishHtml, /<span>One-way AI Architecture<\/span><i class="technology-post-toggle-icon" aria-hidden="true"><\/i><\/button><\/h2><p class="technology-section-lead">Evidence flows in\. Your data stays put\.<\/p>/);
+  assert.match(englishHtml, /Corporate-network Alphadoc is installed at our first institution/);
+  assert.match(englishHtml, /This architecture runs on the corporate network at our first institution\./);
+  assert.doesNotMatch(englishHtml, /KMI|Korea Medical Institute|technology-article-nav|What&#x27;s next|Current Tech/);
   assert.doesNotMatch(englishHtml, /On-premise|on-premise|closed network|Evidence lineage/);
   assert.doesNotMatch(englishHtml, FORBIDDEN_TOKENS);
 });
@@ -1115,7 +1132,7 @@ test("implements the AlphaEvidence public snapshot and distinct public diagrams 
     readFile(new URL("../app/components/TechnologyMotion.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/components/TechnologyPage.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/components/ViewportMotion.tsx", import.meta.url), "utf8"),
-    readFile(new URL("../app/components/TechnologyArticleNav.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/components/TechnologyPostCard.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/components/SiteChrome.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/technology.css", import.meta.url), "utf8"),
   ]);
@@ -1173,7 +1190,9 @@ test("implements the AlphaEvidence public snapshot and distinct public diagrams 
   assert.match(viewportMotion, /new IntersectionObserver/);
   assert.match(viewportMotion, /prefers-reduced-motion: reduce/);
   assert.match(viewportMotion, /visibilityObserver\.disconnect\(\)/);
-  assert.match(nav, /Technology journal contents/);
+  assert.match(nav, /window\.addEventListener\("hashchange", openFromHash\)/);
+  assert.match(nav, /hidden=\{!open\}/);
+  assert.match(technologyPage, /right\.verified\.localeCompare\(left\.verified\) \|\| Number\(right\.index\) - Number\(left\.index\)/);
   assert.match(chrome, /href=\{technologyRouteFor\(language\)\}/);
   assert.doesNotMatch(chrome, /technologyRouteFor\(language, "(?:alphaevidence|alphadoc-engine|alphadocument|alphalayer)"\)/);
   assert.match(chrome, /\["product"\] as MenuId\[\]/);
@@ -1181,10 +1200,10 @@ test("implements the AlphaEvidence public snapshot and distinct public diagrams 
   assert.doesNotMatch(chrome, /routeFor\(language, "clinical-council"\)/);
   assert.match(chrome, /nav-link nav-link-disabled/);
   assert.match(chrome, /<small>Coming soon<\/small>/);
-  assert.match(css, /\.technology-article-nav \{\s*position: fixed;/);
-  assert.match(css, /\.technology-post \{\s*scroll-margin-top:/);
-  assert.match(css, /@media \(max-width: 1180px\) \{[\s\S]*?\.technology-post \{\s*scroll-margin-top: calc\(var\(--header\) \+ 96px \+ 24px\);/);
-  assert.match(css, /@media \(max-width: 760px\) \{[\s\S]*?scroll-margin-top: calc\(var\(--header\) \+ 96px \+ 16px\);/);
+  assert.doesNotMatch(css, /technology-article-nav/);
+  assert.match(css, /\.technology-post \{[^}]*scroll-margin-top: calc\(var\(--header\) \+ 24px\);[^}]*border-radius: 22px;/);
+  assert.match(css, /\.technology-post-toggle::after \{[^}]*position: absolute;[^}]*inset: 0;/);
+  assert.match(css, /\.technology-post-panel\[hidden\] \{\s*display: none;/);
   assert.match(css, /--technology-page: var\(--dark-paper-base\)/);
   assert.match(css, /--technology-paper: var\(--dark-paper-image\)/);
   assert.doesNotMatch(css, /#111114;\s*backdrop-filter: none|rgba\(17, 17, 20|site-header-dark/);
@@ -1210,9 +1229,6 @@ test("implements the AlphaEvidence public snapshot and distinct public diagrams 
   assert.match(globalsCss, /\.site-header-dark \.contact-link \{[\s\S]*?color: #f5f5f7;/);
   assert.match(globalsCss, /@media \(max-width: 760px\) \{\s*\.site-header\.site-header-dark \{\s*background: #000000;/);
   assert.doesNotMatch(globalsCss, /rgba\(17, 17, 20|rgba\(17,17,20|#08080a|#fdfdfc/);
-  assert.match(css, /\.technology-article-nav \{[\s\S]*?border: 0;[\s\S]*?background: transparent;[\s\S]*?backdrop-filter: none;/);
-  assert.match(css, /\.technology-article-nav-inner \{[\s\S]*?border: 0;[\s\S]*?background: transparent;[\s\S]*?backdrop-filter: none;/);
-  assert.match(css, /@media \(max-width: 1180px\) \{[\s\S]*?background: color-mix\(in srgb, var\(--technology-page\) 96%, transparent\);[\s\S]*?grid-template-columns: repeat\(7, minmax\(0, 1fr\)\);/);
   assert.match(css, /\.technology-data-section \{[\s\S]*?margin: 58px 0 0 !important;/);
   assert.doesNotMatch(css, /background: linear-gradient\(90deg, rgba\(17, 17, 20, \.68\), transparent\)/);
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)/);

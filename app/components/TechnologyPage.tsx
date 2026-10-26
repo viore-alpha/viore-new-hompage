@@ -1,8 +1,8 @@
-import { Fragment } from "react";
+import { Fragment, type ReactNode } from "react";
 import type { AlphaEvidenceSnapshotResult } from "@/app/alphaevidence-snapshot";
 import { AlphaEvidenceSnapshot } from "@/app/components/AlphaEvidenceSnapshot";
-import { TechnologyArticleNav } from "@/app/components/TechnologyArticleNav";
 import { TechnologyMotion, type TechnologyMotionKind } from "@/app/components/TechnologyMotion";
+import { TechnologyPostCard } from "@/app/components/TechnologyPostCard";
 import { SITE_UPDATED_AT } from "@/app/seo";
 import { technologyAnchors, type Language } from "@/app/site-content";
 
@@ -265,7 +265,7 @@ const articleCopy = {
           title: "개인의 AI를 기관의 AI로 넓히다",
           paragraphs: [
             [
-              "의료인은 이미 개인 계정으로 AI를 업무에 쓰고 있습니다. 하지만 기관이 이를 업무 도구로 들이려면 기능만으로는 부족하고, 데이터 보호, 사용 권한, 운영 기준, 감사 기록이 갖춰져야 합니다. 바이오레는 이를 두 가지로 준비합니다. 하나는 사내망이나 분리 클라우드에 설치하는 알파닥이고, 다른 하나는 기관의 정책에 따라 접근 권한과 민감정보 처리를 통제하는 기관 단위 보안 체계입니다. 사내망 알파닥은 KMI 한국의학연구소에 설치를 마쳤고 기관 환경에서 공개 기반 모델로 돌아갑니다. 이 모델은 바이오레의 ",
+              "의료인은 이미 개인 계정으로 AI를 업무에 쓰고 있습니다. 하지만 기관이 이를 업무 도구로 들이려면 기능만으로는 부족하고, 데이터 보호, 사용 권한, 운영 기준, 감사 기록이 갖춰져야 합니다. 바이오레는 이를 두 가지로 준비합니다. 하나는 사내망이나 분리 클라우드에 설치하는 알파닥이고, 다른 하나는 기관의 정책에 따라 접근 권한과 민감정보 처리를 통제하는 기관 단위 보안 체계입니다. 사내망 알파닥은 첫 기관에 설치를 마쳤고 기관 환경에서 공개 기반 모델로 돌아갑니다. 이 모델은 바이오레의 ",
               { text: "의료 특화 AI 모델", href: MODEL_ANCHOR },
               "로 바꿀 예정입니다.",
             ],
@@ -303,7 +303,7 @@ const articleCopy = {
               { text: "AlphaEvidence", href: EVIDENCE_ANCHOR },
               "에서 정리한 뒤 각 기관 환경으로 보냅니다. 모델과 보안 업데이트도 같은 방향으로만 보냅니다. 기관의 문서, 질문, 답변은 이 경로를 거꾸로 타고 바이오레로 오지 않습니다.",
             ],
-            "이 구조는 KMI 한국의학연구소의 사내망에 적용돼 있습니다. 일방향 구조는 데이터가 어디에 머물고 어디로 흐르는지에 대한 설계이며, 기관의 개인정보 처리 근거나 법적 적합성까지 확인해 주지는 않습니다.",
+            "이 구조는 첫 기관의 사내망에 적용돼 있습니다. 일방향 구조는 데이터가 어디에 머물고 어디로 흐르는지에 대한 설계이며, 기관의 개인정보 처리 근거나 법적 적합성까지 확인해 주지는 않습니다.",
           ],
         },
       ],
@@ -477,7 +477,7 @@ const articleCopy = {
           title: "From personal AI to institutional AI",
           paragraphs: [
             [
-              "Clinicians already use AI at work through personal accounts. But for an institution to adopt it, features aren't enough. It also needs data protection, access rights, operating rules, and audit records. Viore is building for this in two ways: Alphadoc installed on a corporate network or in a separate cloud, and an institution-level security framework that controls access and sensitive-data handling by institutional policy. Corporate-network Alphadoc is installed at KMI (Korea Medical Institute) and runs on an open base model inside the institution's environment. Viore's ",
+              "Clinicians already use AI at work through personal accounts. But for an institution to adopt it, features aren't enough. It also needs data protection, access rights, operating rules, and audit records. Viore is building for this in two ways: Alphadoc installed on a corporate network or in a separate cloud, and an institution-level security framework that controls access and sensitive-data handling by institutional policy. Corporate-network Alphadoc is installed at our first institution and runs on an open base model inside the institution's environment. Viore's ",
               { text: "medical AI model", href: MODEL_ANCHOR },
               " will replace it.",
             ],
@@ -516,7 +516,7 @@ const articleCopy = {
               { text: "AlphaEvidence", href: EVIDENCE_ANCHOR },
               " and sent to each institution's environment. Model and security updates take the same route. The institution's documents, questions, and answers don't travel back to Viore.",
             ],
-            "This architecture runs on the corporate network at KMI (Korea Medical Institute). It defines where data stays and how it flows. It doesn't establish an institution's legal basis for processing personal data, or its legal suitability.",
+            "This architecture runs on the corporate network at our first institution. It defines where data stays and how it flows. It doesn't establish an institution's legal basis for processing personal data, or its legal suitability.",
           ],
         },
       ],
@@ -525,48 +525,28 @@ const articleCopy = {
   },
 } as const;
 
-function TechnologySectionHeader({
+function TechnologyPostMeta({
   language,
-  index,
-  name,
-  englishTitle,
-  lead,
   status,
-  verified = VERIFIED_DATE,
+  verified,
 }: {
   language: Language;
-  index: string;
-  name: string;
-  englishTitle: string;
-  lead: string;
   status: TechnologyStatus;
-  verified?: string;
+  verified: string;
 }) {
   const labels = sharedCopy[language];
-  const statusClass = status;
 
   return (
-    <header className="technology-section-header">
-      <div className="technology-post-heading">
-        <span className="technology-post-number">POST {index}</span>
-        <div>
-          <p className="technology-section-english">{englishTitle}</p>
-          <h2>{name}</h2>
-          <p className="technology-section-lead">{lead}</p>
-        </div>
+    <dl className="technology-post-meta">
+      <div>
+        <dt>{labels.status}</dt>
+        <dd><span className={`technology-status technology-status-${status}`}>{labels.statuses[status]}</span></dd>
       </div>
-
-      <dl className="technology-status-list">
-        <div>
-          <dt>{labels.status}</dt>
-          <dd><span className={`technology-status technology-status-${statusClass}`}>{labels.statuses[status]}</span></dd>
-        </div>
-        <div>
-          <dt>{labels.verified}</dt>
-          <dd><time dateTime={verified}>{verified}</time></dd>
-        </div>
-      </dl>
-    </header>
+      <div>
+        <dt>{labels.verified}</dt>
+        <dd><time dateTime={verified}>{verified}</time></dd>
+      </div>
+    </dl>
   );
 }
 
@@ -637,6 +617,141 @@ export function TechnologyPage({
   const page = sharedCopy[language];
   const articles = articleCopy[language];
 
+  const posts: ReadonlyArray<{
+    id: string;
+    index: string;
+    status: TechnologyStatus;
+    verified: string;
+    copy: { name: string; englishTitle: string; lead: string };
+    body: ReactNode;
+  }> = [
+    {
+      id: technologyAnchors.alphaevidence,
+      index: "01",
+      status: "implemented-foundation",
+      verified: VERIFIED_DATE,
+      copy: articles.evidence,
+      body: (
+        <>
+          <ProseSections sections={articles.evidence.sections} />
+          <TechnologyFigure language={language} number="02" kind="evidence" caption={articles.evidence.figureCaption} />
+          <section className="technology-data-section">
+            <h3>{articles.evidence.snapshotTitle}</h3>
+            <AlphaEvidenceSnapshot initialResult={snapshotResult} language={language} />
+          </section>
+        </>
+      ),
+    },
+    {
+      id: "technology-alphadoc-engine",
+      index: "02",
+      status: "implemented-capability",
+      verified: VERIFIED_DATE,
+      copy: articles.engine,
+      body: (
+        <>
+          <ProseSections sections={articles.engine.sections} />
+          <TechnologyFigure language={language} number="03" kind="engine" caption={articles.engine.figureCaption} />
+        </>
+      ),
+    },
+    {
+      id: "technology-alphadocument",
+      index: "03",
+      status: "release-in-review",
+      verified: VERIFIED_DATE,
+      copy: articles.document,
+      body: (
+        <>
+          <ProseSections sections={articles.document.sections} />
+          <TechnologyFigure language={language} number="04" kind="document" caption={articles.document.figureCaption} />
+        </>
+      ),
+    },
+    {
+      id: "technology-alphaimage",
+      index: "04",
+      status: "integration-in-review",
+      verified: VERIFIED_DATE,
+      copy: articles.image,
+      body: (
+        <>
+          <ProseSections sections={articles.image.sections} />
+          <TechnologyFigure language={language} number="05" kind="image" caption={articles.image.figureCaption} />
+        </>
+      ),
+    },
+    {
+      id: technologyAnchors.alphalayer,
+      index: "05",
+      status: "selected-path-active",
+      verified: VERIFIED_DATE,
+      copy: articles.layer,
+      body: (
+        <>
+          <ProseSections sections={articles.layer.sections} />
+          <TechnologyFigure language={language} number="06" kind="layer" caption={articles.layer.figureCaption} />
+        </>
+      ),
+    },
+    {
+      id: "technology-alphaseal",
+      index: "06",
+      status: "supported-path-implemented",
+      verified: VERIFIED_DATE,
+      copy: articles.seal,
+      body: (
+        <>
+          <ProseSections sections={articles.seal.sections} />
+          <TechnologyFigure language={language} number="07" kind="seal" caption={articles.seal.figureCaption} />
+        </>
+      ),
+    },
+    {
+      id: technologyAnchors["medical-model"],
+      index: "07",
+      status: "coming-soon",
+      verified: SITE_UPDATED_AT,
+      copy: articles.model,
+      body: (
+        <>
+          <ProseSections sections={articles.model.sections} />
+          <TechnologyFigure language={language} number="08" kind="model" caption={articles.model.figureCaption} />
+        </>
+      ),
+    },
+    {
+      id: technologyAnchors["onpremise-security"],
+      index: "08",
+      status: "first-site-installed",
+      verified: SITE_UPDATED_AT,
+      copy: articles.onpremise,
+      body: (
+        <>
+          <ProseSections sections={articles.onpremise.sections} />
+          <TechnologyFigure language={language} number="09" kind="onpremise" caption={articles.onpremise.figureCaption} />
+        </>
+      ),
+    },
+    {
+      id: technologyAnchors["one-way-architecture"],
+      index: "09",
+      status: "first-site-applied",
+      verified: SITE_UPDATED_AT,
+      copy: articles.oneway,
+      body: (
+        <>
+          <ProseSections sections={articles.oneway.sections} />
+          <TechnologyFigure language={language} number="10" kind="oneway" caption={articles.oneway.figureCaption} />
+        </>
+      ),
+    },
+  ];
+  /* Newest first: latest check date, then the later post. */
+  const orderedPosts = [...posts].sort((left, right) => (
+    right.verified.localeCompare(left.verified) || Number(right.index) - Number(left.index)
+  ));
+
   return (
     <div className="technology-journal" lang={language}>
       <header className="technology-hero" id="technology-overview">
@@ -665,195 +780,24 @@ export function TechnologyPage({
         />
       </header>
 
-      <TechnologyArticleNav language={language} />
-
       <main className="technology-article-stream">
-        <article id="technology-alphaevidence" className="technology-post" data-tech-status="implemented-foundation">
-          <TechnologySectionHeader
-            language={language}
-            index="01"
-            name={articles.evidence.name}
-            englishTitle={articles.evidence.englishTitle}
-            lead={articles.evidence.lead}
-            status="implemented-foundation"
-          />
-          <div className="technology-prose">
-            <ProseSections sections={articles.evidence.sections} />
-            <TechnologyFigure
-              language={language}
-              number="02"
-              kind="evidence"
-              caption={articles.evidence.figureCaption}
-            />
-            <section className="technology-data-section">
-              <h3>{articles.evidence.snapshotTitle}</h3>
-              <AlphaEvidenceSnapshot initialResult={snapshotResult} language={language} />
-            </section>
-          </div>
-        </article>
-
-        <article id="technology-alphadoc-engine" className="technology-post" data-tech-status="implemented-capability">
-          <TechnologySectionHeader
-            language={language}
-            index="02"
-            name={articles.engine.name}
-            englishTitle={articles.engine.englishTitle}
-            lead={articles.engine.lead}
-            status="implemented-capability"
-          />
-          <div className="technology-prose">
-            <ProseSections sections={articles.engine.sections} />
-            <TechnologyFigure
-              language={language}
-              number="03"
-              kind="engine"
-              caption={articles.engine.figureCaption}
-            />
-          </div>
-        </article>
-
-        <article id="technology-alphadocument" className="technology-post" data-tech-status="release-in-review">
-          <TechnologySectionHeader
-            language={language}
-            index="03"
-            name={articles.document.name}
-            englishTitle={articles.document.englishTitle}
-            lead={articles.document.lead}
-            status="release-in-review"
-          />
-          <div className="technology-prose">
-            <ProseSections sections={articles.document.sections} />
-            <TechnologyFigure
-              language={language}
-              number="04"
-              kind="document"
-              caption={articles.document.figureCaption}
-            />
-          </div>
-        </article>
-
-        <article id="technology-alphaimage" className="technology-post" data-tech-status="integration-in-review">
-          <TechnologySectionHeader
-            language={language}
-            index="04"
-            name={articles.image.name}
-            englishTitle={articles.image.englishTitle}
-            lead={articles.image.lead}
-            status="integration-in-review"
-          />
-          <div className="technology-prose">
-            <ProseSections sections={articles.image.sections} />
-            <TechnologyFigure
-              language={language}
-              number="05"
-              kind="image"
-              caption={articles.image.figureCaption}
-            />
-          </div>
-        </article>
-
-        <article id="technology-alphalayer" className="technology-post" data-tech-status="selected-path-active">
-          <TechnologySectionHeader
-            language={language}
-            index="05"
-            name={articles.layer.name}
-            englishTitle={articles.layer.englishTitle}
-            lead={articles.layer.lead}
-            status="selected-path-active"
-          />
-          <div className="technology-prose">
-            <ProseSections sections={articles.layer.sections} />
-            <TechnologyFigure
-              language={language}
-              number="06"
-              kind="layer"
-              caption={articles.layer.figureCaption}
-            />
-          </div>
-        </article>
-
-        <article id="technology-alphaseal" className="technology-post" data-tech-status="supported-path-implemented">
-          <TechnologySectionHeader
-            language={language}
-            index="06"
-            name={articles.seal.name}
-            englishTitle={articles.seal.englishTitle}
-            lead={articles.seal.lead}
-            status="supported-path-implemented"
-          />
-          <div className="technology-prose">
-            <ProseSections sections={articles.seal.sections} />
-            <TechnologyFigure
-              language={language}
-              number="07"
-              kind="seal"
-              caption={articles.seal.figureCaption}
-            />
-          </div>
-        </article>
-
-        <article id={technologyAnchors["medical-model"]} className="technology-post" data-tech-status="coming-soon">
-          <TechnologySectionHeader
-            language={language}
-            index="07"
-            name={articles.model.name}
-            englishTitle={articles.model.englishTitle}
-            lead={articles.model.lead}
-            status="coming-soon"
-            verified={SITE_UPDATED_AT}
-          />
-          <div className="technology-prose">
-            <ProseSections sections={articles.model.sections} />
-            <TechnologyFigure
-              language={language}
-              number="08"
-              kind="model"
-              caption={articles.model.figureCaption}
-            />
-          </div>
-        </article>
-
-        <article id={technologyAnchors["onpremise-security"]} className="technology-post" data-tech-status="first-site-installed">
-          <TechnologySectionHeader
-            language={language}
-            index="08"
-            name={articles.onpremise.name}
-            englishTitle={articles.onpremise.englishTitle}
-            lead={articles.onpremise.lead}
-            status="first-site-installed"
-            verified={SITE_UPDATED_AT}
-          />
-          <div className="technology-prose">
-            <ProseSections sections={articles.onpremise.sections} />
-            <TechnologyFigure
-              language={language}
-              number="09"
-              kind="onpremise"
-              caption={articles.onpremise.figureCaption}
-            />
-          </div>
-        </article>
-
-        <article id={technologyAnchors["one-way-architecture"]} className="technology-post" data-tech-status="first-site-applied">
-          <TechnologySectionHeader
-            language={language}
-            index="09"
-            name={articles.oneway.name}
-            englishTitle={articles.oneway.englishTitle}
-            lead={articles.oneway.lead}
-            status="first-site-applied"
-            verified={SITE_UPDATED_AT}
-          />
-          <div className="technology-prose">
-            <ProseSections sections={articles.oneway.sections} />
-            <TechnologyFigure
-              language={language}
-              number="10"
-              kind="oneway"
-              caption={articles.oneway.figureCaption}
-            />
-          </div>
-        </article>
+        <ol className="technology-post-list">
+          {orderedPosts.map((post) => (
+            <li key={post.id}>
+              <TechnologyPostCard
+                id={post.id}
+                status={post.status}
+                index={post.index}
+                englishTitle={post.copy.englishTitle}
+                name={post.copy.name}
+                lead={post.copy.lead}
+                meta={<TechnologyPostMeta language={language} status={post.status} verified={post.verified} />}
+              >
+                <div className="technology-prose">{post.body}</div>
+              </TechnologyPostCard>
+            </li>
+          ))}
+        </ol>
       </main>
     </div>
   );

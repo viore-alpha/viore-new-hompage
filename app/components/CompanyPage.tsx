@@ -3,6 +3,7 @@ import { CompanyEnergyCanvas } from "@/app/components/CompanyEnergyCanvas";
 import { CompanyMetrics } from "@/app/components/CompanyMetrics";
 import { CompanyNetworkBackdrop } from "@/app/components/CompanyNetworkBackdrop";
 import { CompanyNoteMotion } from "@/app/components/CompanyNoteMotion";
+import { CompanyPartners, CompanyRecognitions } from "@/app/components/CompanyPartners";
 import { CompanyQuestionLoop } from "@/app/components/CompanyQuestionLoop";
 import { getCompanyMetrics } from "@/app/company-metrics";
 import { detailContent, routeFor, technologyRouteFor, type Language } from "@/app/site-content";
@@ -73,6 +74,8 @@ export async function CompanyPage({ language }: { language: Language }) {
             </section>
           )}
           {page.connections && <CompanyConnections content={page.connections} />}
+          <CompanyPartners language={language} />
+          <CompanyRecognitions />
         </section>
 
         <section className="detail-next company-join" id="company-join">

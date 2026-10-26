@@ -490,6 +490,16 @@ img { display: block; max-width: 100%; }
 .company-connection-node:not(:nth-child(3n+1)) { border-left: 1px solid rgba(255,255,255,.12); }
 .company-connection-node h3 { margin: 0; color: #f5f5f7; font-size: 21px; font-weight: 560; line-height: 1.28; letter-spacing: -.035em; word-break: keep-all; text-wrap: balance; }
 .company-connection-node-copy > p { margin: 8px 0 0; color: #aaaab0; font-size: 13px; font-weight: 450; line-height: 1.4; letter-spacing: -.014em; text-wrap: balance; }
+/* Partners and Recognitions: the connections heading and rule lines, with one mark per cell. */
+.company-logo-section { margin-top: clamp(104px,9vw,140px); }
+.company-logo-row { margin: 56px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); border-top: 1px solid rgba(255,255,255,.16); border-bottom: 1px solid rgba(255,255,255,.12); list-style: none; }
+.company-logo-item { min-width: 0; min-height: 196px; padding: 40px 28px; display: flex; align-items: center; }
+.company-logo-item:first-child { padding-left: 0; }
+.company-logo-item + .company-logo-item { border-left: 1px solid rgba(255,255,255,.12); }
+.company-logo-wordmark { color: #f5f5f7; font-size: 26px; font-weight: 640; line-height: 1.2; letter-spacing: -.035em; word-break: keep-all; }
+.company-partner-logo { width: auto; max-width: 100%; height: 56px; display: block; }
+.company-recognition-badge { width: 240px; max-width: 100%; height: auto; display: block; }
+.company-trademark { max-width: 620px; margin: 18px 0 0; color: #8e8e94; font-size: 11px; line-height: 1.5; letter-spacing: -.005em; }
 .detail-items { margin: 112px 0 0 22%; border-top: 1px solid rgba(15,15,16,.25); }
 .detail-items article { min-height: 170px; padding: 35px 0; display: grid; grid-template-columns: 68px minmax(180px,.78fr) minmax(260px,1fr); align-items: start; gap: 28px; border-bottom: 1px solid var(--line); }
 .detail-items article > span { color: #8f8f94; font-size: 9px; font-weight: 650; letter-spacing: .13em; }
@@ -553,12 +563,6 @@ img { display: block; max-width: 100%; }
 .footer-legal { display: grid; justify-items: end; gap: 4px; color: #77777c; font-size: 11px; line-height: 1.42; }
 .footer-policy-links { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 16px; }
 .footer-copyright { white-space: nowrap; }
-.footer-inception { display: block; line-height: 0; }
-.footer-inception-badge { width: 72px; height: auto; display: block; }
-.footer-inception-badge.is-dark,.site-footer-dark .footer-inception-badge.is-light { display: none; }
-.site-footer-dark .footer-inception-badge.is-dark { display: block; }
-.footer-trademark { max-width: 420px; color: #9a9aa0; font-size: 9.5px; line-height: 1.4; text-align: right; }
-.site-footer-dark .footer-trademark { color: #8e8e94; }
 .footer-legal a { transition: color .18s ease; }
 .footer-legal a:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 4px; }
 .site-footer-dark { color: #f5f5f7; color-scheme: dark; border-top-color: rgba(255,255,255,.14); background-color: var(--dark-paper-base); background-image: var(--dark-paper-image); background-repeat: repeat; background-size: var(--dark-paper-size); }
@@ -865,6 +869,10 @@ img { display: block; max-width: 100%; }
   .company-connection-node { position: static; width: auto; min-height: 92px; padding: 25px 0; display: block; border-bottom: 1px solid rgba(255,255,255,.12); border-left: 0; text-shadow: none; }
   .company-connection-node + .company-connection-node { border-left: 0; }
   .company-connection-node h3 { font-size: 20px; }
+  .company-logo-section { margin-top: 104px; }
+  .company-logo-row { margin-top: 40px; grid-template-columns: 1fr; }
+  .company-logo-item { min-height: 150px; padding: 32px 0; }
+  .company-logo-item + .company-logo-item { border-left: 0; border-top: 1px solid rgba(255,255,255,.12); }
   .product-hero-v2 { min-height: auto; padding-top: calc(var(--header) + 100px); display: flex; flex-direction: column; align-items: stretch; gap: 70px; }
   .product-hero-copy-v2 { max-width: 760px; }
   .product-constellation { width: min(100%,660px); align-self: center; }
@@ -982,6 +990,9 @@ img { display: block; max-width: 100%; }
   .company-knowledge > h2 { font-size: 30px; }
   .company-knowledge .company-metrics { margin-top: 38px; }
   .company-connections { margin-top: 90px; }
+  .company-logo-section { margin-top: 90px; }
+  .company-logo-wordmark { font-size: 22px; }
+  .company-recognition-badge { width: 200px; }
   .company-connections-heading h2 { font-size: 30px; }
   .company-connections-stage { margin-top: 38px; }
   .company-connection-node { min-height: 84px; padding: 23px 0; }

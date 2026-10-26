@@ -10,10 +10,6 @@ import { AlphadocV2PapersMotion } from "@/app/components/alphadoc2/PapersMotion"
 import { AlphadocV2EvidenceMotion } from "@/app/components/alphadoc2/EvidenceMotion";
 import { AlphadocV2SecurityMotion } from "@/app/components/alphadoc2/SecurityMotion";
 
-/* Set to the KMI CI file path (for example "/brand/partners/kmi-logo.svg") once KMI approves
-   logo use and provides the original file. Until then the name is shown as text. */
-const KMI_LOGO_SRC: string | null = null;
-
 const productCopy = {
   ko: {
     nav: [
@@ -59,8 +55,6 @@ const productCopy = {
         ["One-way", "일방향 학습형 AI 구조로서 기관 데이터를 학습에 쓰지 않고 밖으로 내보내지 않습니다."],
         ["Zero Trust", "입력, 경로, 응답까지 검증 로직을 더한 보안 체계를 구현하고 있습니다."],
       ],
-      proofLabel: "사내망 첫 적용",
-      proofName: "KMI 한국의학연구소",
     },
     cta: {
       title: ["바이오레의 첫번째 선형,", "이제 시작해보세요."],
@@ -112,8 +106,6 @@ const productCopy = {
         ["One-way", "A one-way learning architecture. Your institution's data isn't used for training, and it doesn't leave."],
         ["Zero Trust", "We're building checks into every input, every path, and every response."],
       ],
-      proofLabel: "First deployed at",
-      proofName: "KMI (Korea Medical Institute)",
     },
     cta: {
       title: ["Viore's first linearity.", "Start here."],
@@ -205,12 +197,6 @@ export function ProductPage({ language }: { language: Language }) {
           <p>{content.security.body}</p>
           <div className="ap-alphadocs-list">
             {content.security.items.map(([title, body]) => <article key={title}><h3>{title}</h3><p>{body}</p></article>)}
-          </div>
-          <div className="ap-deploy-proof">
-            <span className="ap-deploy-proof-label">{content.security.proofLabel}</span>
-            {KMI_LOGO_SRC
-              ? <img className="ap-deploy-proof-logo" src={KMI_LOGO_SRC} alt={content.security.proofName} height="28" loading="lazy" decoding="async" />
-              : <span className="ap-deploy-proof-name">{content.security.proofName}</span>}
           </div>
         </div>
       </section>

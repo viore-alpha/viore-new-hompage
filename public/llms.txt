@@ -39,7 +39,7 @@ Alphadoc is Viore's AI agent workspace for healthcare institutions and healthcar
 - AlphaImage's bounded static-image artifact technology is implemented and synthetic-input runtime-verified; Alphadoc user-path activation remains under review. It is not a diagnostic model.
 - AlphaLayer is runtime-verified for selected protected text capabilities. It does not cover every feature, identifier type, image, or source file and does not establish patient-information readiness or legal suitability.
 - AlphaSeal encrypts message bodies on supported one-to-one paths between participant browsers. Delivery metadata and reporting paths remain separate, and the scope does not establish patient-information suitability.
-- Alphadoc runs on corporate networks and in separate clouds with a one-way AI architecture: medical evidence and updates flow from Viore to each institution, and institution documents and notes stay in that environment. Corporate-network Alphadoc is installed at KMI (Korea Medical Institute) and runs on an open base model. The architecture describes where data stays and flows; it does not establish legal suitability.
+- Alphadoc runs on corporate networks and in separate clouds with a one-way AI architecture: medical evidence and updates flow from Viore to each institution, and institution documents and notes stay in that environment. Corporate-network Alphadoc is installed at its first institution and runs on an open base model. The architecture describes where data stays and flows; it does not establish legal suitability.
 - The institution-level security framework (Zero Trust) is in progress. Viore's medical-specialized AI model is in development and is not yet in use.
 
 ## Naming guidance
