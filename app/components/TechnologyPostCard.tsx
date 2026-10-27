@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, type ReactNode } from "react";
+import { withAlphadocName } from "@/app/components/BrandName";
 
 /* One Technology post as a card. The face stays visible; the body opens in place.
    The body is server-rendered and only hidden, so search, links and find-by-anchor keep working.
@@ -49,11 +50,11 @@ export function TechnologyPostCard({
             aria-controls={bodyId}
             onClick={() => setOpen((value) => !value)}
           >
-            <span>{name}</span>
+            <span>{withAlphadocName(name)}</span>
             <i className="technology-post-toggle-icon" aria-hidden="true" />
           </button>
         </h2>
-        <p className="technology-section-lead">{lead}</p>
+        <p className="technology-section-lead">{withAlphadocName(lead)}</p>
         {meta}
       </header>
       <div className="technology-post-panel" id={bodyId} hidden={!open}>

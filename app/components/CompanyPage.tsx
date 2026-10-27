@@ -4,6 +4,7 @@ import { CompanyMetrics } from "@/app/components/CompanyMetrics";
 import { CompanyNetworkBackdrop } from "@/app/components/CompanyNetworkBackdrop";
 import { CompanyQuestionLoop } from "@/app/components/CompanyQuestionLoop";
 import { CompanyPartners, CompanyRecognitions } from "@/app/components/CompanyPartners";
+import { withAlphadocName } from "@/app/components/BrandName";
 import { getCompanyMetrics } from "@/app/company-metrics";
 import { detailContent, routeFor, technologyRouteFor, type Language } from "@/app/site-content";
 
@@ -34,7 +35,7 @@ export async function CompanyPage({ language }: { language: Language }) {
         <CompanyNetworkBackdrop />
         <section className="detail-body" id="company-story">
           <h2>{page.statement}</h2>
-          {page.statementLead && <p className="detail-statement-lead">{page.statementLead}</p>}
+          {page.statementLead && <p className="detail-statement-lead">{withAlphadocName(page.statementLead)}</p>}
           {page.efficiency && (
             <section className="company-efficiency" aria-labelledby="company-efficiency-title">
               <div className="company-efficiency-heading">
@@ -54,7 +55,6 @@ export async function CompanyPage({ language }: { language: Language }) {
                   <strong className="company-efficiency-product">{page.efficiency.product}</strong>
                   {page.efficiency.productLead}
                 </span>
-                <span>{page.efficiency.outcome}</span>
               </p>
             </section>
           )}

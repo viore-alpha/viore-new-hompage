@@ -1,6 +1,7 @@
 import type { KnowledgeInitialFeedResult } from "@/app/knowledge-feed";
 import type { Language } from "@/app/site-content";
 import { KnowledgePaperLibrary } from "@/app/components/KnowledgePaperLibrary";
+import { withAlphadocName } from "@/app/components/BrandName";
 
 function formatUpdatedAt(value: string, language: Language) {
   return new Intl.DateTimeFormat(language === "ko" ? "ko-KR" : "en-US", {
@@ -67,9 +68,9 @@ export function KnowledgePage({
           <KnowledgePaperLibrary initialPage={result.page} language={language} />
 
           <footer className="knowledge-library-foot">
-            <p>{ko ? "더 깊은 검색과 원문 탐색은 알파닥에서 이어집니다." : "Continue with deeper search and source review in Alphadoc."}</p>
+            <p>{withAlphadocName(ko ? "더 깊은 검색과 원문 탐색은 알파닥에서 이어집니다." : "Continue with deeper search and source review in Alphadoc.")}</p>
             <a href="https://alphadoc.ai" target="_blank" rel="noopener noreferrer">
-              <span>{ko ? "알파닥에서 논문 찾기" : "Search in Alphadoc"}</span>
+              <span>{withAlphadocName(ko ? "알파닥에서 논문 찾기" : "Search in Alphadoc")}</span>
               <i aria-hidden="true">↗</i>
             </a>
           </footer>
