@@ -1,226 +1,187 @@
-/* alphadoc-v2-security: Zero Trust step scene and the first-deployment line. */
+/* alphadoc-v2-security: the product security section. A line diagram of the whole Alphadoc
+   architecture drawn straight on the dark page (no card), lit part by part in request order.
+   Prefix arch-. One 10s cycle; the plain style of every part is "lit", which reduced motion shows. */
 
 .ap-security .ap-alphadocs-visual { padding-block: 64px; }
 
-.a2-sec-stage {
-  position: relative;
-  width: min(100%, 480px);
-  aspect-ratio: 4 / 5;
-  overflow: hidden;
-  contain: layout paint;
-  container-type: inline-size;
-  border: 1px solid rgba(255, 255, 255, .28);
-  border-radius: 22px;
-  background: #fff;
-  box-shadow: 0 38px 110px rgba(0, 0, 0, .42), 0 10px 30px rgba(0, 0, 0, .24);
-}
-
-.a2.a2-sec {
-  --a2-cycle: 9.86s;
-  padding: 5.2cqw 5.2cqw 4.6cqw;
-  display: flex;
-  flex-direction: column;
-  gap: 2.6cqw;
-  font-size: 3.3cqw;
-}
-
-.a2-sec-head {
-  display: flex;
-  align-items: center;
-  gap: .45em;
-  font-size: .95em;
-  font-weight: 680;
-  letter-spacing: -.02em;
-}
-.a2-sec-head svg { width: 1.05em; height: 1.05em; color: var(--a2-primary); }
-.a2-sec-head .a2-badge { margin-left: auto; font-size: .62em; }
-
-.a2-sec-request {
-  padding: .7em .85em;
-  display: flex;
-  align-items: flex-start;
-  gap: .55em;
-  border-radius: .9em;
-  background: var(--a2-fill);
-  animation-name: a2-sec-request;
-}
-.a2-sec-request > svg { width: 1em; height: 1em; margin-top: .18em; color: var(--a2-muted); }
-.a2-sec-request p { position: relative; flex: 1; min-height: 2.9em; font-size: .78em; line-height: 1.5; }
-.a2-sec-request mark { padding: 0 .15em; border-radius: .25em; color: inherit; background: var(--a2-highlight); white-space: nowrap; }
-.a2-sec-original,
-.a2-sec-tokenized { position: absolute; inset: 0; }
-.a2-sec-original { opacity: 0; animation-name: a2-sec-original; }
-.a2-sec-tokenized { animation-name: a2-sec-tokenized; }
-.a2-sec-tokenized mark { color: var(--a2-primary); background: var(--a2-primary-tint-strong); font-weight: 600; }
-
-.a2-sec-body { flex: 1; min-height: 0; display: grid; }
-
-.a2-sec-steps { position: relative; align-self: start; display: grid; align-content: start; gap: .42em; }
-.a2-sec-rail,
-.a2-sec-rail-fill { position: absolute; top: 1.2em; bottom: 1.2em; left: 1.28em; width: 2px; border-radius: 2px; }
-.a2-sec-rail { background: var(--a2-line); }
-.a2-sec-rail-fill { background: var(--a2-primary); transform-origin: top center; animation-name: a2-sec-rail; }
-
-.a2-sec-step {
-  position: relative;
-  z-index: 1;
-  min-height: 2.55em;
-  padding: .38em .5em;
-  display: grid;
-  grid-template-columns: 1.75em minmax(0, 1fr) auto;
-  align-items: center;
-  gap: .55em;
-  border: 1px solid var(--a2-line);
-  border-radius: .7em;
-  background: #fff;
-}
-@property --a2-sec-dim {
+@property --arch-on {
   syntax: "<number>";
   inherits: true;
   initial-value: 1;
 }
-.a2-sec-step-icon,
-.a2-sec-step-copy { opacity: var(--a2-sec-dim); }
-.a2-sec-step-icon {
-  width: 1.75em;
-  height: 1.75em;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  color: var(--a2-primary);
-  background: var(--a2-primary-tint);
-}
-.a2-sec-step-icon svg { width: 1em; height: 1em; }
-.a2-sec-step-copy { min-width: 0; display: grid; }
-.a2-sec-step-copy strong { overflow: hidden; font-size: .66em; font-weight: 650; text-overflow: ellipsis; white-space: nowrap; }
-.a2-sec-step-copy small { overflow: hidden; color: var(--a2-muted); font-size: .56em; text-overflow: ellipsis; white-space: nowrap; }
-.a2-sec-step-done {
-  display: inline-flex;
-  align-items: center;
-  gap: .2em;
-  color: var(--a2-green-badge-fg);
-  font-size: .56em;
-  font-weight: 650;
-}
-.a2-sec-step-done svg { width: 1.1em; height: 1.1em; }
 
+.ap-arch { width: min(100%, 520px); }
+.ap-arch-svg { display: block; width: 100%; height: auto; overflow: visible; }
 
-.a2-sec-response {
-  padding: .7em .85em;
-  border: 1px solid rgba(0, 122, 47, .22);
-  border-radius: .9em;
-  background: #f4fbf6;
-  animation-name: a2-sec-response;
+.arch-anim {
+  animation-duration: 10s;
+  animation-timing-function: cubic-bezier(.22, 1, .36, 1);
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+  animation-play-state: var(--arch-play, paused);
 }
-.a2-sec-response-meta { display: flex; align-items: center; gap: .35em; color: var(--a2-green-badge-fg); font-size: .6em; font-weight: 650; }
-.a2-sec-response-meta svg { width: 1.1em; height: 1.1em; }
-.a2-sec-response p { margin-top: .25em; font-size: .8em; font-weight: 600; }
+.ap-arch.is-playing { --arch-play: running; }
+.ap-arch.is-reduced .arch-anim { animation: none !important; }
 
-@keyframes a2-sec-request {
-  0% { opacity: 0; transform: translateY(.6em); }
-  4.26%, 93.18% { opacity: 1; transform: none; }
-  97.44%, 100% { opacity: 0; transform: none; }
-}
-@keyframes a2-sec-original {
-  0%, 18.75% { opacity: 1; }
-  23.01%, 100% { opacity: 0; }
-}
-@keyframes a2-sec-tokenized {
-  0%, 18.75% { opacity: 0; }
-  23.01%, 93.18% { opacity: 1; }
-  97.44%, 100% { opacity: 0; }
-}
-@keyframes a2-sec-rail {
-  0%, 6.82% { transform: scaleY(0); }
-  49.43%, 93.18% { transform: scaleY(1); }
-  97.44%, 100% { transform: scaleY(0); }
-}
-@keyframes a2-sec-response {
-  0%, 51.99% { opacity: 0; transform: translateY(.6em); }
-  56.25%, 93.18% { opacity: 1; transform: none; }
-  97.44%, 100% { opacity: 0; transform: none; }
-}
+/* Parts */
+.arch-box { fill: rgba(245, 245, 247, .02); stroke: rgba(245, 245, 247, .22); stroke-width: 1; }
+.arch-box.is-dashed { stroke-dasharray: 4 4; }
+.arch-hl { fill: rgba(139, 181, 255, .1); stroke: #8bb5ff; stroke-width: 1.2; opacity: var(--arch-on); }
+.is-red .arch-hl { fill: rgba(255, 122, 110, .1); stroke: #ff7a6e; }
+.arch-inner { fill: rgba(245, 245, 247, .03); stroke: rgba(245, 245, 247, .18); stroke-width: 1; }
 
-.a2-sec-step-1 { animation-name: a2-sec-step-1; }
-.a2-sec-done-1 { animation-name: a2-sec-done-1; }
-@keyframes a2-sec-step-1 {
-  0%, 5.11% { --a2-sec-dim: .42; border-color: var(--a2-line); background: #fff; }
-  6.82% { --a2-sec-dim: 1; border-color: var(--a2-primary); background: var(--a2-primary-tint); }
-  11.08%, 93.18% { --a2-sec-dim: 1; border-color: var(--a2-line); background: #fff; }
-  97.44%, 100% { --a2-sec-dim: .42; border-color: var(--a2-line); background: #fff; }
-}
-@keyframes a2-sec-done-1 {
-  0%, 9.38% { opacity: 0; transform: scale(.7); }
-  11.08%, 93.18% { opacity: 1; transform: none; }
-  97.44%, 100% { opacity: 0; transform: none; }
-}
+.arch-text { fill: #f5f5f7; fill-opacity: calc(.5 + .5 * var(--arch-on)); font-size: 13.5px; font-weight: 560; letter-spacing: -.01em; }
+.arch-text.is-title { font-size: 15px; font-weight: 650; }
+.arch-text.is-small { font-size: 12px; }
+.arch-sub { fill: rgba(245, 245, 247, .55); font-size: 11px; letter-spacing: -.005em; }
+.arch-label { fill: rgba(245, 245, 247, .62); }
+.arch-stays { fill: rgba(255, 150, 140, .8); }
 
-.a2-sec-step-2 { animation-name: a2-sec-step-2; }
-.a2-sec-done-2 { animation-name: a2-sec-done-2; }
-@keyframes a2-sec-step-2 {
-  0%, 12.78% { --a2-sec-dim: .42; border-color: var(--a2-line); background: #fff; }
-  14.49% { --a2-sec-dim: 1; border-color: var(--a2-primary); background: var(--a2-primary-tint); }
-  18.75%, 93.18% { --a2-sec-dim: 1; border-color: var(--a2-line); background: #fff; }
-  97.44%, 100% { --a2-sec-dim: .42; border-color: var(--a2-line); background: #fff; }
-}
-@keyframes a2-sec-done-2 {
-  0%, 17.05% { opacity: 0; transform: scale(.7); }
-  18.75%, 93.18% { opacity: 1; transform: none; }
-  97.44%, 100% { opacity: 0; transform: none; }
-}
+.arch-num { fill: none; stroke: #8bb5ff; stroke-opacity: calc(.3 + .7 * var(--arch-on)); stroke-width: 1.2; }
+.arch-num-text { fill: #8bb5ff; fill-opacity: calc(.4 + .6 * var(--arch-on)); font-size: 11px; font-weight: 700; }
 
-.a2-sec-step-3 { animation-name: a2-sec-step-3; }
-.a2-sec-done-3 { animation-name: a2-sec-done-3; }
-@keyframes a2-sec-step-3 {
-  0%, 20.45% { --a2-sec-dim: .42; border-color: var(--a2-line); background: #fff; }
-  22.16% { --a2-sec-dim: 1; border-color: var(--a2-primary); background: var(--a2-primary-tint); }
-  26.42%, 93.18% { --a2-sec-dim: 1; border-color: var(--a2-line); background: #fff; }
-  97.44%, 100% { --a2-sec-dim: .42; border-color: var(--a2-line); background: #fff; }
-}
-@keyframes a2-sec-done-3 {
-  0%, 24.72% { opacity: 0; transform: scale(.7); }
-  26.42%, 93.18% { opacity: 1; transform: none; }
-  97.44%, 100% { opacity: 0; transform: none; }
-}
+.arch-boundary { fill: none; stroke: rgba(245, 245, 247, .3); stroke-width: 1.2; }
+.arch-boundary-label { fill: rgba(245, 245, 247, .62); font-size: 11.5px; }
+.arch-band { fill: none; stroke: rgba(139, 181, 255, .38); stroke-width: 1; stroke-dasharray: 3 5; }
+.arch-band-label { fill: #8bb5ff; font-size: 11px; font-weight: 620; }
 
-.a2-sec-step-4 { animation-name: a2-sec-step-4; }
-.a2-sec-done-4 { animation-name: a2-sec-done-4; }
-@keyframes a2-sec-step-4 {
-  0%, 28.12% { --a2-sec-dim: .42; border-color: var(--a2-line); background: #fff; }
-  29.83% { --a2-sec-dim: 1; border-color: var(--a2-primary); background: var(--a2-primary-tint); }
-  34.09%, 93.18% { --a2-sec-dim: 1; border-color: var(--a2-line); background: #fff; }
-  97.44%, 100% { --a2-sec-dim: .42; border-color: var(--a2-line); background: #fff; }
-}
-@keyframes a2-sec-done-4 {
-  0%, 32.39% { opacity: 0; transform: scale(.7); }
-  34.09%, 93.18% { opacity: 1; transform: none; }
-  97.44%, 100% { opacity: 0; transform: none; }
-}
+.arch-wire { fill: none; stroke: rgba(245, 245, 247, .22); stroke-width: 1.2; }
+.arch-wire.is-dashed { stroke-dasharray: 3 4; }
+.arch-wire-hl { fill: none; stroke: #8bb5ff; stroke-width: 1.7; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 0; }
+.arch-arrow { fill: none; stroke: #8bb5ff; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; opacity: var(--arch-on); }
+.arch-block { fill: none; stroke: #ff7a6e; stroke-width: 2; stroke-linecap: round; opacity: calc(.3 + .7 * var(--arch-on)); }
 
-.a2-sec-step-5 { animation-name: a2-sec-step-5; }
-.a2-sec-done-5 { animation-name: a2-sec-done-5; }
-@keyframes a2-sec-step-5 {
-  0%, 35.8% { --a2-sec-dim: .42; border-color: var(--a2-line); background: #fff; }
-  37.5% { --a2-sec-dim: 1; border-color: var(--a2-primary); background: var(--a2-primary-tint); }
-  41.76%, 93.18% { --a2-sec-dim: 1; border-color: var(--a2-line); background: #fff; }
-  97.44%, 100% { --a2-sec-dim: .42; border-color: var(--a2-line); background: #fff; }
-}
-@keyframes a2-sec-done-5 {
-  0%, 40.06% { opacity: 0; transform: scale(.7); }
-  41.76%, 93.18% { opacity: 1; transform: none; }
-  97.44%, 100% { opacity: 0; transform: none; }
-}
+/* Order: Viore update, member, steps 1-3, step 4, Alphadoc, steps 5-6, answer, external AI kept out. */
+.arch-s0 { animation-name: arch-on-0; }
+.arch-draw0 { animation-name: arch-draw-0; }
+.arch-s1 { animation-name: arch-on-1; }
+.arch-draw1 { animation-name: arch-draw-1; }
+.arch-s2 { animation-name: arch-on-2; }
+.arch-draw2 { animation-name: arch-draw-2; }
+.arch-s3 { animation-name: arch-on-3; }
+.arch-draw3 { animation-name: arch-draw-3; }
+.arch-s4 { animation-name: arch-on-4; }
+.arch-draw4 { animation-name: arch-draw-4; }
+.arch-s5 { animation-name: arch-on-5; }
+.arch-draw5 { animation-name: arch-draw-5; }
+.arch-s6 { animation-name: arch-on-6; }
+.arch-draw6 { animation-name: arch-draw-6; }
+.arch-s7 { animation-name: arch-on-7; }
+.arch-draw7 { animation-name: arch-draw-7; }
+.arch-s8 { animation-name: arch-on-8; }
+.arch-draw8 { animation-name: arch-draw-8; }
+.arch-s9 { animation-name: arch-on-9; }
+.arch-draw9 { animation-name: arch-draw-9; }
+.arch-s10 { animation-name: arch-on-10; }
+.arch-draw10 { animation-name: arch-draw-10; }
 
-.a2-sec-step-6 { animation-name: a2-sec-step-6; }
-.a2-sec-done-6 { animation-name: a2-sec-done-6; }
-@keyframes a2-sec-step-6 {
-  0%, 43.47% { --a2-sec-dim: .42; border-color: var(--a2-line); background: #fff; }
-  45.17% { --a2-sec-dim: 1; border-color: var(--a2-primary); background: var(--a2-primary-tint); }
-  49.43%, 93.18% { --a2-sec-dim: 1; border-color: var(--a2-line); background: #fff; }
-  97.44%, 100% { --a2-sec-dim: .42; border-color: var(--a2-line); background: #fff; }
+@keyframes arch-on-0 {
+  0%, 2% { --arch-on: 0; }
+  5%, 92% { --arch-on: 1; }
+  97%, 100% { --arch-on: 0; }
 }
-@keyframes a2-sec-done-6 {
-  0%, 47.73% { opacity: 0; transform: scale(.7); }
-  49.43%, 93.18% { opacity: 1; transform: none; }
-  97.44%, 100% { opacity: 0; transform: none; }
+@keyframes arch-draw-0 {
+  0%, 2% { stroke-dashoffset: 1; }
+  6%, 92% { stroke-dashoffset: 0; }
+  97%, 100% { stroke-dashoffset: 1; }
+}
+@keyframes arch-on-1 {
+  0%, 10% { --arch-on: 0; }
+  13%, 92% { --arch-on: 1; }
+  97%, 100% { --arch-on: 0; }
+}
+@keyframes arch-draw-1 {
+  0%, 10% { stroke-dashoffset: 1; }
+  14%, 92% { stroke-dashoffset: 0; }
+  97%, 100% { stroke-dashoffset: 1; }
+}
+@keyframes arch-on-2 {
+  0%, 17% { --arch-on: 0; }
+  20%, 92% { --arch-on: 1; }
+  97%, 100% { --arch-on: 0; }
+}
+@keyframes arch-draw-2 {
+  0%, 17% { stroke-dashoffset: 1; }
+  21%, 92% { stroke-dashoffset: 0; }
+  97%, 100% { stroke-dashoffset: 1; }
+}
+@keyframes arch-on-3 {
+  0%, 24% { --arch-on: 0; }
+  27%, 92% { --arch-on: 1; }
+  97%, 100% { --arch-on: 0; }
+}
+@keyframes arch-draw-3 {
+  0%, 24% { stroke-dashoffset: 1; }
+  28%, 92% { stroke-dashoffset: 0; }
+  97%, 100% { stroke-dashoffset: 1; }
+}
+@keyframes arch-on-4 {
+  0%, 31% { --arch-on: 0; }
+  34%, 92% { --arch-on: 1; }
+  97%, 100% { --arch-on: 0; }
+}
+@keyframes arch-draw-4 {
+  0%, 31% { stroke-dashoffset: 1; }
+  35%, 92% { stroke-dashoffset: 0; }
+  97%, 100% { stroke-dashoffset: 1; }
+}
+@keyframes arch-on-5 {
+  0%, 38% { --arch-on: 0; }
+  41%, 92% { --arch-on: 1; }
+  97%, 100% { --arch-on: 0; }
+}
+@keyframes arch-draw-5 {
+  0%, 38% { stroke-dashoffset: 1; }
+  42%, 92% { stroke-dashoffset: 0; }
+  97%, 100% { stroke-dashoffset: 1; }
+}
+@keyframes arch-on-6 {
+  0%, 46% { --arch-on: 0; }
+  49%, 92% { --arch-on: 1; }
+  97%, 100% { --arch-on: 0; }
+}
+@keyframes arch-draw-6 {
+  0%, 46% { stroke-dashoffset: 1; }
+  50%, 92% { stroke-dashoffset: 0; }
+  97%, 100% { stroke-dashoffset: 1; }
+}
+@keyframes arch-on-7 {
+  0%, 55% { --arch-on: 0; }
+  58%, 92% { --arch-on: 1; }
+  97%, 100% { --arch-on: 0; }
+}
+@keyframes arch-draw-7 {
+  0%, 55% { stroke-dashoffset: 1; }
+  59%, 92% { stroke-dashoffset: 0; }
+  97%, 100% { stroke-dashoffset: 1; }
+}
+@keyframes arch-on-8 {
+  0%, 62% { --arch-on: 0; }
+  65%, 92% { --arch-on: 1; }
+  97%, 100% { --arch-on: 0; }
+}
+@keyframes arch-draw-8 {
+  0%, 62% { stroke-dashoffset: 1; }
+  66%, 92% { stroke-dashoffset: 0; }
+  97%, 100% { stroke-dashoffset: 1; }
+}
+@keyframes arch-on-9 {
+  0%, 69% { --arch-on: 0; }
+  72%, 92% { --arch-on: 1; }
+  97%, 100% { --arch-on: 0; }
+}
+@keyframes arch-draw-9 {
+  0%, 69% { stroke-dashoffset: 1; }
+  73%, 92% { stroke-dashoffset: 0; }
+  97%, 100% { stroke-dashoffset: 1; }
+}
+@keyframes arch-on-10 {
+  0%, 77% { --arch-on: 0; }
+  80%, 92% { --arch-on: 1; }
+  97%, 100% { --arch-on: 0; }
+}
+@keyframes arch-draw-10 {
+  0%, 77% { stroke-dashoffset: 1; }
+  81%, 92% { stroke-dashoffset: 0; }
+  97%, 100% { stroke-dashoffset: 1; }
 }

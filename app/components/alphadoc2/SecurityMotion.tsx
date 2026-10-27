@@ -1,131 +1,167 @@
-import {
-  Check,
-  ClipboardCheck,
-  Lock,
-  MessageSquare,
-  ScanSearch,
-  ShieldCheck,
-  SlidersHorizontal,
-  Undo2,
-  UserCheck,
-  type LucideIcon,
-} from "lucide-react";
+import type { ReactNode } from "react";
 import { ViewportMotion } from "@/app/components/ViewportMotion";
 import type { Language } from "@/app/site-content";
 
-/* Zero Trust step scene for the product security section.
-   Steps follow the IR 2.1 Zero Trust slide at the same public level as Technology POST 08:
-   step names only, no detection methods, thresholds, storage or other internal components.
-   The request uses a made-up staff name and phone number, never patient data. */
-
-type Step = { icon: LucideIcon; title: string; detail: string };
+/* Product security section: the whole Alphadoc architecture as a line diagram on the dark page,
+   with no card behind it, so it reads differently from the Alphadoc screen scenes.
+   Parts light up in the order a request travels: the one-way update from Viore, the member's
+   question, Zero Trust steps 1 to 3, the permitted model call, Alphadoc with the institution's model
+   and data, steps 5 and 6, the verified answer, and external AI kept out.
+   Public level only (contract rules 9 to 11): step names, no detection methods or internal parts.
+   External AI is shown as unused because the diagram is the corporate-network / separate-cloud setup. */
 
 const copy: Record<Language, {
   label: string;
-  title: string;
-  status: string;
-  requestOriginal: [string, string, string, string];
-  requestTail: string;
-  requestTokens: [string, string];
-  steps: Step[];
-  response: string;
-  responseMeta: string;
-  done: string;
+  viore: string;
+  vioreSub: string;
+  oneWay: string;
+  external: string;
+  boundary: string;
+  member: string;
+  band: string;
+  steps: [string, string, string, string, string, string];
+  core: string;
+  model: string;
+  data: string;
+  dataSub: string;
+  stays: string;
+  answer: string;
 }> = {
   ko: {
-    label: "질문 하나가 요청 인증, 민감정보 치환, 입력 검증, 허용 모델 호출, 응답 검증과 복원, 감사 기록을 차례로 거쳐 답이 되는 흐름",
-    title: "기관 단위 보안 체계",
-    status: "구축 중",
-    requestOriginal: ["", "박서연", " 연구자(", "010-1234-5678"],
-    requestTail: ")에게 보낼 모니터링 방문 안내문을 써 줘",
-    requestTokens: ["[이름 1]", "[전화 1]"],
-    steps: [
-      { icon: UserCheck, title: "요청 인증 · 권한 확인", detail: "요청마다 확인" },
-      { icon: ScanSearch, title: "민감정보 탐지 · 치환", detail: "이름과 번호를 가린 채 전달" },
-      { icon: ShieldCheck, title: "입력 검증", detail: "입력과 첨부 자료" },
-      { icon: SlidersHorizontal, title: "허용 모델 게이트웨이", detail: "기관 정책에 맞는 모델만" },
-      { icon: Undo2, title: "응답 검증 · 복원", detail: "누출 점검 뒤 권한 있을 때 복원" },
-      { icon: ClipboardCheck, title: "감사 기록", detail: "기관 보관 정책 적용" },
-    ],
-    response: "박서연 연구자님께 보낼 방문 안내문 초안",
-    responseMeta: "검증된 응답",
-    done: "통과",
+    label: "알파닥 보안 아키텍처: 바이오레는 지침과 문헌, 모델, 보안 업데이트를 기관 환경으로 한 방향으로만 보냅니다. 사내망 또는 분리 클라우드 안에서 구성원의 질문은 인증·권한 확인, 민감정보 치환, 입력 검증, 허용 모델 호출을 거쳐 알파닥이 기관 환경 모델과 기관 자료로 답하고, 응답 검증·복원과 감사 기록을 거쳐 돌아옵니다. 기관 단위 보안 체계는 구축 중이며 외부 AI는 쓰지 않습니다.",
+    viore: "바이오레",
+    vioreSub: "지침 · 문헌 · 모델 · 보안 업데이트",
+    oneWay: "한 방향",
+    external: "외부 AI",
+    boundary: "기관 환경 · 사내망 또는 분리 클라우드",
+    member: "구성원",
+    band: "기관 단위 보안 체계 · 구축 중",
+    steps: ["인증 · 권한 확인", "민감정보 치환", "입력 검증", "허용 모델 호출", "응답 검증 · 복원", "감사 기록"],
+    core: "알파닥",
+    model: "기관 환경 모델",
+    data: "기관 자료",
+    dataSub: "게시판 · 노트 · 문서",
+    stays: "기관 데이터는 기관 환경 안에",
+    answer: "검증된 답변",
   },
   en: {
-    label: "One question passes request authentication, sensitive-data substitution, input validation, the permitted-model gateway, response validation and restoration, and an audit record before it becomes an answer",
-    title: "Institution-level security",
-    status: "In progress",
-    requestOriginal: ["Draft a monitoring visit notice for ", "Dr. Seoyeon Park", " (", "010-1234-5678"],
-    requestTail: ")",
-    requestTokens: ["[Name 1]", "[Phone 1]"],
-    steps: [
-      { icon: UserCheck, title: "Authentication · access check", detail: "Every request" },
-      { icon: ScanSearch, title: "Sensitive-data substitution", detail: "Names and numbers masked" },
-      { icon: ShieldCheck, title: "Input validation", detail: "Inputs and attachments" },
-      { icon: SlidersHorizontal, title: "Permitted-model gateway", detail: "Only models policy allows" },
-      { icon: Undo2, title: "Response validation · restore", detail: "Leak check, restore with permission" },
-      { icon: ClipboardCheck, title: "Audit record", detail: "Institution retention policy" },
-    ],
-    response: "Visit notice draft for Dr. Seoyeon Park",
-    responseMeta: "Verified answer",
-    done: "Passed",
+    label: "Alphadoc security architecture: Viore sends guidelines, literature, model and security updates to the institution in one direction only. Inside the corporate network or a separate cloud, a staff question passes authentication and access checks, sensitive-data masking, input validation and the permitted-model call; Alphadoc answers with the in-institution model and institution data, and the answer comes back through verification and restoration and an audit log. Institution-level security is in progress, and external AI isn't used.",
+    viore: "Viore",
+    vioreSub: "Guidelines · literature · model · security updates",
+    oneWay: "One way",
+    external: "External AI",
+    boundary: "Institution environment · corporate network or separate cloud",
+    member: "Staff",
+    band: "Zero Trust · in progress",
+    steps: ["Auth & access", "Mask sensitive data", "Validate input", "Permitted model", "Verify & restore", "Audit log"],
+    core: "Alphadoc",
+    model: "In-institution model",
+    data: "Institution data",
+    dataSub: "Board · notes · documents",
+    stays: "Institution data stays inside",
+    answer: "Verified answer",
   },
 };
 
+/* Each lit part: a base box, a highlight box on top, then text. */
+function Box({ x, y, w, h, step, children, tone = "blue", dashed = false }: {
+  x: number; y: number; w: number; h: number; step: number; children: ReactNode; tone?: "blue" | "red"; dashed?: boolean;
+}) {
+  return (
+    <g className={`arch-part arch-anim arch-s${step}${tone === "red" ? " is-red" : ""}`}>
+      <rect className={`arch-box${dashed ? " is-dashed" : ""}`} x={x} y={y} width={w} height={h} rx={10} />
+      <rect className="arch-hl" x={x} y={y} width={w} height={h} rx={10} />
+      {children}
+    </g>
+  );
+}
+
+function Wire({ d, step, arrow }: { d: string; step: number; arrow?: string }) {
+  return (
+    <g className={`arch-part arch-anim arch-s${step}`}>
+      <path className="arch-wire" d={d} />
+      <path className={`arch-wire-hl arch-anim arch-draw${step}`} d={d} pathLength={1} />
+      {arrow && <path className="arch-arrow" d={arrow} />}
+    </g>
+  );
+}
+
+function Step({ n, x, y, label, step }: { n: number; x: number; y: number; label: string; step: number }) {
+  return (
+    <Box x={x} y={y} w={180} h={40} step={step}>
+      <circle className="arch-num" cx={x + 20} cy={y + 20} r={10} />
+      <text className="arch-num-text" x={x + 20} y={y + 24.5} textAnchor="middle">{n}</text>
+      <text className="arch-text" x={x + 38} y={y + 25}>{label}</text>
+    </Box>
+  );
+}
+
 export function AlphadocV2SecurityMotion({ language }: { language: Language }) {
-  const text = copy[language];
-  const [before, name, middle, phone] = text.requestOriginal;
-  const tail = text.requestTail;
+  const t = copy[language];
 
   return (
-    <ViewportMotion className="a2-sec-stage" role="img" ariaLabel={text.label} threshold={0.2}>
-      <div className="a2 a2-sec" aria-hidden="true">
-        <div className="a2-sec-head">
-          <Lock strokeWidth={1.9} />
-          <span>{text.title}</span>
-          <span className="a2-badge is-blue">{text.status}</span>
-        </div>
+    <ViewportMotion className="ap-arch" role="img" ariaLabel={t.label} threshold={0.25}>
+      <svg className="ap-arch-svg" viewBox="0 0 460 640" aria-hidden="true">
+        {/* Viore and the one-way update */}
+        <Box x={95} y={8} w={270} h={52} step={0}>
+          <text className="arch-text is-title" x={230} y={30} textAnchor="middle">{t.viore}</text>
+          <text className="arch-sub" x={230} y={48} textAnchor="middle">{t.vioreSub}</text>
+        </Box>
+        <Wire d="M230 60 V96" step={0} arrow="M225 89 L230 96 L235 89" />
+        <text className="arch-sub arch-label" x={240} y={83}>{t.oneWay}</text>
 
-        <div className="a2-sec-request a2-anim">
-          <MessageSquare strokeWidth={1.8} />
-          <p>
-            <span className="a2-sec-original a2-anim">
-              {before}<mark>{name}</mark>{middle}<mark>{phone}</mark>{tail}
-            </span>
-            <span className="a2-sec-tokenized a2-anim">
-              {before}<mark>{text.requestTokens[0]}</mark>{middle}<mark>{text.requestTokens[1]}</mark>{tail}
-            </span>
-          </p>
-        </div>
+        {/* External AI stays outside */}
+        <Box x={380} y={14} w={72} h={40} step={10} tone="red" dashed>
+          <text className="arch-text is-small" x={416} y={38} textAnchor="middle">{t.external}</text>
+        </Box>
+        <g className="arch-part arch-anim arch-s10 is-red">
+          <path className="arch-wire is-dashed" d="M416 54 V96" />
+          <path className="arch-block" d="M410 69 L422 81 M422 69 L410 81" />
+        </g>
 
-        <div className="a2-sec-body">
-          <ol className="a2-sec-steps">
-            <span className="a2-sec-rail" />
-            <span className="a2-sec-rail-fill a2-anim" />
-            {text.steps.map((step, index) => {
-              const Icon = step.icon;
-              return (
-                <li key={step.title} className={`a2-sec-step a2-anim a2-sec-step-${index + 1}`}>
-                  <span className="a2-sec-step-icon"><Icon strokeWidth={1.8} /></span>
-                  <span className="a2-sec-step-copy">
-                    <strong>{step.title}</strong>
-                    <small>{step.detail}</small>
-                  </span>
-                  <span className={`a2-sec-step-done a2-anim a2-sec-done-${index + 1}`}>
-                    <Check strokeWidth={2.4} />
-                    {text.done}
-                  </span>
-                </li>
-              );
-            })}
-          </ol>
-        </div>
+        {/* Institution boundary */}
+        <rect className="arch-boundary" x={8} y={96} width={444} height={536} rx={20} />
+        <text className="arch-sub arch-boundary-label" x={26} y={120}>{t.boundary}</text>
 
-        <div className="a2-sec-response a2-anim">
-          <span className="a2-sec-response-meta"><ShieldCheck strokeWidth={1.9} />{text.responseMeta}</span>
-          <p>{text.response}</p>
-        </div>
-      </div>
+        {/* Member */}
+        <Box x={150} y={138} w={160} h={44} step={1}>
+          <text className="arch-text" x={230} y={165} textAnchor="middle">{t.member}</text>
+        </Box>
+
+        {/* Zero Trust band (in progress) */}
+        <rect className="arch-band" x={18} y={204} width={424} height={240} rx={14} />
+        <text className="arch-band-label" x={130} y={220}>{t.band}</text>
+
+        {/* Request path: member, steps 1 to 3, the permitted model call */}
+        <Wire d="M150 160 H118 V230" step={1} arrow="M113 223 L118 230 L123 223" />
+        <Step n={1} x={28} y={230} label={t.steps[0]} step={2} />
+        <Wire d="M118 270 V282" step={3} />
+        <Step n={2} x={28} y={282} label={t.steps[1]} step={3} />
+        <Wire d="M118 322 V334" step={4} />
+        <Step n={3} x={28} y={334} label={t.steps[2]} step={4} />
+        <Wire d="M118 374 V412 H140" step={5} arrow="M133 407 L140 412 L133 417" />
+        <Step n={4} x={140} y={392} label={t.steps[3]} step={5} />
+
+        {/* Alphadoc with the institution's model and data */}
+        <Wire d="M230 432 V462" step={6} arrow="M225 455 L230 462 L235 455" />
+        <Box x={28} y={462} w={404} h={150} step={6}>
+          <text className="arch-text is-title is-core" x={46} y={487}>{t.core}</text>
+          <rect className="arch-inner" x={46} y={500} width={176} height={52} rx={9} />
+          <text className="arch-text" x={134} y={531} textAnchor="middle">{t.model}</text>
+          <rect className="arch-inner" x={238} y={500} width={176} height={52} rx={9} />
+          <text className="arch-text" x={326} y={522} textAnchor="middle">{t.data}</text>
+          <text className="arch-sub" x={326} y={540} textAnchor="middle">{t.dataSub}</text>
+          <text className="arch-sub arch-stays" x={46} y={588}>{t.stays}</text>
+        </Box>
+
+        {/* Response path: steps 5 and 6, then the verified answer back to the member */}
+        <Wire d="M342 462 V374" step={7} arrow="M337 381 L342 374 L347 381" />
+        <Step n={5} x={252} y={334} label={t.steps[4]} step={7} />
+        <Wire d="M342 334 V322" step={8} arrow="M337 329 L342 322 L347 329" />
+        <Step n={6} x={252} y={282} label={t.steps[5]} step={8} />
+        <Wire d="M342 282 V160 H310" step={9} arrow="M317 155 L310 160 L317 165" />
+        <text className="arch-sub arch-label arch-answer" x={352} y={252}>{t.answer}</text>
+      </svg>
     </ViewportMotion>
   );
 }

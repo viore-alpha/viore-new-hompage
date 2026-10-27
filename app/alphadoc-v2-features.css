@@ -344,9 +344,13 @@
   width: 47%;
   animation-name: fs-paper-pane;
 }
+.a2-fs-pane-body { position: relative; flex: 1; min-height: 0; overflow: hidden; }
 .a2-fs-pane-empty {
-  flex: 1;
+  position: absolute;
+  inset: 0;
   padding: 0 .8em;
+  opacity: 0;
+  animation-name: fs-paper-empty;
   display: grid;
   place-content: center;
   justify-items: center;
@@ -365,7 +369,11 @@
   border: 1px solid var(--a2-line);
   border-radius: .7em;
 }
-.a2-fs-pane-typed { min-width: 0; flex: 1; overflow: hidden; white-space: nowrap; font-size: .5625em; animation-name: fs-typed; }
+.a2-fs-pane-typed { min-width: 0; flex: 1; overflow: hidden; white-space: nowrap; font-size: .5625em; opacity: 0; animation-name: fs-typed; }
+.a2-fs-paper-convo { padding: .6em .55em 0 .7em; display: grid; gap: .5em; }
+.a2 .a2-fs-paper-q { max-width: 92%; padding: .45em .65em; font-size: .5625em; line-height: 1.45; animation-name: fs-paper-q; }
+.a2-fs-paper-a { font-size: .5625em; line-height: 1.55; color: rgba(0, 0, 0, .78); word-break: keep-all; animation-name: fs-paper-a; }
+.a2-fs-paper-a .a2-pill { font-size: .9em; }
 .a2-fs-pane-input .a2-send { width: 1.6em; height: 1.6em; }
 
 @keyframes fs-paper-select {
@@ -380,8 +388,21 @@
   100% { transform: translateX(108%); }
 }
 @keyframes fs-typed {
-  0%, 39.92% { clip-path: inset(0 100% 0 0); animation-timing-function: steps(20, end); }
-  58.06%, 100% { clip-path: inset(0 0 0 0); }
+  0%, 32% { opacity: 1; clip-path: inset(0 100% 0 0); animation-timing-function: steps(18, end); }
+  46%, 50% { opacity: 1; clip-path: inset(0 0 0 0); }
+  51%, 100% { opacity: 0; clip-path: inset(0 0 0 0); }
+}
+@keyframes fs-paper-empty {
+  0%, 50% { opacity: 1; }
+  52%, 100% { opacity: 0; }
+}
+@keyframes fs-paper-q {
+  0%, 51% { opacity: 0; transform: translateY(.4em); }
+  55%, 100% { opacity: 1; transform: none; }
+}
+@keyframes fs-paper-a {
+  0%, 60% { opacity: 0; transform: translateY(.4em); }
+  65%, 100% { opacity: 1; transform: none; }
 }
 
 /* 6 Favorites: star an answer, it lands in Saved answers */

@@ -265,22 +265,14 @@ test("server-renders the Korean Company story as the homepage", async () => {
   assert.doesNotMatch(html, /company-efficiency-workspace|company-section-subtitle/);
   assert.match(html, /class="company-knowledge"/);
   assert.match(html, /id="company-knowledge-title">Ever-growing Knowledge<\/h2>/);
-  assert.doesNotMatch(html, /company-question-loop/);
-  assert.match(html, /의학부 주간 회의/);
-  assert.match(html, /자문위원 질문지는 1차 평가변수와 관련된 5문항을 중심으로 확정한다\./);
-  assert.match(html, /경쟁 약제 3상 결과는 학회 초록만 공개됐고, 논문은 아직 나오지 않았다\./);
+  assert.match(html, /class="company-question-loop"/);
+  assert.match(html, /패혈성 쇼크 첫 1시간 처치 순서는\?/);
+  assert.match(html, /알파닥 질문 입력 예시: [^"]*임상시험 SUSAR 보고 기한은\?[^"]*논문을 TRIPOD\+AI로 점검해 줘/);
+  assert.doesNotMatch(html, /a2-note|company-note-motion|a2n-/);
   assert.match(html, /의료 현장은 수많은 정보와 시스템 사이를 끊임없이 오갑니다\./);
   assert.match(html, /기록하고, 계산하고, 검색하고, 확인하는 반복적인 과정은 의료인의 시간을 빼앗습니다\./);
   assert.match(html, /class="company-efficiency-product">알파닥<\/strong>은 논문과 의료 지침, 사내 문서를 한 화면에 모아 이 과정을 하나의 흐름으로 연결합니다\./);
   assert.match(html, /데이터 반출 없는 일방향 학습형 AI 아키텍처로 임상 질문의 답에는 최신 국내외 의학 문헌과 진료지침의 출처가 함께 제시됩니다\. 계속 업데이트되는 사내 자료와 내 노트를 바탕으로 노트 작성도 알파닥에게 맡길 수 있습니다\./);
-  assert.match(html, /class="company-efficiency-demo"/);
-  assert.match(html, /class="a2-stage a2-note company-note-motion[^"]*"[^>]*role="img"/);
-  assert.match(html, /이 회의록을 결정 사항과 다음 할 일로 정리해 주세요/);
-  assert.match(html, /이 노트에 대해 알파닥에게 물어보세요/);
-  assert.match(html, /현재 노트 · 회의록/);
-  assert.match(html, /class="a2n-inserted a2-anim"><h5>알파닥 정리<\/h5>/);
-  assert.match(html, /노트에 넣었어요/);
-  assert.match(html, /노트 끝에 넣기/);
   assert.match(html, /<small>도입 및 파트너십 문의<\/small>/);
   assert.doesNotMatch(html, /하나의 자연스러운 흐름으로 연결하여|가장 중요한 일에 집중할 수 있도록/);
   assert.match(html, /class="company-join-next"><a href="\/ko\/technology#technology-medical-model">Coming soon — 기관 안에서 구동하는 바이오레의 의료 특화 AI 모델\. Technology 보기 →<\/a><\/p><\/div><\/section>/);
@@ -609,21 +601,36 @@ test("server-renders the Alphadoc 2.0 product story", async () => {
   assert.match(html, /AUC 400–600/);
   assert.match(html, /class="a2-stage a2-papers[^"]*"[^>]*role="img"/);
   assert.match(html, /TRIPOD\+AI statement/);
+  // Papers scene: the list of eight papers is searched down to TRIPOD+AI before it is opened.
+  for (const label of ["논문 검색", "제목·내용·저자로 검색", "예측 모델", "자료 목록 · 8개 자료", "검색 결과 · 1개 자료", "저널 원문 열기", "논문 본문 읽기", "Surviving Sepsis Campaign", "DECIDE-AI"]) {
+    assert.ok(html.includes(label), label);
+  }
+  assert.equal((html.match(/class="a2p-card a2-anim is-other"/g) ?? []).length, 7);
+  assert.equal((html.match(/class="a2p-card a2-anim is-target"/g) ?? []).length, 1);
   assert.match(html, /class="a2-stage a2-evidence[^"]*"[^>]*role="img"/);
   assert.match(html, /참조 범위/);
   assert.match(html, /자료: 사내 게시판/);
   assert.match(html, /임상시험 중 중대한 이상사례는 언제까지 보고해야 해\?/);
-  assert.match(html, /사망이나 생명 위협은 7일, 그 밖의 경우는 15일 이내입니다\./);
+  assert.match(html, /예상하지 못한 중대한 약물이상반응\(SUSAR\)은 의뢰자가 식약처에 보고합니다\./);
+  assert.match(html, /알게 된 날부터 7일 이내, 추가 정보는 이후 8일 안에/);
+  assert.match(html, /알게 된 날부터 15일 이내/);
   assert.match(html, /사내 게시판 2/);
-  assert.match(html, /본문 27개 항목, 초록 13개 항목/);
-  assert.match(html, /박서연/);
+  assert.match(html, /본문 27개 항목과 초록 13개 항목/);
+  // Papers pane: what TRIPOD+AI adds to TRIPOD 2015, not a yes/no reply.
+  for (const label of ["2015년 TRIPOD 대비 새로 챙겨야 할 항목만 정리해 줘", "2015년판에 없거나 크게 늘어난 항목은 네 가지입니다.", "공정성", "클래스 불균형", "오픈 사이언스", "환자·대중 참여"]) {
+    assert.ok(html.includes(label), label);
+  }
+  assert.doesNotMatch(html, /이 지침을 써도 돼\?/);
   assert.doesNotMatch(html, /손 위생|김지원 선생님|10월/);
-  assert.match(html, /class="a2-sec-stage[^"]*"[^>]*role="img"/);
-  assert.match(html, /기관 단위 보안 체계/);
-  assert.match(html, /구축 중/);
-  assert.match(html, /\[이름 1\]/);
-  assert.match(html, /\[전화 1\]/);
-  assert.doesNotMatch(html, /토큰 볼트|Token vault|a2-sec-vault/);
+  assert.match(html, /class="ap-arch[^"]*"[^>]*role="img"[^>]*aria-label="알파닥 보안 아키텍처:/);
+  assert.match(html, /<svg class="ap-arch-svg" viewBox="0 0 460 640"/);
+  assert.match(html, /기관 단위 보안 체계 · 구축 중/);
+  assert.match(html, /기관 환경 · 사내망 또는 분리 클라우드/);
+  for (const label of ["인증 · 권한 확인", "민감정보 치환", "입력 검증", "허용 모델 호출", "응답 검증 · 복원", "감사 기록", "기관 환경 모델", "검증된 답변", "외부 AI"]) {
+    assert.ok(html.includes(label), label);
+  }
+  assert.equal((html.match(/class="arch-part arch-anim arch-s\d+/g) ?? []).length >= 20, true);
+  assert.doesNotMatch(html, /a2-sec-|토큰 볼트|Token vault|\[이름 1\]/);
   assert.match(html, /\/brand\/alphadoc-alpha\.png/);
 
   assert.match(html, /모든 것이 하나의 화면 안에/);
@@ -661,6 +668,11 @@ test("server-renders the Alphadoc 2.0 product story", async () => {
   assert.doesNotMatch(html, /GPT|Gemini|OpenAI|Llama|Qwen/);
   assert.doesNotMatch(html, /10월|11월/);
   assert.doesNotMatch(featureSceneSource, /"\d{2}\.\d{2}"/);
+  // Papers feature card answers its question; favorites keeps the 120-minute exception.
+  assert.match(featureSceneSource, /AI 판독 RCT 결과 보고 지침은\?/);
+  assert.match(featureSceneSource, /CONSORT-AI 확장판을 따릅니다\. 계획서는 SPIRIT-AI, 도입 초기 임상 평가는 DECIDE-AI입니다\./);
+  assert.match(featureSceneSource, /반코마이신과 플루오로퀴놀론은 절개 전 120분 이내에 시작합니다\./);
+  assert.doesNotMatch(featureSceneSource, /우리 연구에 맞는 지침을 골라 줘/);
   assert.doesNotMatch(kitSource, /\d{1,2}월/);
 
   assert.match(productRoute, /import "\.\.\/\.\.\/\.\.\/alphadoc-v2\.css";/);
@@ -697,8 +709,13 @@ test("server-renders the Alphadoc 2.0 product story", async () => {
   assert.match(kitCss, /\.is-playing \.a2,\s*\.is-playing\.a2 \{ --a2-play: running; \}/);
   assert.match(kitCss, /\.is-reduced \.a2-anim,\s*\.is-reduced\.a2-anim \{ animation: none !important; \}/);
   assert.match(featureCss, /animation-play-state: var\(--ap-feature-play-state, paused\);/);
-  assert.match(securityCss, /@property --a2-sec-dim/);
-  assert.match(securityCss, /\.a2-sec-steps \{[^}]*align-self: start;/);
+  assert.match(securityCss, /@property --arch-on/);
+  assert.match(securityCss, /\.ap-arch\.is-reduced \.arch-anim \{ animation: none !important; \}/);
+  assert.match(securityCss, /\.arch-hl \{[^}]*opacity: var\(--arch-on\);/);
+  for (let step = 0; step <= 10; step += 1) {
+    assert.match(securityCss, new RegExp(`@keyframes arch-on-${step} \\{`));
+  }
+  assert.doesNotMatch(securityCss, /\.a2-sec|background: #fff/);
 
   assert.doesNotMatch(css, /PretendardVariable\.woff2/);
   assert.match(css, /--dark-paper-base: #000000;/);
@@ -731,9 +748,14 @@ test("server-renders the English Alphadoc product page in its own voice", async 
   assert.match(html, /Never miss the evidence\./);
   assert.match(html, /Every possibility, at a glance\./);
   assert.match(html, /Sources: Internal board/);
-  assert.match(html, /Institution-level security/);
-  assert.match(html, /\[Name 1\]/);
-  assert.doesNotMatch(html, /Token vault|a2-sec-vault/);
+  assert.match(html, /aria-label="Alphadoc security architecture:/);
+  assert.match(html, /Zero Trust · in progress/);
+  assert.match(html, /Verified answer/);
+  assert.match(html, /Results · 1 paper/);
+  assert.match(html, /Four areas are new or much expanded:/);
+  assert.match(html, /within 7 days of learning about it, with follow-up within 8 more days/);
+  assert.match(html, /prediction model/);
+  assert.doesNotMatch(html, /Token vault|a2-sec-|\[Name 1\]/);
   assert.match(html, /Every moment of information,\s*handled with clarity and care\./);
   assert.doesNotMatch(html, /KMI|Korea Medical Institute|ap-deploy-proof/);
   assert.match(html, /Viore(?:&#x27;|')s first linearity\./);
@@ -908,27 +930,27 @@ test("keeps the three connected principles text-only over the continuous company
   assert.doesNotMatch(css, /\.company-connections \{[^}]*border-top:/);
 });
 
-test("shows the Alphadoc note motion beside the efficiency title, without a question field", async () => {
-  const [page, css, noteCss, noteSource, homeRoute] = await Promise.all([
+test("loops six Alphadoc user questions in the original search field", async () => {
+  const [page, questionLoop, css, homeRoute] = await Promise.all([
     readFile(new URL("../app/components/CompanyPage.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/components/CompanyQuestionLoop.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
-    readFile(new URL("../app/alphadoc-v2-note.css", import.meta.url), "utf8"),
-    readFile(new URL("../app/components/CompanyNoteMotion.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/[lang]/page.tsx", import.meta.url), "utf8"),
   ]);
 
-  assert.match(page, /<div className="company-efficiency-demo">\s*<CompanyNoteMotion language=\{language\} \/>\s*<\/div>/);
-  assert.doesNotMatch(page, /CompanyQuestionLoop/);
-  assert.doesNotMatch(css, /company-question-/);
-  assert.match(homeRoute, /import "\.\.\/alphadoc-v2\.css";/);
-  assert.match(homeRoute, /import "\.\.\/alphadoc-v2-note\.css";/);
-  assert.match(noteSource, /<A2Sidebar language=\{language\} active="note" role=\{text\.role\} \/>/);
-  assert.match(noteSource, /className="a2-panel a2n-pane"/);
-  assert.match(noteCss, /\.a2n-split \{[^}]*grid-template-columns: minmax\(0, 1fr\) 17em;/);
-  assert.match(noteCss, /@keyframes a2n-inserted/);
-  assert.match(noteCss, /@keyframes a2n-insert-after/);
-  assert.match(noteCss, /@container \(max-width: 560px\)/);
-  assert.doesNotMatch(css, /company-note-anim|@keyframes company-note-/);
+  assert.match(page, /<CompanyQuestionLoop language=\{language\} \/>/);
+  assert.doesNotMatch(page, /CompanyNoteMotion|company-efficiency-demo/);
+  assert.doesNotMatch(homeRoute, /alphadoc-v2/);
+  assert.equal((questionLoop.match(/패혈성 쇼크 첫 1시간 처치 순서는|개정된 항생제 지침에서 바뀐 점은|임상시험 SUSAR 보고 기한은|조영제 과민반응 전처치 기준은|지난 회의록에서 할 일만 정리해 줘|논문을 TRIPOD\+AI로 점검해 줘/g) ?? []).length, 6);
+  assert.match(questionLoop, /function SearchIcon/);
+  assert.doesNotMatch(questionLoop, /company-question-scope|PlusIcon/);
+  assert.match(questionLoop, /IntersectionObserver/);
+  assert.match(questionLoop, /prefers-reduced-motion: reduce/);
+  assert.match(questionLoop, /role="img"/);
+  assert.match(css, /\.company-question-loop \{[^}]*grid-template-columns: 32px minmax\(0,1fr\) 56px;/);
+  assert.match(css, /\.company-question-loop \{[^}]*background: transparent;/);
+  assert.match(css, /@keyframes company-question-cursor/);
+  assert.doesNotMatch(css, /company-note-|company-efficiency-demo/);
   assert.match(css, /\.company-efficiency > p > span \{ display: block; \}/);
   assert.match(css, /\.company-efficiency \{[^}]*border-top: 1px solid rgba\(255,255,255,\.18\);/);
   assert.match(css, /\.company-efficiency-heading \{[^}]*grid-template-columns: max-content minmax\(0,1fr\);/);
