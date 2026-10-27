@@ -440,6 +440,8 @@ img { display: block; max-width: 100%; }
 .company-efficiency > p { max-width: 1040px; margin: 38px 0 0; color: #bdbdc3; font-size: clamp(16px,1.35vw,19px); font-weight: 430; line-height: 1.72; letter-spacing: -.024em; word-break: keep-all; }
 .company-efficiency > p > span { display: block; }
 .company-efficiency-product { color: var(--red); font-weight: 620; }
+/* Product name in running copy, set by withAlphadocName(). */
+.brand-alphadoc { color: var(--red); }
 .company-knowledge { margin-top: clamp(104px,9vw,140px); }
 .company-knowledge > h2 { margin: 0; color: #f5f5f7; font-size: clamp(32px,3.4vw,48px); font-weight: 570; line-height: 1.08; letter-spacing: -.048em; word-break: keep-all; }
 .company-knowledge .company-metrics { margin-top: 52px; }

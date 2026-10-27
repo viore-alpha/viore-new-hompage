@@ -29,7 +29,6 @@ export type CompanyEfficiencyContent = {
   repetition: string;
   product: string;
   productLead: string;
-  outcome: string;
 };
 
 export type DetailPage = {
@@ -207,7 +206,6 @@ export const detailContent: Record<Language, Record<PageKey, DetailPage>> = {
         repetition: "기록하고, 계산하고, 검색하고, 확인하는 반복적인 과정은 의료인의 시간을 빼앗습니다.",
         product: "알파닥",
         productLead: "은 논문과 의료 지침, 사내 문서를 한 화면에 모아 이 과정을 하나의 흐름으로 연결합니다.",
-        outcome: "데이터 반출 없는 일방향 학습형 AI 아키텍처로 임상 질문의 답에는 최신 국내외 의학 문헌과 진료지침의 출처가 함께 제시됩니다. 계속 업데이트되는 사내 자료와 내 노트를 바탕으로 노트 작성도 알파닥에게 맡길 수 있습니다.",
       },
       connections: {
         title: "One connected flow\nfor medicine.",
@@ -332,7 +330,6 @@ export const detailContent: Record<Language, Record<PageKey, DetailPage>> = {
         repetition: "Recording, searching, and double-checking eat into every day.",
         product: "Alphadoc",
         productLead: " puts papers, guidelines, and internal documents on one screen, so the work becomes one flow.",
-        outcome: "Its one-way learning architecture keeps your data inside, and clinical answers come with sources from the latest Korean and global literature and guidelines. Alphadoc can even write your notes, working from internal documents and notes as they change.",
       },
       connections: {
         title: "One connected flow\nfor medicine.",

@@ -1,6 +1,7 @@
 import { Fragment, type ReactNode } from "react";
 import type { AlphaEvidenceSnapshotResult } from "@/app/alphaevidence-snapshot";
 import { AlphaEvidenceSnapshot } from "@/app/components/AlphaEvidenceSnapshot";
+import { withAlphadocName } from "@/app/components/BrandName";
 import { TechnologyMotion, type TechnologyMotionKind } from "@/app/components/TechnologyMotion";
 import { TechnologyPostCard } from "@/app/components/TechnologyPostCard";
 import { SITE_UPDATED_AT } from "@/app/seo";
@@ -566,20 +567,20 @@ function TechnologyFigure({
       <TechnologyMotion kind={kind} language={language} />
       <figcaption>
         <strong>{sharedCopy[language].figure} {number}</strong>
-        <span>{caption}</span>
+        <span>{withAlphadocName(caption)}</span>
       </figcaption>
     </figure>
   );
 }
 
 function ProseParagraphContent({ paragraph }: { paragraph: ProseParagraph }) {
-  if (typeof paragraph === "string") return paragraph;
+  if (typeof paragraph === "string") return withAlphadocName(paragraph);
   return (
     <>
       {paragraph.map((segment, index) => (
         typeof segment === "string"
-          ? <Fragment key={index}>{segment}</Fragment>
-          : <a key={index} href={segment.href}>{segment.text}</a>
+          ? <Fragment key={index}>{withAlphadocName(segment)}</Fragment>
+          : <a key={index} href={segment.href}>{withAlphadocName(segment.text)}</a>
       ))}
     </>
   );
@@ -765,7 +766,7 @@ export function TechnologyPage({
 
         <section className="technology-intro-copy" aria-labelledby="technology-intro-title">
           <h2 id="technology-intro-title">{page.introTitle}</h2>
-          {page.intro.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+          {page.intro.map((paragraph) => <p key={paragraph}>{withAlphadocName(paragraph)}</p>)}
           <blockquote>
             <span>{page.quote.first}</span>
             <strong>{page.quote.second}</strong>

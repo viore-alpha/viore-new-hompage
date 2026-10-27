@@ -2,6 +2,7 @@
 import { technologyRouteFor, type Language } from "@/app/site-content";
 import { AlphadocFeatureRail } from "@/app/components/AlphadocFeatureRail";
 import { AlphadocLocalNav } from "@/app/components/AlphadocLocalNav";
+import { withAlphadocName } from "@/app/components/BrandName";
 import type { AlphadocFeatureItem } from "@/app/components/AlphadocFeatureCard";
 import { CompanyEnergyCanvas } from "@/app/components/CompanyEnergyCanvas";
 import { ViewportMotion } from "@/app/components/ViewportMotion";
@@ -147,7 +148,7 @@ export function ProductPage({ language }: { language: Language }) {
             <span className="ap-hero-brand">{content.hero.titleBrand}</span>
             <span className="ap-hero-tagline">{content.hero.titleRest}</span>
           </h1>
-          <p className="ap-hero-lead">{content.hero.lead}</p>
+          <p className="ap-hero-lead">{withAlphadocName(content.hero.lead)}</p>
           <div className="ap-hero-actions">
             <a className="ap-button ap-button-primary" href="https://alphadoc.ai" target="_blank" rel="noreferrer">{content.hero.primary}<span aria-hidden="true">↗</span></a>
           </div>
@@ -163,7 +164,7 @@ export function ProductPage({ language }: { language: Language }) {
       <section className="ap-anatomy ap-shell" id="workspace">
         <header className="ap-section-head">
           <div><h2>{content.anatomy.title}</h2></div>
-          <p className="ap-anatomy-lead">{content.anatomy.body}</p>
+          <p className="ap-anatomy-lead">{withAlphadocName(content.anatomy.body)}</p>
         </header>
         <figure className="ap-anatomy-motion-figure">
           <AlphadocV2PapersMotion language={language} label={content.anatomy.visualLabel} />
@@ -174,7 +175,7 @@ export function ProductPage({ language }: { language: Language }) {
         <div className="ap-shell">
           <header className="ap-section-head">
             <div><h2 className="ap-general-title" id="ap-general-title">{content.general.title}</h2></div>
-            <p>{content.general.body}</p>
+            <p>{withAlphadocName(content.general.body)}</p>
           </header>
           <figure className="ap-general-motion-figure">
             <AlphadocV2EvidenceMotion language={language} label={content.general.visualLabel} />
@@ -185,7 +186,7 @@ export function ProductPage({ language }: { language: Language }) {
       <section className="ap-showcase ap-shell" id="clinical" data-ap-section>
         <header className="ap-section-head">
           <div><h2>{content.clinical.title}</h2></div>
-          <p className="ap-clinical-lead">{content.clinical.body}</p>
+          <p className="ap-clinical-lead">{withAlphadocName(content.clinical.body)}</p>
         </header>
         <AlphadocFeatureRail id="clinical-gallery" items={content.clinical.items} ariaLabel={content.clinical.title} language={language} />
       </section>
@@ -194,9 +195,9 @@ export function ProductPage({ language }: { language: Language }) {
         <div className="ap-alphadocs-visual"><AlphadocV2SecurityMotion language={language} /></div>
         <div className="ap-alphadocs-copy">
           <h2>{content.security.title}</h2>
-          <p>{content.security.body}</p>
+          <p>{withAlphadocName(content.security.body)}</p>
           <div className="ap-alphadocs-list">
-            {content.security.items.map(([title, body]) => <article key={title}><h3>{title}</h3><p>{body}</p></article>)}
+            {content.security.items.map(([title, body]) => <article key={title}><h3>{title}</h3><p>{withAlphadocName(body)}</p></article>)}
           </div>
         </div>
       </section>

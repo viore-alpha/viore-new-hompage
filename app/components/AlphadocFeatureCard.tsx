@@ -3,6 +3,7 @@
 import { lazy, memo, Suspense, type PointerEvent as ReactPointerEvent } from "react";
 import type { Language } from "@/app/site-content";
 import { A2NavIcon, type A2NavKey } from "@/app/components/alphadoc2/kit";
+import { withAlphadocName } from "@/app/components/BrandName";
 import type { AlphadocFeatureId } from "@/app/components/alphadoc2/FeatureScene";
 
 const AlphadocV2FeatureScene = lazy(async () => {
@@ -66,8 +67,8 @@ export const AlphadocFeatureCard = memo(function AlphadocFeatureCard({ active, c
           <span className="ap-feature-card-icon"><A2NavIcon nav={featureIcons[item.id]} /></span>
           <span>{item.label}</span>
         </div>
-        <h3>{item.title}</h3>
-        <p>{item.body}</p>
+        <h3>{withAlphadocName(item.title)}</h3>
+        <p>{withAlphadocName(item.body)}</p>
       </div>
     </article>
   );

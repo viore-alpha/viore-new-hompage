@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 import { buildPageMetadata } from "@/app/seo";
 import { isLanguage } from "@/app/site-content";
+import { withAlphadocName } from "@/app/components/BrandName";
 
 type RouteParams = Promise<{ lang: string }>;
 type Detail = { label: string; value: ReactNode };
@@ -159,7 +160,7 @@ function KoreanLegalDocument() {
         <div className="legal-notice-copy">
           <p>이 홈페이지는 바이오레와 제품에 관한 일반적인 정보를 제공하며, 내용은 필요한 경우 변경될 수 있습니다.</p>
           <p>문구, 이미지, 로고와 디자인의 권리는 바이오레 또는 정당한 권리자에게 있으며, 사전 동의 없는 상업적 이용을 금합니다.</p>
-          <p>알파닥 서비스에는 알파닥에서 공개하는 별도 약관과 정책이 적용됩니다.</p>
+          <p>{withAlphadocName("알파닥 서비스에는 알파닥에서 공개하는 별도 약관과 정책이 적용됩니다.")}</p>
           <p>문의는 <a href="mailto:cs@vioreai.com">cs@vioreai.com</a>으로 보내주세요.</p>
         </div>
       </article>
@@ -210,7 +211,7 @@ function EnglishLegalDocument() {
         <div className="legal-notice-copy">
           <p>This website provides general information about Viore and its products. The content may be changed when necessary.</p>
           <p>Text, images, logos, and designs are owned by Viore or their respective rights holders. Commercial use without prior consent is prohibited.</p>
-          <p>Separate terms and policies published by Alphadoc apply to the Alphadoc service.</p>
+          <p>{withAlphadocName("Separate terms and policies published by Alphadoc apply to the Alphadoc service.")}</p>
           <p>For inquiries, contact <a href="mailto:cs@vioreai.com">cs@vioreai.com</a>.</p>
         </div>
       </article>

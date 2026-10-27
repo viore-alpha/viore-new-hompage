@@ -61,7 +61,7 @@ test("server-renders independent Korean and English homepage metadata", async ()
   assert.match(englishHtml, /Medical AI that draws decades of expertise and systems into one line\. That&#x27;s Viore\./);
   assert.doesNotMatch(englishHtml, /Viore builds a Medical OS that connects the expertise/);
   assert.match(englishHtml, /class="company-efficiency-product">Alphadoc<\/strong> puts papers, guidelines, and internal documents on one screen, so the work becomes one flow\./);
-  assert.match(englishHtml, /Its one-way learning architecture keeps your data inside, and clinical answers come with sources from the latest Korean and global literature and guidelines\./);
+  assert.doesNotMatch(englishHtml, /Its one-way learning architecture keeps your data inside|Alphadoc can even write your notes/);
   assert.match(englishHtml, /Be part of\nthe new linearity\./);
   assert.match(englishHtml, /Our first linearity: <span class="company-join-product-name">Alphadoc<\/span>/);
   assert.match(englishHtml, /<small>Deployment and partnerships<\/small>/);
@@ -246,7 +246,7 @@ test("server-renders the Korean Company story as the homepage", async () => {
   assert.match(html, /하나의 흐름으로/);
   assert.match(html, /혁신은, 더 많이 더하는 일이 아닙니다\./);
   assert.match(html, /이미 존재하는 의료의 전문성과 시스템이 더 자연스럽게 이어지도록 만드는 일입니다\./);
-  assert.match(html, /바이오레는 데이터가 어디에 저장되고 어디서 처리되는지를 직접 정하여, 의료기관과 의료기업이 안전하게 쓰는 AI 에이전트 워크스페이스 알파닥을 만듭니다\./);
+  assert.match(html, /바이오레는 데이터가 어디에 저장되고 어디서 처리되는지를 직접 정하여, 의료기관과 의료기업이 안전하게 쓰는 AI 에이전트 워크스페이스 <span class="brand-alphadoc">알파닥<\/span>을 만듭니다\./);
   assert.doesNotMatch(html, /Medical OS/);
   assert.match(html, /class="detail-statement-lead"/);
   assert.match(html, /data-metrics-source="(?:live|snapshot)"/);
@@ -272,7 +272,7 @@ test("server-renders the Korean Company story as the homepage", async () => {
   assert.match(html, /의료 현장은 수많은 정보와 시스템 사이를 끊임없이 오갑니다\./);
   assert.match(html, /기록하고, 계산하고, 검색하고, 확인하는 반복적인 과정은 의료인의 시간을 빼앗습니다\./);
   assert.match(html, /class="company-efficiency-product">알파닥<\/strong>은 논문과 의료 지침, 사내 문서를 한 화면에 모아 이 과정을 하나의 흐름으로 연결합니다\./);
-  assert.match(html, /데이터 반출 없는 일방향 학습형 AI 아키텍처로 임상 질문의 답에는 최신 국내외 의학 문헌과 진료지침의 출처가 함께 제시됩니다\. 계속 업데이트되는 사내 자료와 내 노트를 바탕으로 노트 작성도 알파닥에게 맡길 수 있습니다\./);
+  assert.doesNotMatch(html, /데이터 반출 없는 일방향 학습형 AI 아키텍처|계속 업데이트되는 사내 자료와 내 노트를 바탕으로/);
   assert.match(html, /<small>도입 및 파트너십 문의<\/small>/);
   assert.doesNotMatch(html, /하나의 자연스러운 흐름으로 연결하여|가장 중요한 일에 집중할 수 있도록/);
   assert.match(html, /class="company-join-next"><a href="\/ko\/technology#technology-medical-model">Coming soon — 기관 안에서 구동하는 바이오레의 의료 특화 AI 모델\. Technology 보기 →<\/a><\/p><\/div><\/section>/);
@@ -585,7 +585,7 @@ test("server-renders the Alphadoc 2.0 product story", async () => {
   assert.match(html, /class="site-header site-header-dark"/);
   assert.match(html, /class="site-footer "/);
   assert.match(html, /class="ap-hero-brand">알파닥, <\/span><span class="ap-hero-tagline">의료기관과 의료기업을 위한 AI 에이전트 워크스페이스<\/span>/);
-  assert.match(html, /근거를 찾는 일도, 노트를 쓰는 일도 알파닥에게 맡기세요\.\s*최신 의학 문헌과 진료지침, 계속 업데이트되는 사내 자료를 바탕으로 답하고 정리합니다\./);
+  assert.match(html, /근거를 찾는 일도, 노트를 쓰는 일도 <span class="brand-alphadoc">알파닥<\/span>에게 맡기세요\.\s*최신 의학 문헌과 진료지침, 계속 업데이트되는 사내 자료를 바탕으로 답하고 정리합니다\./);
   assert.match(html, /href="#overview"[^>]*>인터페이스/);
   assert.match(html, /href="#general"[^>]*>근거 대화/);
   assert.match(html, /href="#clinical"[^>]*>기능/);
@@ -641,10 +641,14 @@ test("server-renders the Alphadoc 2.0 product story", async () => {
     assert.match(html, new RegExp(`data-feature-card="${id}"`));
   }
   assert.match(html, /참고할 자료를, 질문하기 전에 고릅니다\./);
-  assert.match(html, /노트를 쓰다가, 정리는 알파닥에게 맡깁니다\./);
+  assert.match(html, /노트를 쓰다가, 정리는 <span class="brand-alphadoc">알파닥<\/span>에게 맡깁니다\./);
   assert.match(html, /class="ap-feature-motion-placeholder"/);
   assert.match(html, /정보의 모든 순간을,\s*더 직관적이고 책임 있게/);
-  assert.match(html, /알파닥은 보안을 최우선으로 하여 분리 클라우드와 사내망에서 유연하게 작동합니다\./);
+  assert.match(html, /<span class="brand-alphadoc">알파닥<\/span>은 보안을 최우선으로 하여 분리 클라우드와 사내망에서 유연하게 작동합니다\./);
+  // The product name in running copy uses the Alphadoc color; the filled CTA button keeps white text.
+  assert.match(css, /\.brand-alphadoc \{ color: var\(--red\); \}/);
+  assert.ok((html.match(/class="brand-alphadoc"/g) ?? []).length >= 8);
+  assert.doesNotMatch(html, /ap-button-primary"[^>]*><span class="brand-alphadoc"/);
   assert.match(html, /<h3>Lightweight<\/h3>/);
   assert.match(html, /<h3>One-way<\/h3>/);
   assert.match(html, /<h3>Zero Trust<\/h3>/);
@@ -997,7 +1001,7 @@ test("server-renders an accessible, expanding Technology journal with its curren
   assert.match(html, /만드는 과정/);
   assert.match(html, /Viore Team/);
   assert.match(html, /답이 만들어지는 과정 전체를 설계합니다/);
-  assert.match(html, /각 기술은 동작을 확인한 곳에서만 서로 연결되고, 그 연결이 알파닥이 됩니다\./);
+  assert.match(html, /각 기술은 동작을 확인한 곳에서만 서로 연결되고, 그 연결이 <span class="brand-alphadoc">알파닥<\/span>이 됩니다\./);
   assert.match(html, /모델은 바뀔 수 있습니다/);
   assert.match(html, /근거와 업무, 보안의 원칙은 남아야 합니다/);
   assert.match(html, /Evidence Foundation/);
@@ -1051,7 +1055,7 @@ test("server-renders an accessible, expanding Technology journal with its curren
   assert.equal((html.match(/aria-expanded="false" aria-controls="technology-[^"]+-body"/g) ?? []).length, 9);
   assert.equal((html.match(/class="technology-post-panel" id="technology-[^"]+-body" hidden=""/g) ?? []).length, 9);
   assert.match(html, /POST <!-- -->07<\/p><p class="technology-section-english">Medical-specialized AI Model<\/p><h2><button type="button" class="technology-post-toggle"[^>]*><span>의료 특화 AI 모델<\/span>/);
-  assert.match(html, /POST <!-- -->08<\/p><p class="technology-section-english">Corporate Network Deployment &amp; Zero Trust Extension<\/p><h2><button[^>]*><span>사내망 알파닥과 기관 단위 보안 체계<\/span>[\s\S]*?<p class="technology-section-lead">개인이 쓰던 AI를 기관이 도입하고 관리할 수 있게 만듭니다\.<\/p>/);
+  assert.match(html, /POST <!-- -->08<\/p><p class="technology-section-english">Corporate Network Deployment &amp; Zero Trust Extension<\/p><h2><button[^>]*><span>사내망 <span class="brand-alphadoc">알파닥<\/span>과 기관 단위 보안 체계<\/span>[\s\S]*?<p class="technology-section-lead">개인이 쓰던 AI를 기관이 도입하고 관리할 수 있게 만듭니다\.<\/p>/);
   assert.match(html, /POST <!-- -->09<\/p><p class="technology-section-english">One-way AI Architecture<\/p><h2><button[^>]*><span>일방향 AI 구조<\/span>[\s\S]*?<p class="technology-section-lead">의학 근거는 기관 환경으로 보내고, 기관의 데이터는 그 안에 둡니다\.<\/p>/);
   assert.match(html, /technology-status technology-status-coming-soon">Coming soon · 개발 중</);
   assert.match(html, /technology-status technology-status-first-site-installed">첫 기관 설치 · 보안 체계 구축 중</);
@@ -1061,7 +1065,7 @@ test("server-renders an accessible, expanding Technology journal with its curren
   assert.match(html, /사내망과 분리 클라우드 모두 기관 환경 안의 모델로 답하며, 외부 모델을 부르지 않습니다\./);
   assert.match(html, /개인의 AI를 기관의 AI로 넓히다/);
   assert.match(html, /AlphaLayer의 통제를 기관 전체로/);
-  assert.match(html, /사내망 알파닥은 첫 기관에 설치를 마쳤고 기관 환경에서 공개 기반 모델로 돌아갑니다\./);
+  assert.match(html, /사내망 <span class="brand-alphadoc">알파닥<\/span>은 첫 기관에 설치를 마쳤고 기관 환경에서 공개 기반 모델로 돌아갑니다\./);
   assert.match(html, /이 모델은 바이오레의 <a href="#technology-medical-model">의료 특화 AI 모델<\/a>로 바꿀 예정입니다\./);
   assert.match(html, /<a href="#technology-alphalayer">AlphaLayer<\/a>는 지금 일부 텍스트 기능에서/);
   assert.match(html, /데이터가 머무는 곳을 먼저 정하다/);
@@ -1125,9 +1129,9 @@ test("server-renders an accessible, expanding Technology journal with its curren
   assert.match(englishHtml, /technology-status-first-site-applied">IMPLEMENTED · APPLIED AT FIRST INSTITUTION</);
   assert.match(englishHtml, /Updated October 26, 2026/);
   assert.match(englishHtml, /<span>Our own medical AI model<\/span><i class="technology-post-toggle-icon" aria-hidden="true"><\/i><\/button><\/h2><p class="technology-section-lead">Fine-tuned by Viore, built for medicine\.<\/p>/);
-  assert.match(englishHtml, /<span>Alphadoc on your corporate network, with institution-level security<\/span>/);
+  assert.match(englishHtml, /<span><span class="brand-alphadoc">Alphadoc<\/span> on your corporate network, with institution-level security<\/span>/);
   assert.match(englishHtml, /<span>One-way AI Architecture<\/span><i class="technology-post-toggle-icon" aria-hidden="true"><\/i><\/button><\/h2><p class="technology-section-lead">Evidence flows in\. Your data stays put\.<\/p>/);
-  assert.match(englishHtml, /Corporate-network Alphadoc is installed at our first institution/);
+  assert.match(englishHtml, /Corporate-network <span class="brand-alphadoc">Alphadoc<\/span> is installed at our first institution/);
   assert.match(englishHtml, /This architecture runs on the corporate network at our first institution\./);
   assert.doesNotMatch(englishHtml, /KMI|Korea Medical Institute|technology-article-nav|What&#x27;s next|Current Tech/);
   assert.doesNotMatch(englishHtml, /On-premise|on-premise|closed network|Evidence lineage/);
