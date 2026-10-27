@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import "../alphadoc-v2.css";
+import "../alphadoc-v2-note.css";
 import { CompanyPage } from "@/app/components/CompanyPage";
 import {
   HOME_SEO,

@@ -25,6 +25,7 @@ const copy: Record<Language, {
   title: string;
   status: string;
   requestOriginal: [string, string, string, string];
+  requestTail: string;
   requestTokens: [string, string];
   steps: Step[];
   response: string;
@@ -35,7 +36,8 @@ const copy: Record<Language, {
     label: "질문 하나가 요청 인증, 민감정보 치환, 입력 검증, 허용 모델 호출, 응답 검증과 복원, 감사 기록을 차례로 거쳐 답이 되는 흐름",
     title: "기관 단위 보안 체계",
     status: "구축 중",
-    requestOriginal: ["", "김지원", " 선생님(", "010-1234-5678"],
+    requestOriginal: ["", "박서연", " 연구자(", "010-1234-5678"],
+    requestTail: ")에게 보낼 모니터링 방문 안내문을 써 줘",
     requestTokens: ["[이름 1]", "[전화 1]"],
     steps: [
       { icon: UserCheck, title: "요청 인증 · 권한 확인", detail: "요청마다 확인" },
@@ -45,7 +47,7 @@ const copy: Record<Language, {
       { icon: Undo2, title: "응답 검증 · 복원", detail: "누출 점검 뒤 권한 있을 때 복원" },
       { icon: ClipboardCheck, title: "감사 기록", detail: "기관 보관 정책 적용" },
     ],
-    response: "김지원 선생님 주간 회의 요약",
+    response: "박서연 연구자님께 보낼 방문 안내문 초안",
     responseMeta: "검증된 응답",
     done: "통과",
   },
@@ -53,7 +55,8 @@ const copy: Record<Language, {
     label: "One question passes request authentication, sensitive-data substitution, input validation, the permitted-model gateway, response validation and restoration, and an audit record before it becomes an answer",
     title: "Institution-level security",
     status: "In progress",
-    requestOriginal: ["Summarize the meeting notes from ", "Jiwon Kim", " (", "010-1234-5678"],
+    requestOriginal: ["Draft a monitoring visit notice for ", "Dr. Seoyeon Park", " (", "010-1234-5678"],
+    requestTail: ")",
     requestTokens: ["[Name 1]", "[Phone 1]"],
     steps: [
       { icon: UserCheck, title: "Authentication · access check", detail: "Every request" },
@@ -63,7 +66,7 @@ const copy: Record<Language, {
       { icon: Undo2, title: "Response validation · restore", detail: "Leak check, restore with permission" },
       { icon: ClipboardCheck, title: "Audit record", detail: "Institution retention policy" },
     ],
-    response: "Meeting summary for Jiwon Kim",
+    response: "Visit notice draft for Dr. Seoyeon Park",
     responseMeta: "Verified answer",
     done: "Passed",
   },
@@ -72,7 +75,7 @@ const copy: Record<Language, {
 export function AlphadocV2SecurityMotion({ language }: { language: Language }) {
   const text = copy[language];
   const [before, name, middle, phone] = text.requestOriginal;
-  const tail = language === "ko" ? ") 주간 회의록을 요약해 줘" : ")";
+  const tail = text.requestTail;
 
   return (
     <ViewportMotion className="a2-sec-stage" role="img" ariaLabel={text.label} threshold={0.2}>

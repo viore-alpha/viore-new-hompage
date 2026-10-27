@@ -1,11 +1,11 @@
 /* eslint-disable @next/next/no-img-element -- Decorative product mark inside the motion scene. */
-import { ArrowUp, BookOpen, Check, ChevronDown, ClipboardList, Copy, FileText, MousePointer2, Plus, RotateCcw, Star, X } from "lucide-react";
+import { ArrowUp, BookOpen, Check, ChevronDown, ClipboardList, Copy, MousePointer2, Plus, RotateCcw, Star, X } from "lucide-react";
 import type { Language } from "@/app/site-content";
 import { ViewportMotion } from "@/app/components/ViewportMotion";
 import { A2Pill, A2Sidebar, A2Topbar, a2Labels } from "@/app/components/alphadoc2/kit";
 
 /* M4 · "놓치지 않는 근거". Scope menu → 사내 게시판 → question → answer with sentence-end pills →
-   pill preview card → "출처 2" opens the source panel. One 16s cycle. Keyframe 0% is the empty
+   pill preview card → "출처 2" opens the source panel. One 10.6s cycle. Keyframe 0% is the empty
    conversation; the default (non-animated) state is the final view with the source panel open. */
 
 const evidenceCopy = {
@@ -20,23 +20,25 @@ const evidenceCopy = {
       ["내 자료", "내가 쓰거나 올린 문서와 노트, 조직에 공유된 자료"],
       ["사내 게시판", "사내 소식, 자료 공유, 업무 논의"],
     ],
-    question: "신규 직원 손 위생 교육은 언제까지 마쳐야 해?",
-    answerTitle: "입사 후 첫 달 안에 마쳐야 합니다",
+    role: "임상운영팀 · CRA",
+    question: "임상시험 중 중대한 이상사례는 언제까지 보고해야 해?",
+    answerTitle: "시험자는 알게 된 뒤 24시간 안에 보고합니다",
     answer: [
-      "신규 직원은 입사 후 첫 달 안에 손 위생 교육을 마쳐야 합니다.",
-      "교육은 부서별로 한 번씩 진행하고, 필독 확인으로 이수 여부를 확인합니다.",
+      "시험자는 중대한 이상사례를 알게 된 뒤 24시간 안에 의뢰자에게 보고합니다.",
+      "예상하지 못한 중대한 약물이상반응은 의뢰자가 식약처에 보고하며, 사망이나 생명 위협은 7일, 그 밖의 경우는 15일 이내입니다.",
     ],
-    boardPill: "손 위생 지침 v3",
-    notePill: "신규 직원 교육 메모",
-    peekType: "사내 게시판 · 감염관리",
-    peekTitle: "손 위생 지침 v3",
-    peekMeta: "감염관리실 · 2일 전",
-    peekQuote: ["신규 직원은 입사 후 ", "첫 달 안에 손 위생 교육을 이수", "합니다."],
+    boardPill: "이상사례 보고 SOP",
+    secondPill: "안전성 정보 관리 지침",
+    peekType: "사내 게시판 · 임상운영",
+    peekTitle: "이상사례 보고 SOP",
+    peekMeta: "임상운영팀 · 2일 전",
+    peekQuote: ["시험자는 중대한 이상사례를 인지한 때부터 ", "24시간 이내에 의뢰자에게 보고", "한다."],
     sources: "출처 2",
     panelTitle: "출처 2",
-    panelGroups: [
-      ["사내 게시판 1", "손 위생 지침 v3", "감염관리 · 2일 전", "board"],
-      ["내 노트 1", "신규 직원 교육 메모", "내 노트 · 오늘", "note"],
+    panelGroup: "사내 게시판 2",
+    panelItems: [
+      ["이상사례 보고 SOP", "임상운영팀 · 2일 전"],
+      ["안전성 정보 관리 지침", "약물감시팀 · 1주 전"],
     ],
   },
   en: {
@@ -50,23 +52,25 @@ const evidenceCopy = {
       ["My materials", "Documents and notes you wrote or uploaded, plus shared files"],
       ["Internal board", "News, shared materials, discussions"],
     ],
-    question: "When do new staff need to finish hand hygiene training?",
-    answerTitle: "Within the first month",
+    role: "Clinical operations · CRA",
+    question: "When do we report a serious adverse event in a trial?",
+    answerTitle: "Investigators report within 24 hours",
     answer: [
-      "New staff must finish hand hygiene training within their first month.",
-      "Each department runs one session, and read confirmations show who has completed it.",
+      "Investigators report a serious adverse event to the sponsor within 24 hours of learning about it.",
+      "The sponsor reports unexpected serious adverse drug reactions to the MFDS: within 7 days for deaths or life-threatening cases, and within 15 days for all others.",
     ],
-    boardPill: "Hand hygiene v3",
-    notePill: "Training memo",
-    peekType: "Internal board · Infection control",
-    peekTitle: "Hand hygiene guideline v3",
-    peekMeta: "Infection control · 2 days ago",
-    peekQuote: ["New staff ", "complete hand hygiene training within the first month", "."],
+    boardPill: "SAE reporting SOP",
+    secondPill: "Safety information policy",
+    peekType: "Internal board · Clinical operations",
+    peekTitle: "SAE reporting SOP",
+    peekMeta: "Clinical operations · 2 days ago",
+    peekQuote: ["Investigators ", "report serious adverse events to the sponsor within 24 hours", " of becoming aware of them."],
     sources: "2 sources",
     panelTitle: "2 sources",
-    panelGroups: [
-      ["Internal board 1", "Hand hygiene guideline v3", "Infection control · 2 days ago", "board"],
-      ["My notes 1", "New staff training memo", "My notes · Today", "note"],
+    panelGroup: "Internal board 2",
+    panelItems: [
+      ["SAE reporting SOP", "Clinical operations · 2 days ago"],
+      ["Safety information policy", "Pharmacovigilance · 1 week ago"],
     ],
   },
 } as const;
@@ -87,7 +91,7 @@ export function AlphadocV2EvidenceMotion({ language, label }: { language: Langua
     <ViewportMotion className="a2-stage a2-evidence" role="img" ariaLabel={label} threshold={0.18}>
       <div className="a2" aria-hidden="true">
         <div className="a2-app">
-          <A2Sidebar language={language} active="chat" />
+          <A2Sidebar language={language} active="chat" role={copy.role} />
           <div className="a2-main">
             <A2Topbar language={language} crumbs={[labels.newChat]} />
 
@@ -121,7 +125,7 @@ export function AlphadocV2EvidenceMotion({ language, label }: { language: Langua
                     </div>
                     <p className="a2e-ans-b a2-anim">
                       {copy.answer[1]}
-                      <A2Pill kind="note" label={copy.notePill} />
+                      <A2Pill kind="board" label={copy.secondPill} />
                     </p>
                     <div className="a2-answer-actions a2e-actions a2-anim">
                       <Copy aria-hidden="true" strokeWidth={1.8} />
@@ -130,7 +134,6 @@ export function AlphadocV2EvidenceMotion({ language, label }: { language: Langua
                       <span className="a2e-count-wrap">
                         <span className="a2-source-count a2e-count a2-anim">
                           <ClipboardList aria-hidden="true" strokeWidth={1.8} />
-                          <FileText aria-hidden="true" strokeWidth={1.8} />
                           {copy.sources}
                         </span>
                         <Pointer className="a2e-ptr-count" />
@@ -186,20 +189,18 @@ export function AlphadocV2EvidenceMotion({ language, label }: { language: Langua
                 <X className="a2-close" aria-hidden="true" strokeWidth={1.8} />
               </div>
               <div className="a2e-panel-body">
-                {copy.panelGroups.map(([group, title, meta, kind]) => (
-                  <div key={group} className="a2e-panel-group">
-                    <p>{group}</p>
-                    <span className="a2e-panel-item">
-                      {kind === "board"
-                        ? <ClipboardList aria-hidden="true" strokeWidth={1.8} />
-                        : <FileText aria-hidden="true" strokeWidth={1.8} />}
+                <div className="a2e-panel-group">
+                  <p>{copy.panelGroup}</p>
+                  {copy.panelItems.map(([title, meta]) => (
+                    <span key={title} className="a2e-panel-item">
+                      <ClipboardList aria-hidden="true" strokeWidth={1.8} />
                       <span>
                         <strong>{title}</strong>
                         <small>{meta}</small>
                       </span>
                     </span>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </aside>
           </div>
