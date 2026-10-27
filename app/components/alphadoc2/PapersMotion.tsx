@@ -50,6 +50,7 @@ const TARGET_ID = "tripod-ai";
 
 const sceneCopy = {
   ko: {
+    role: "의학부 · 메디컬 어드바이저",
     listTitle: "논문",
     listSub: "바이오레가 제공하는 문헌",
     filters: ["전체 보기", "리뷰", "원저", "가이드라인"],
@@ -65,21 +66,22 @@ const sceneCopy = {
     abstractTitle: "초록",
     abstract: "회귀나 머신러닝 방법을 쓴 임상 예측 모델 연구의 보고 지침입니다. 기존 TRIPOD 성명을 갱신해, 연구 설계와 데이터, 모델 개발과 평가를 투명하게 보고하도록 항목을 정리했습니다.",
     checkTitle: "확인할 내용",
-    checks: ["데이터 출처와 연구 대상", "모델 개발과 평가 방법", "공정성과 한계"],
+    checks: ["데이터 출처와 연구 대상", "모델 개발과 평가 방법", "표본 크기와 결측치 처리"],
     note: "노트",
     save: "저장",
     paneTitle: "알파닥",
     paneEmptyTitle: "이 논문에 대해 알파닥에게 물어보세요",
     paneEmptyBody: "본문 구절을 고르거나 바로 질문을 입력하세요.",
     panePlaceholder: "이 논문에 대해 알파닥에게 물어보세요",
-    question: "보고해야 할 항목을 정리해 줘",
+    question: "우리 예측 모델 논문에 이 지침을 써도 돼?",
     paneScope: "현재 문헌",
     paneSend: "질문 보내기",
-    answerLead: "TRIPOD+AI는 예측 모델 연구에서 다음 내용을 투명하게 보고하도록 권고합니다.",
-    answerItems: ["데이터 출처와 연구 대상", "모델을 개발하고 평가한 방법", "공정성과 연구의 한계"],
+    answerLead: "네. TRIPOD+AI는 회귀 모델과 머신러닝 모델을 가리지 않고 쓰는 예측 모델 보고 지침입니다.",
+    answerItems: ["모델 개발과 검증 연구 모두 대상", "본문 27개 항목, 초록 13개 항목", "2015년 TRIPOD 체크리스트를 대체"],
     answerPill: "BMJ · TRIPOD+AI",
   },
   en: {
+    role: "Medical affairs · Medical advisor",
     listTitle: "Papers",
     listSub: "Literature provided by Viore",
     filters: ["All", "Reviews", "Original", "Guidelines"],
@@ -95,18 +97,18 @@ const sceneCopy = {
     abstractTitle: "Abstract",
     abstract: "A reporting guideline for clinical prediction model studies that use regression or machine learning methods. It updates the original TRIPOD statement and lists what to report about study design, data, and model development and evaluation.",
     checkTitle: "What to check",
-    checks: ["Data sources and study population", "Model development and evaluation", "Fairness and limitations"],
+    checks: ["Data sources and study population", "Model development and evaluation", "Sample size and missing data"],
     note: "Note",
     save: "Save",
     paneTitle: "Alphadoc",
     paneEmptyTitle: "Ask Alphadoc about this paper",
     paneEmptyBody: "Select a passage, or just type a question.",
     panePlaceholder: "Ask Alphadoc about this paper",
-    question: "What should authors report?",
+    question: "Can we use this for our prediction model paper?",
     paneScope: "This paper",
     paneSend: "Send",
-    answerLead: "TRIPOD+AI recommends that prediction model studies clearly report:",
-    answerItems: ["Data sources and study population", "How the model was developed and evaluated", "Fairness and limitations"],
+    answerLead: "Yes. TRIPOD+AI is the reporting guideline for prediction model studies, whether they use regression or machine learning.",
+    answerItems: ["Covers development and validation studies", "27 items for the paper, 13 for the abstract", "Replaces the 2015 TRIPOD checklist"],
     answerPill: "BMJ · TRIPOD+AI",
   },
 } as const;
@@ -119,7 +121,7 @@ export function AlphadocV2PapersMotion({ language, label }: { language: Language
     <ViewportMotion className="a2-stage a2-papers" role="img" ariaLabel={label} threshold={0.12}>
       <div className="a2" aria-hidden="true">
         <div className="a2-app">
-          <A2Sidebar language={language} active="papers" />
+          <A2Sidebar language={language} active="papers" role={copy.role} />
           <div className="a2-main">
             <A2Topbar language={language} crumbs={[a2Labels[language].nav.papers, "TRIPOD+AI"]} />
             <div className="a2p-body">

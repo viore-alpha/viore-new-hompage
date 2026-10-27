@@ -1,10 +1,10 @@
 /* alphadoc-v2-chat: Alphadoc 2.0 motion styles.
    M2 hero (.a2-hero, prefix a2h-) and M4 evidence (.a2-evidence, prefix a2e-).
-   Both run one 16s cycle. Keyframe 0% is the opening screen; the plain (non-animated)
+   The hero runs an 11s cycle and the evidence scene 10.6s. Keyframe 0% is the opening screen; the plain (non-animated)
    rule of each element is its final state, which reduced motion shows. */
 
-.a2-hero .a2,
-.a2-evidence .a2 { --a2-cycle: 16s; }
+.a2-hero .a2 { --a2-cycle: 11.01s; }
+.a2-evidence .a2 { --a2-cycle: 10.56s; }
 
 .a2-hero .a2-topbar > span:not(.a2-topbar-actions),
 .a2-evidence .a2-topbar > span:not(.a2-topbar-actions) { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
@@ -185,56 +185,56 @@
 .a2h-chat-compose .a2-composer { width: min(100%, 37em); margin: 0 auto; }
 
 @keyframes a2h-home {
-  0%, 44% { opacity: 1; visibility: visible; transform: none; }
-  47%, 95% { opacity: 0; visibility: hidden; transform: translateY(-1em); }
-  98%, 100% { opacity: 1; visibility: visible; transform: none; }
+  0%, 38.37% { opacity: 1; visibility: visible; transform: none; }
+  40.99%, 95.64% { opacity: 0; visibility: hidden; transform: translateY(-1em); }
+  98.26%, 100% { opacity: 1; visibility: visible; transform: none; }
 }
 @keyframes a2h-chat {
-  0%, 45% { opacity: 0; visibility: hidden; transform: translateY(1em); }
-  48%, 93% { opacity: 1; visibility: visible; transform: none; }
-  96%, 100% { opacity: 0; visibility: hidden; transform: translateY(-.5em); }
+  0%, 39.24% { opacity: 0; visibility: hidden; transform: translateY(1em); }
+  41.86%, 93.9% { opacity: 1; visibility: visible; transform: none; }
+  96.51%, 100% { opacity: 0; visibility: hidden; transform: translateY(-.5em); }
 }
-@keyframes a2h-ph { 0%, 7% { opacity: 1; } 8%, 95% { opacity: 0; } 96%, 100% { opacity: 1; } }
-@keyframes a2h-at { 0%, 7.9% { opacity: 0; } 8%, 23% { opacity: 1; } 24%, 100% { opacity: 0; } }
+@keyframes a2h-ph { 0%, 6.1% { opacity: 1; } 6.98%, 95.64% { opacity: 0; } 96.51%, 100% { opacity: 1; } }
+@keyframes a2h-at { 0%, 6.89% { opacity: 0; } 6.98%, 20.06% { opacity: 1; } 20.93%, 100% { opacity: 0; } }
 @keyframes a2h-mention {
-  0%, 9% { opacity: 0; visibility: hidden; transform: translateY(-.3em) scale(.98); }
-  11%, 22% { opacity: 1; visibility: visible; transform: none; }
-  24%, 100% { opacity: 0; visibility: hidden; transform: translateY(-.3em) scale(.98); }
+  0%, 7.85% { opacity: 0; visibility: hidden; transform: translateY(-.3em) scale(.98); }
+  9.59%, 19.19% { opacity: 1; visibility: visible; transform: none; }
+  20.93%, 100% { opacity: 0; visibility: hidden; transform: translateY(-.3em) scale(.98); }
 }
-@keyframes a2h-opt-first { 0%, 11% { background: transparent; } 12%, 15% { background: var(--a2-fill); } 16%, 100% { background: transparent; } }
+@keyframes a2h-opt-first { 0%, 9.59% { background: transparent; } 10.47%, 13.08% { background: var(--a2-fill); } 13.95%, 100% { background: transparent; } }
 @keyframes a2h-opt-target {
-  0%, 15% { background: transparent; }
-  16%, 20% { background: var(--a2-fill); }
-  21%, 23% { background: var(--a2-fill-strong); }
-  24%, 100% { background: transparent; }
+  0%, 13.08% { background: transparent; }
+  13.95%, 17.44% { background: var(--a2-fill); }
+  18.31%, 20.06% { background: var(--a2-fill-strong); }
+  20.93%, 100% { background: transparent; }
 }
 @keyframes a2h-chip {
-  0%, 23.9% { opacity: 0; transform: scale(.8); }
-  25%, 93% { opacity: 1; transform: none; }
-  94%, 100% { opacity: 0; transform: scale(.8); }
+  0%, 20.84% { opacity: 0; transform: scale(.8); }
+  21.8%, 93.9% { opacity: 1; transform: none; }
+  94.77%, 100% { opacity: 0; transform: scale(.8); }
 }
 @keyframes a2h-typed {
-  0%, 26% { clip-path: inset(0 100% 0 0); }
-  40%, 93% { clip-path: inset(0 0 0 0); }
-  94%, 100% { clip-path: inset(0 100% 0 0); }
+  0%, 22.67% { clip-path: inset(0 100% 0 0); }
+  34.88%, 93.9% { clip-path: inset(0 0 0 0); }
+  94.77%, 100% { clip-path: inset(0 100% 0 0); }
 }
 @keyframes a2h-send {
-  0%, 39% { background: rgba(0, 0, 0, .16); transform: none; }
-  40%, 42% { background: var(--a2-primary); transform: none; }
-  43% { background: var(--a2-primary); transform: scale(.82); }
-  45% { background: var(--a2-primary); transform: none; }
-  47%, 100% { background: rgba(0, 0, 0, .16); transform: none; }
+  0%, 34.01% { background: rgba(0, 0, 0, .16); transform: none; }
+  34.88%, 36.63% { background: var(--a2-primary); transform: none; }
+  37.5% { background: var(--a2-primary); transform: scale(.82); }
+  39.24% { background: var(--a2-primary); transform: none; }
+  40.99%, 100% { background: rgba(0, 0, 0, .16); transform: none; }
 }
-@keyframes a2h-nav-home { 0%, 45% { background: var(--a2-fill-strong); } 47%, 95% { background: transparent; } 97%, 100% { background: var(--a2-fill-strong); } }
-@keyframes a2h-nav-chat { 0%, 45% { background: transparent; } 47%, 95% { background: var(--a2-fill-strong); } 97%, 100% { background: transparent; } }
-@keyframes a2h-bubble { 0%, 46% { opacity: 0; transform: translateY(.6em); } 49%, 100% { opacity: 1; transform: none; } }
-@keyframes a2h-think { 0%, 48% { opacity: 0; } 50%, 55% { opacity: 1; } 57%, 100% { opacity: 0; } }
-@keyframes a2h-ans-a { 0%, 55% { opacity: 0; transform: translateY(.5em); } 58%, 100% { opacity: 1; transform: none; } }
-@keyframes a2h-ans-b { 0%, 59% { opacity: 0; } 61%, 100% { opacity: 1; } }
-@keyframes a2h-tr-1 { 0%, 60% { opacity: 0; } 62%, 100% { opacity: 1; } }
-@keyframes a2h-tr-2 { 0%, 63% { opacity: 0; } 65%, 100% { opacity: 1; } }
-@keyframes a2h-tr-3 { 0%, 66% { opacity: 0; } 68%, 100% { opacity: 1; } }
-@keyframes a2h-actions { 0%, 68% { opacity: 0; } 71%, 100% { opacity: 1; } }
+@keyframes a2h-nav-home { 0%, 39.24% { background: var(--a2-fill-strong); } 40.99%, 95.64% { background: transparent; } 97.38%, 100% { background: var(--a2-fill-strong); } }
+@keyframes a2h-nav-chat { 0%, 39.24% { background: transparent; } 40.99%, 95.64% { background: var(--a2-fill-strong); } 97.38%, 100% { background: transparent; } }
+@keyframes a2h-bubble { 0%, 40.12% { opacity: 0; transform: translateY(.6em); } 42.73%, 100% { opacity: 1; transform: none; } }
+@keyframes a2h-think { 0%, 41.86% { opacity: 0; } 43.6%, 47.97% { opacity: 1; } 49.71%, 100% { opacity: 0; } }
+@keyframes a2h-ans-a { 0%, 47.97% { opacity: 0; transform: translateY(.5em); } 50.58%, 100% { opacity: 1; transform: none; } }
+@keyframes a2h-ans-b { 0%, 51.45% { opacity: 0; } 53.2%, 100% { opacity: 1; } }
+@keyframes a2h-tr-1 { 0%, 52.33% { opacity: 0; } 54.07%, 100% { opacity: 1; } }
+@keyframes a2h-tr-2 { 0%, 54.94% { opacity: 0; } 56.69%, 100% { opacity: 1; } }
+@keyframes a2h-tr-3 { 0%, 57.56% { opacity: 0; } 59.3%, 100% { opacity: 1; } }
+@keyframes a2h-actions { 0%, 59.3% { opacity: 0; } 61.92%, 100% { opacity: 1; } }
 
 /* Hero column (about 520 to 760px wide): a slim icon rail keeps the 2.0 sidebar visible. */
 @container (max-width: 760px) {
@@ -420,7 +420,8 @@
 .a2e-panel-item svg { width: 1em; height: 1em; margin-top: .15em; color: rgba(0, 0, 0, .55); }
 .a2e-panel-item strong { display: block; font-size: .75em; font-weight: 600; }
 .a2e-panel-item small { display: block; color: var(--a2-muted); font-size: .6875em; }
-.a2e-panel-group:first-child .a2e-panel-item { background: var(--a2-fill); }
+/* The source the preview card came from stays selected. */
+.a2e-panel-group:first-child .a2e-panel-item:first-of-type { background: var(--a2-fill); }
 
 /* Pointer: appears on each target, presses, and leaves. */
 .a2e-ptr {
@@ -443,79 +444,79 @@
 .a2e-ptr-pill { animation-name: a2e-ptr-pill; }
 .a2e-ptr-count { animation-name: a2e-ptr-count; }
 
-@keyframes a2e-empty { 0%, 39% { opacity: 1; } 41%, 95% { opacity: 0; } 97%, 100% { opacity: 1; } }
-@keyframes a2e-shift { 0%, 75.5% { transform: none; } 78.5%, 93.5% { transform: translateX(var(--a2e-shift)); } 96.5%, 100% { transform: none; } }
-@keyframes a2e-bubble { 0%, 40% { opacity: 0; transform: translateY(.6em); } 42%, 94% { opacity: 1; transform: none; } 96%, 100% { opacity: 0; transform: none; } }
-@keyframes a2e-think { 0%, 42% { opacity: 0; } 43%, 47% { opacity: 1; } 48%, 100% { opacity: 0; } }
-@keyframes a2e-ans-a { 0%, 47% { opacity: 0; transform: translateY(.5em); } 49.5%, 94% { opacity: 1; transform: none; } 96%, 100% { opacity: 0; transform: none; } }
-@keyframes a2e-ans-b { 0%, 50% { opacity: 0; } 52.5%, 94% { opacity: 1; } 96%, 100% { opacity: 0; } }
-@keyframes a2e-actions { 0%, 53% { opacity: 0; } 55%, 94% { opacity: 1; } 96%, 100% { opacity: 0; } }
+@keyframes a2e-empty { 0%, 35.45% { opacity: 1; } 37.27%, 95.45% { opacity: 0; } 97.27%, 100% { opacity: 1; } }
+@keyframes a2e-shift { 0%, 68.64% { transform: none; } 71.36%, 94.09% { transform: translateX(var(--a2e-shift)); } 96.82%, 100% { transform: none; } }
+@keyframes a2e-bubble { 0%, 36.36% { opacity: 0; transform: translateY(.6em); } 38.18%, 94.55% { opacity: 1; transform: none; } 96.36%, 100% { opacity: 0; transform: none; } }
+@keyframes a2e-think { 0%, 38.18% { opacity: 0; } 39.09%, 42.73% { opacity: 1; } 43.64%, 100% { opacity: 0; } }
+@keyframes a2e-ans-a { 0%, 42.73% { opacity: 0; transform: translateY(.5em); } 45%, 94.55% { opacity: 1; transform: none; } 96.36%, 100% { opacity: 0; transform: none; } }
+@keyframes a2e-ans-b { 0%, 45.45% { opacity: 0; } 47.73%, 94.55% { opacity: 1; } 96.36%, 100% { opacity: 0; } }
+@keyframes a2e-actions { 0%, 48.18% { opacity: 0; } 50%, 94.55% { opacity: 1; } 96.36%, 100% { opacity: 0; } }
 @keyframes a2e-pill-hover {
-  0%, 57% { color: var(--a2-muted); background: var(--a2-fill); }
-  58.5%, 70% { color: var(--a2-primary); background: var(--a2-primary-tint-strong); }
-  71.5%, 100% { color: var(--a2-muted); background: var(--a2-fill); }
+  0%, 51.82% { color: var(--a2-muted); background: var(--a2-fill); }
+  53.18%, 63.64% { color: var(--a2-primary); background: var(--a2-primary-tint-strong); }
+  65%, 100% { color: var(--a2-muted); background: var(--a2-fill); }
 }
 @keyframes a2e-peek {
-  0%, 58% { opacity: 0; visibility: hidden; transform: translateY(.3em); }
-  60%, 69.5% { opacity: 1; visibility: visible; transform: none; }
-  71%, 100% { opacity: 0; visibility: hidden; transform: translateY(.3em); }
+  0%, 52.73% { opacity: 0; visibility: hidden; transform: translateY(.3em); }
+  54.55%, 63.18% { opacity: 1; visibility: visible; transform: none; }
+  64.55%, 100% { opacity: 0; visibility: hidden; transform: translateY(.3em); }
 }
 @keyframes a2e-count {
-  0%, 74.5% { color: var(--a2-fg); border-color: var(--a2-line); background: #fff; }
-  75%, 76% { color: var(--a2-fg); border-color: var(--a2-line); background: var(--a2-fill); }
-  77%, 94% { color: var(--a2-primary); border-color: transparent; background: var(--a2-primary-tint); }
-  96%, 100% { color: var(--a2-fg); border-color: var(--a2-line); background: #fff; }
+  0%, 67.73% { color: var(--a2-fg); border-color: var(--a2-line); background: #fff; }
+  68.18%, 69.09% { color: var(--a2-fg); border-color: var(--a2-line); background: var(--a2-fill); }
+  70%, 94.55% { color: var(--a2-primary); border-color: transparent; background: var(--a2-primary-tint); }
+  96.36%, 100% { color: var(--a2-fg); border-color: var(--a2-line); background: #fff; }
 }
-@keyframes a2e-panel { 0%, 75.5% { transform: translateX(104%); } 78.5%, 93.5% { transform: none; } 96.5%, 100% { transform: translateX(104%); } }
-@keyframes a2e-ph { 0%, 23% { opacity: 1; } 24%, 39.5% { opacity: 0; } 40.5%, 100% { opacity: 1; } }
+@keyframes a2e-panel { 0%, 68.64% { transform: translateX(104%); } 71.36%, 94.09% { transform: none; } 96.82%, 100% { transform: translateX(104%); } }
+@keyframes a2e-ph { 0%, 20.91% { opacity: 1; } 21.82%, 35.91% { opacity: 0; } 36.82%, 100% { opacity: 1; } }
 @keyframes a2e-typed {
-  0%, 24% { opacity: 1; clip-path: inset(0 100% 0 0); }
-  36%, 39.5% { opacity: 1; clip-path: inset(0 0 0 0); }
-  40%, 100% { opacity: 0; clip-path: inset(0 100% 0 0); }
+  0%, 21.82% { opacity: 1; clip-path: inset(0 100% 0 0); }
+  32.73%, 35.91% { opacity: 1; clip-path: inset(0 0 0 0); }
+  36.36%, 100% { opacity: 0; clip-path: inset(0 100% 0 0); }
 }
 @keyframes a2e-send {
-  0%, 35.5% { background: rgba(0, 0, 0, .16); transform: none; }
-  36.5%, 38% { background: var(--a2-primary); transform: none; }
-  38.8% { background: var(--a2-primary); transform: scale(.82); }
-  39.6% { background: var(--a2-primary); transform: none; }
-  40.5%, 100% { background: rgba(0, 0, 0, .16); transform: none; }
+  0%, 32.27% { background: rgba(0, 0, 0, .16); transform: none; }
+  33.18%, 34.55% { background: var(--a2-primary); transform: none; }
+  35.27% { background: var(--a2-primary); transform: scale(.82); }
+  36% { background: var(--a2-primary); transform: none; }
+  36.82%, 100% { background: rgba(0, 0, 0, .16); transform: none; }
 }
-@keyframes a2e-scope { 0%, 7.5% { background: transparent; } 8.5%, 22% { background: var(--a2-fill); } 23%, 100% { background: transparent; } }
-@keyframes a2e-scope-all { 0%, 21.5% { opacity: 1; } 22.5%, 95% { opacity: 0; } 97%, 100% { opacity: 1; } }
-@keyframes a2e-scope-board { 0%, 21.5% { opacity: 0; } 22.5%, 95% { opacity: 1; } 97%, 100% { opacity: 0; } }
+@keyframes a2e-scope { 0%, 6.82% { background: transparent; } 7.73%, 20% { background: var(--a2-fill); } 20.91%, 100% { background: transparent; } }
+@keyframes a2e-scope-all { 0%, 19.55% { opacity: 1; } 20.45%, 95.45% { opacity: 0; } 97.27%, 100% { opacity: 1; } }
+@keyframes a2e-scope-board { 0%, 19.55% { opacity: 0; } 20.45%, 95.45% { opacity: 1; } 97.27%, 100% { opacity: 0; } }
 @keyframes a2e-menu {
-  0%, 8.5% { opacity: 0; visibility: hidden; transform: translateY(.4em) scale(.98); }
-  10%, 21.5% { opacity: 1; visibility: visible; transform: none; }
-  23%, 100% { opacity: 0; visibility: hidden; transform: translateY(.4em) scale(.98); }
+  0%, 7.73% { opacity: 0; visibility: hidden; transform: translateY(.4em) scale(.98); }
+  9.09%, 19.55% { opacity: 1; visibility: visible; transform: none; }
+  20.91%, 100% { opacity: 0; visibility: hidden; transform: translateY(.4em) scale(.98); }
 }
-@keyframes a2e-opt-hover { 0%, 13.5% { background: transparent; } 14.5%, 21.5% { background: var(--a2-fill); } 23%, 100% { background: transparent; } }
-@keyframes a2e-check-all { 0%, 18% { opacity: 1; } 19%, 95% { opacity: 0; } 97%, 100% { opacity: 1; } }
-@keyframes a2e-check-board { 0%, 18% { opacity: 0; } 19%, 95% { opacity: 1; } 97%, 100% { opacity: 0; } }
+@keyframes a2e-opt-hover { 0%, 12.27% { background: transparent; } 13.18%, 19.55% { background: var(--a2-fill); } 20.91%, 100% { background: transparent; } }
+@keyframes a2e-check-all { 0%, 16.36% { opacity: 1; } 17.27%, 95.45% { opacity: 0; } 97.27%, 100% { opacity: 1; } }
+@keyframes a2e-check-board { 0%, 16.36% { opacity: 0; } 17.27%, 95.45% { opacity: 1; } 97.27%, 100% { opacity: 0; } }
 @keyframes a2e-ptr-scope {
-  0%, 4% { opacity: 0; transform: translate(1.2em, 1em); }
-  6.5%, 7.5% { opacity: 1; transform: none; }
-  8% { opacity: 1; transform: scale(.85); }
-  8.8%, 10% { opacity: 1; transform: none; }
-  11%, 100% { opacity: 0; transform: none; }
+  0%, 3.64% { opacity: 0; transform: translate(1.2em, 1em); }
+  5.91%, 6.82% { opacity: 1; transform: none; }
+  7.27% { opacity: 1; transform: scale(.85); }
+  8%, 9.09% { opacity: 1; transform: none; }
+  10%, 100% { opacity: 0; transform: none; }
 }
 @keyframes a2e-ptr-opt {
-  0%, 12% { opacity: 0; transform: translate(-1em, 1.5em); }
-  14.5%, 17.5% { opacity: 1; transform: none; }
-  18.2% { opacity: 1; transform: scale(.85); }
-  19%, 21% { opacity: 1; transform: none; }
-  22%, 100% { opacity: 0; transform: none; }
+  0%, 10.91% { opacity: 0; transform: translate(-1em, 1.5em); }
+  13.18%, 15.91% { opacity: 1; transform: none; }
+  16.55% { opacity: 1; transform: scale(.85); }
+  17.27%, 19.09% { opacity: 1; transform: none; }
+  20%, 100% { opacity: 0; transform: none; }
 }
 @keyframes a2e-ptr-pill {
-  0%, 55% { opacity: 0; transform: translate(1.2em, 1em); }
-  57%, 70% { opacity: 1; transform: none; }
-  71.5%, 100% { opacity: 0; transform: none; }
+  0%, 50% { opacity: 0; transform: translate(1.2em, 1em); }
+  51.82%, 63.64% { opacity: 1; transform: none; }
+  65%, 100% { opacity: 0; transform: none; }
 }
 @keyframes a2e-ptr-count {
-  0%, 71% { opacity: 0; transform: translate(1.2em, 1em); }
-  73%, 74% { opacity: 1; transform: none; }
-  75% { opacity: 1; transform: scale(.85); }
-  76% { opacity: 1; transform: none; }
-  78%, 100% { opacity: 0; transform: none; }
+  0%, 64.55% { opacity: 0; transform: translate(1.2em, 1em); }
+  66.36%, 67.27% { opacity: 1; transform: none; }
+  68.18% { opacity: 1; transform: scale(.85); }
+  69.09% { opacity: 1; transform: none; }
+  70.91%, 100% { opacity: 0; transform: none; }
 }
 
 /* Narrow figures: the working pane fills the stage, the source panel slides over it. */

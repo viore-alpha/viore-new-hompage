@@ -1,5 +1,5 @@
 /* alphadoc-v2-features: Alphadoc 2.0 motion styles.
-   Six feature-card scenes inside .ap-feature-motion (aspect 14/9). Each loop is 8s and runs only while
+   Six feature-card scenes inside .ap-feature-motion (aspect 14/9). Each loop is 5.7s and runs only while
    the rail plays the card (--ap-feature-play-state). An element's own style is its final frame. */
 
 /* Card tints and label icon */
@@ -26,7 +26,7 @@
 /* Scene canvas */
 .a2-fs { position: absolute; inset: 0; container-type: inline-size; }
 .a2.a2-fs-canvas {
-  --fs-cycle: 8s;
+  --fs-cycle: 5.73s;
   font-size: 3cqw;
   background: #f5f6f8;
 }
@@ -138,40 +138,40 @@
 .a2-fs-scope-after { animation-name: fs-scope-after; }
 
 @keyframes fs-menu {
-  0%, 6% { opacity: 0; transform: translateY(.5em); }
-  11%, 60% { opacity: 1; transform: none; }
-  66%, 100% { opacity: 0; transform: translateY(.5em); }
+  0%, 5.44% { opacity: 0; transform: translateY(.5em); }
+  9.98%, 54.43% { opacity: 1; transform: none; }
+  59.87%, 100% { opacity: 0; transform: translateY(.5em); }
 }
 @keyframes fs-menu-hover {
-  0%, 18% { transform: translateY(0); }
-  30%, 100% { transform: translateY(7.05em); }
+  0%, 16.33% { transform: translateY(0); }
+  27.22%, 100% { transform: translateY(7.05em); }
 }
 @keyframes fs-check-old {
-  0%, 34% { opacity: 1; }
-  38%, 100% { opacity: 0; }
+  0%, 30.84% { opacity: 1; }
+  34.47%, 100% { opacity: 0; }
 }
 @keyframes fs-check-new {
-  0%, 34% { opacity: 0; transform: scale(.6); }
-  40%, 100% { opacity: 1; transform: none; }
+  0%, 30.84% { opacity: 0; transform: scale(.6); }
+  36.29%, 100% { opacity: 1; transform: none; }
 }
 @keyframes fs-scope-before {
-  0%, 40% { opacity: 1; }
-  44%, 97% { opacity: 0; }
+  0%, 36.29% { opacity: 1; }
+  39.92%, 97.28% { opacity: 0; }
   100% { opacity: 1; }
 }
 @keyframes fs-scope-after {
-  0%, 40% { opacity: 0; }
-  44%, 97% { opacity: 1; }
+  0%, 36.29% { opacity: 0; }
+  39.92%, 97.28% { opacity: 1; }
   100% { opacity: 0; }
 }
 @keyframes fs-at {
-  0%, 66% { opacity: 0; }
-  68%, 72% { opacity: 1; }
-  74%, 100% { opacity: 0; }
+  0%, 59.87% { opacity: 0; }
+  61.69%, 65.32% { opacity: 1; }
+  67.13%, 100% { opacity: 0; }
 }
 @keyframes fs-chip {
-  0%, 72% { opacity: 0; transform: scale(.9); }
-  76%, 95% { opacity: 1; transform: none; }
+  0%, 65.32% { opacity: 0; transform: scale(.9); }
+  68.95%, 95.46% { opacity: 1; transform: none; }
   100% { opacity: 0; transform: none; }
 }
 
@@ -206,25 +206,25 @@
 .a2-fs-insert { margin-top: .6em; height: 2.1em; padding: 0 .55em; font-size: .5625em; animation-name: fs-press-insert; }
 
 @keyframes fs-appear-early {
-  0%, 6% { opacity: 0; transform: translateY(.4em); }
-  12%, 95% { opacity: 1; transform: none; }
+  0%, 5.44% { opacity: 0; transform: translateY(.4em); }
+  10.89%, 95.46% { opacity: 1; transform: none; }
   100% { opacity: 0; transform: none; }
 }
 @keyframes fs-reply {
-  0%, 18% { opacity: 0; transform: translateY(.4em); }
-  27%, 95% { opacity: 1; transform: none; }
+  0%, 16.33% { opacity: 0; transform: translateY(.4em); }
+  24.49%, 95.46% { opacity: 1; transform: none; }
   100% { opacity: 0; transform: none; }
 }
 @keyframes fs-press-insert {
-  0%, 52% { transform: none; background: #fff; }
-  56% { transform: scale(.94); background: var(--a2-primary-tint-strong); }
-  60%, 100% { transform: none; background: #fff; }
+  0%, 47.17% { transform: none; background: #fff; }
+  50.8% { transform: scale(.94); background: var(--a2-primary-tint-strong); }
+  54.43%, 100% { transform: none; background: #fff; }
 }
 @keyframes fs-inserted {
-  0%, 58% { opacity: 0; transform: translateY(.4em); background: rgba(255, 204, 0, 0); }
-  64% { opacity: 1; transform: none; background: var(--a2-highlight); }
-  82% { background: var(--a2-highlight); }
-  92%, 95% { opacity: 1; background: rgba(255, 204, 0, 0); }
+  0%, 52.62% { opacity: 0; transform: translateY(.4em); background: rgba(255, 204, 0, 0); }
+  58.06% { opacity: 1; transform: none; background: var(--a2-highlight); }
+  77.32% { background: var(--a2-highlight); }
+  91.28%, 95.46% { opacity: 1; background: rgba(255, 204, 0, 0); }
   100% { opacity: 0; background: rgba(255, 204, 0, 0); }
 }
 
@@ -271,27 +271,27 @@
 .a2-fs-readers { display: flex; align-items: center; gap: .35em; color: var(--a2-muted); font-size: .5625em; animation-name: fs-readers; }
 
 @keyframes fs-board-target {
-  0%, 8% { background: rgba(0, 0, 0, 0); }
-  12%, 95% { background: var(--a2-fill); }
+  0%, 7.26% { background: rgba(0, 0, 0, 0); }
+  10.89%, 95.46% { background: var(--a2-fill); }
   100% { background: rgba(0, 0, 0, 0); }
 }
 @keyframes fs-detail {
-  0%, 14% { transform: translateX(105%); }
-  23%, 94% { transform: none; }
+  0%, 12.7% { transform: translateX(105%); }
+  20.87%, 94.07% { transform: none; }
   100% { transform: translateX(105%); }
 }
 @keyframes fs-confirm-before {
-  0%, 48% { opacity: 1; transform: none; }
-  51% { opacity: 1; transform: scale(.94); }
-  55%, 100% { opacity: 0; transform: none; }
+  0%, 43.55% { opacity: 1; transform: none; }
+  46.27% { opacity: 1; transform: scale(.94); }
+  49.9%, 100% { opacity: 0; transform: none; }
 }
 @keyframes fs-confirm-after {
-  0%, 53% { opacity: 0; transform: scale(.9); }
-  58%, 100% { opacity: 1; transform: none; }
+  0%, 48.08% { opacity: 0; transform: scale(.9); }
+  52.62%, 100% { opacity: 1; transform: none; }
 }
 @keyframes fs-readers {
-  0%, 56% { opacity: 0; }
-  62%, 100% { opacity: 1; }
+  0%, 50.8% { opacity: 0; }
+  56.25%, 100% { opacity: 1; }
 }
 
 /* 4 Guidelines: one-line list, a new row arrives at the top */
@@ -302,15 +302,15 @@
 .a2-fs-new-row .a2-badge { margin-right: .4em; height: 1.55em; font-size: .75em; }
 
 @keyframes fs-list-track {
-  0%, 14% { transform: translateY(-2.6em); }
-  28%, 94% { transform: none; }
+  0%, 12.7% { transform: translateY(-2.6em); }
+  25.4%, 94.07% { transform: none; }
   100% { transform: translateY(-2.6em); }
 }
 @keyframes fs-new-row {
-  0%, 22% { opacity: 0; background: rgba(0, 100, 225, 0); }
-  30% { opacity: 1; background: var(--a2-primary-tint); }
-  70% { background: var(--a2-primary-tint); }
-  86%, 100% { opacity: 1; background: rgba(0, 100, 225, 0); }
+  0%, 19.96% { opacity: 0; background: rgba(0, 100, 225, 0); }
+  27.22% { opacity: 1; background: var(--a2-primary-tint); }
+  63.5% { background: var(--a2-primary-tint); }
+  82.9%, 100% { opacity: 1; background: rgba(0, 100, 225, 0); }
 }
 
 /* 5 Papers: card grid + Alphadoc pane */
@@ -369,19 +369,19 @@
 .a2-fs-pane-input .a2-send { width: 1.6em; height: 1.6em; }
 
 @keyframes fs-paper-select {
-  0%, 10% { border-color: var(--a2-line); background: #fff; box-shadow: 0 0 0 0 rgba(0, 100, 225, 0); transform: none; }
-  13% { transform: scale(.97); }
-  17%, 95% { border-color: rgba(0, 100, 225, .45); background: rgba(0, 100, 225, .04); box-shadow: 0 0 0 .18em rgba(0, 100, 225, .1); transform: none; }
+  0%, 9.07% { border-color: var(--a2-line); background: #fff; box-shadow: 0 0 0 0 rgba(0, 100, 225, 0); transform: none; }
+  11.79% { transform: scale(.97); }
+  15.42%, 95.46% { border-color: rgba(0, 100, 225, .45); background: rgba(0, 100, 225, .04); box-shadow: 0 0 0 .18em rgba(0, 100, 225, .1); transform: none; }
   100% { border-color: var(--a2-line); background: #fff; box-shadow: 0 0 0 0 rgba(0, 100, 225, 0); }
 }
 @keyframes fs-paper-pane {
-  0%, 24% { transform: translateX(108%); }
-  34%, 94% { transform: none; }
+  0%, 21.77% { transform: translateX(108%); }
+  30.84%, 94.07% { transform: none; }
   100% { transform: translateX(108%); }
 }
 @keyframes fs-typed {
-  0%, 44% { clip-path: inset(0 100% 0 0); animation-timing-function: steps(20, end); }
-  64%, 100% { clip-path: inset(0 0 0 0); }
+  0%, 39.92% { clip-path: inset(0 100% 0 0); animation-timing-function: steps(20, end); }
+  58.06%, 100% { clip-path: inset(0 0 0 0); }
 }
 
 /* 6 Favorites: star an answer, it lands in Saved answers */
@@ -434,25 +434,25 @@
 .a2-fs-saved-row.is-new { animation-name: fs-saved-new; }
 
 @keyframes fs-star-off {
-  0%, 22% { opacity: 1; }
-  26%, 96% { opacity: 0; }
+  0%, 19.96% { opacity: 1; }
+  23.59%, 96.37% { opacity: 0; }
   100% { opacity: 1; }
 }
 @keyframes fs-star-on {
-  0%, 22% { opacity: 0; transform: scale(.4); }
-  28% { opacity: 1; transform: scale(1.25); }
-  32%, 96% { opacity: 1; transform: none; }
+  0%, 19.96% { opacity: 0; transform: scale(.4); }
+  25.4% { opacity: 1; transform: scale(1.25); }
+  29.03%, 96.37% { opacity: 1; transform: none; }
   100% { opacity: 0; transform: none; }
 }
 @keyframes fs-toast {
-  0%, 28% { opacity: 0; transform: translate(-50%, .4em); }
-  34%, 56% { opacity: 1; transform: translate(-50%, 0); }
-  62%, 100% { opacity: 0; transform: translate(-50%, 0); }
+  0%, 25.4% { opacity: 0; transform: translate(-50%, .4em); }
+  30.84%, 50.8% { opacity: 1; transform: translate(-50%, 0); }
+  56.25%, 100% { opacity: 0; transform: translate(-50%, 0); }
 }
 @keyframes fs-saved-new {
-  0%, 36% { opacity: 0; transform: translateY(-.6em); background: rgba(0, 100, 225, 0); }
-  46% { opacity: 1; transform: none; background: var(--a2-primary-tint); }
-  80% { background: var(--a2-primary-tint); }
-  90%, 96% { opacity: 1; background: rgba(0, 100, 225, 0); }
+  0%, 32.66% { opacity: 0; transform: translateY(-.6em); background: rgba(0, 100, 225, 0); }
+  41.73% { opacity: 1; transform: none; background: var(--a2-primary-tint); }
+  74.53% { background: var(--a2-primary-tint); }
+  88.49%, 96.37% { opacity: 1; background: rgba(0, 100, 225, 0); }
   100% { opacity: 0; background: rgba(0, 100, 225, 0); }
 }

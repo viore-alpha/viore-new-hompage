@@ -16,7 +16,7 @@
 }
 
 .a2.a2-sec {
-  --a2-cycle: 14s;
+  --a2-cycle: 9.86s;
   padding: 5.2cqw 5.2cqw 4.6cqw;
   display: flex;
   flex-direction: column;
@@ -46,7 +46,7 @@
 }
 .a2-sec-request > svg { width: 1em; height: 1em; margin-top: .18em; color: var(--a2-muted); }
 .a2-sec-request p { position: relative; flex: 1; min-height: 2.9em; font-size: .78em; line-height: 1.5; }
-.a2-sec-request mark { padding: 0 .15em; border-radius: .25em; color: inherit; background: var(--a2-highlight); }
+.a2-sec-request mark { padding: 0 .15em; border-radius: .25em; color: inherit; background: var(--a2-highlight); white-space: nowrap; }
 .a2-sec-original,
 .a2-sec-tokenized { position: absolute; inset: 0; }
 .a2-sec-original { opacity: 0; animation-name: a2-sec-original; }
@@ -118,109 +118,109 @@
 
 @keyframes a2-sec-request {
   0% { opacity: 0; transform: translateY(.6em); }
-  5%, 92% { opacity: 1; transform: none; }
-  97%, 100% { opacity: 0; transform: none; }
+  4.26%, 93.18% { opacity: 1; transform: none; }
+  97.44%, 100% { opacity: 0; transform: none; }
 }
 @keyframes a2-sec-original {
-  0%, 22% { opacity: 1; }
-  27%, 100% { opacity: 0; }
+  0%, 18.75% { opacity: 1; }
+  23.01%, 100% { opacity: 0; }
 }
 @keyframes a2-sec-tokenized {
-  0%, 22% { opacity: 0; }
-  27%, 92% { opacity: 1; }
-  97%, 100% { opacity: 0; }
+  0%, 18.75% { opacity: 0; }
+  23.01%, 93.18% { opacity: 1; }
+  97.44%, 100% { opacity: 0; }
 }
 @keyframes a2-sec-rail {
-  0%, 8% { transform: scaleY(0); }
-  58%, 92% { transform: scaleY(1); }
-  97%, 100% { transform: scaleY(0); }
+  0%, 6.82% { transform: scaleY(0); }
+  49.43%, 93.18% { transform: scaleY(1); }
+  97.44%, 100% { transform: scaleY(0); }
 }
 @keyframes a2-sec-response {
-  0%, 61% { opacity: 0; transform: translateY(.6em); }
-  66%, 92% { opacity: 1; transform: none; }
-  97%, 100% { opacity: 0; transform: none; }
+  0%, 51.99% { opacity: 0; transform: translateY(.6em); }
+  56.25%, 93.18% { opacity: 1; transform: none; }
+  97.44%, 100% { opacity: 0; transform: none; }
 }
 
 .a2-sec-step-1 { animation-name: a2-sec-step-1; }
 .a2-sec-done-1 { animation-name: a2-sec-done-1; }
 @keyframes a2-sec-step-1 {
-  0%, 6% { --a2-sec-dim: .42; border-color: var(--a2-line); background: #fff; }
-  8% { --a2-sec-dim: 1; border-color: var(--a2-primary); background: var(--a2-primary-tint); }
-  13%, 92% { --a2-sec-dim: 1; border-color: var(--a2-line); background: #fff; }
-  97%, 100% { --a2-sec-dim: .42; border-color: var(--a2-line); background: #fff; }
+  0%, 5.11% { --a2-sec-dim: .42; border-color: var(--a2-line); background: #fff; }
+  6.82% { --a2-sec-dim: 1; border-color: var(--a2-primary); background: var(--a2-primary-tint); }
+  11.08%, 93.18% { --a2-sec-dim: 1; border-color: var(--a2-line); background: #fff; }
+  97.44%, 100% { --a2-sec-dim: .42; border-color: var(--a2-line); background: #fff; }
 }
 @keyframes a2-sec-done-1 {
-  0%, 11% { opacity: 0; transform: scale(.7); }
-  13%, 92% { opacity: 1; transform: none; }
-  97%, 100% { opacity: 0; transform: none; }
+  0%, 9.38% { opacity: 0; transform: scale(.7); }
+  11.08%, 93.18% { opacity: 1; transform: none; }
+  97.44%, 100% { opacity: 0; transform: none; }
 }
 
 .a2-sec-step-2 { animation-name: a2-sec-step-2; }
 .a2-sec-done-2 { animation-name: a2-sec-done-2; }
 @keyframes a2-sec-step-2 {
-  0%, 15% { --a2-sec-dim: .42; border-color: var(--a2-line); background: #fff; }
-  17% { --a2-sec-dim: 1; border-color: var(--a2-primary); background: var(--a2-primary-tint); }
-  22%, 92% { --a2-sec-dim: 1; border-color: var(--a2-line); background: #fff; }
-  97%, 100% { --a2-sec-dim: .42; border-color: var(--a2-line); background: #fff; }
+  0%, 12.78% { --a2-sec-dim: .42; border-color: var(--a2-line); background: #fff; }
+  14.49% { --a2-sec-dim: 1; border-color: var(--a2-primary); background: var(--a2-primary-tint); }
+  18.75%, 93.18% { --a2-sec-dim: 1; border-color: var(--a2-line); background: #fff; }
+  97.44%, 100% { --a2-sec-dim: .42; border-color: var(--a2-line); background: #fff; }
 }
 @keyframes a2-sec-done-2 {
-  0%, 20% { opacity: 0; transform: scale(.7); }
-  22%, 92% { opacity: 1; transform: none; }
-  97%, 100% { opacity: 0; transform: none; }
+  0%, 17.05% { opacity: 0; transform: scale(.7); }
+  18.75%, 93.18% { opacity: 1; transform: none; }
+  97.44%, 100% { opacity: 0; transform: none; }
 }
 
 .a2-sec-step-3 { animation-name: a2-sec-step-3; }
 .a2-sec-done-3 { animation-name: a2-sec-done-3; }
 @keyframes a2-sec-step-3 {
-  0%, 24% { --a2-sec-dim: .42; border-color: var(--a2-line); background: #fff; }
-  26% { --a2-sec-dim: 1; border-color: var(--a2-primary); background: var(--a2-primary-tint); }
-  31%, 92% { --a2-sec-dim: 1; border-color: var(--a2-line); background: #fff; }
-  97%, 100% { --a2-sec-dim: .42; border-color: var(--a2-line); background: #fff; }
+  0%, 20.45% { --a2-sec-dim: .42; border-color: var(--a2-line); background: #fff; }
+  22.16% { --a2-sec-dim: 1; border-color: var(--a2-primary); background: var(--a2-primary-tint); }
+  26.42%, 93.18% { --a2-sec-dim: 1; border-color: var(--a2-line); background: #fff; }
+  97.44%, 100% { --a2-sec-dim: .42; border-color: var(--a2-line); background: #fff; }
 }
 @keyframes a2-sec-done-3 {
-  0%, 29% { opacity: 0; transform: scale(.7); }
-  31%, 92% { opacity: 1; transform: none; }
-  97%, 100% { opacity: 0; transform: none; }
+  0%, 24.72% { opacity: 0; transform: scale(.7); }
+  26.42%, 93.18% { opacity: 1; transform: none; }
+  97.44%, 100% { opacity: 0; transform: none; }
 }
 
 .a2-sec-step-4 { animation-name: a2-sec-step-4; }
 .a2-sec-done-4 { animation-name: a2-sec-done-4; }
 @keyframes a2-sec-step-4 {
-  0%, 33% { --a2-sec-dim: .42; border-color: var(--a2-line); background: #fff; }
-  35% { --a2-sec-dim: 1; border-color: var(--a2-primary); background: var(--a2-primary-tint); }
-  40%, 92% { --a2-sec-dim: 1; border-color: var(--a2-line); background: #fff; }
-  97%, 100% { --a2-sec-dim: .42; border-color: var(--a2-line); background: #fff; }
+  0%, 28.12% { --a2-sec-dim: .42; border-color: var(--a2-line); background: #fff; }
+  29.83% { --a2-sec-dim: 1; border-color: var(--a2-primary); background: var(--a2-primary-tint); }
+  34.09%, 93.18% { --a2-sec-dim: 1; border-color: var(--a2-line); background: #fff; }
+  97.44%, 100% { --a2-sec-dim: .42; border-color: var(--a2-line); background: #fff; }
 }
 @keyframes a2-sec-done-4 {
-  0%, 38% { opacity: 0; transform: scale(.7); }
-  40%, 92% { opacity: 1; transform: none; }
-  97%, 100% { opacity: 0; transform: none; }
+  0%, 32.39% { opacity: 0; transform: scale(.7); }
+  34.09%, 93.18% { opacity: 1; transform: none; }
+  97.44%, 100% { opacity: 0; transform: none; }
 }
 
 .a2-sec-step-5 { animation-name: a2-sec-step-5; }
 .a2-sec-done-5 { animation-name: a2-sec-done-5; }
 @keyframes a2-sec-step-5 {
-  0%, 42% { --a2-sec-dim: .42; border-color: var(--a2-line); background: #fff; }
-  44% { --a2-sec-dim: 1; border-color: var(--a2-primary); background: var(--a2-primary-tint); }
-  49%, 92% { --a2-sec-dim: 1; border-color: var(--a2-line); background: #fff; }
-  97%, 100% { --a2-sec-dim: .42; border-color: var(--a2-line); background: #fff; }
+  0%, 35.8% { --a2-sec-dim: .42; border-color: var(--a2-line); background: #fff; }
+  37.5% { --a2-sec-dim: 1; border-color: var(--a2-primary); background: var(--a2-primary-tint); }
+  41.76%, 93.18% { --a2-sec-dim: 1; border-color: var(--a2-line); background: #fff; }
+  97.44%, 100% { --a2-sec-dim: .42; border-color: var(--a2-line); background: #fff; }
 }
 @keyframes a2-sec-done-5 {
-  0%, 47% { opacity: 0; transform: scale(.7); }
-  49%, 92% { opacity: 1; transform: none; }
-  97%, 100% { opacity: 0; transform: none; }
+  0%, 40.06% { opacity: 0; transform: scale(.7); }
+  41.76%, 93.18% { opacity: 1; transform: none; }
+  97.44%, 100% { opacity: 0; transform: none; }
 }
 
 .a2-sec-step-6 { animation-name: a2-sec-step-6; }
 .a2-sec-done-6 { animation-name: a2-sec-done-6; }
 @keyframes a2-sec-step-6 {
-  0%, 51% { --a2-sec-dim: .42; border-color: var(--a2-line); background: #fff; }
-  53% { --a2-sec-dim: 1; border-color: var(--a2-primary); background: var(--a2-primary-tint); }
-  58%, 92% { --a2-sec-dim: 1; border-color: var(--a2-line); background: #fff; }
-  97%, 100% { --a2-sec-dim: .42; border-color: var(--a2-line); background: #fff; }
+  0%, 43.47% { --a2-sec-dim: .42; border-color: var(--a2-line); background: #fff; }
+  45.17% { --a2-sec-dim: 1; border-color: var(--a2-primary); background: var(--a2-primary-tint); }
+  49.43%, 93.18% { --a2-sec-dim: 1; border-color: var(--a2-line); background: #fff; }
+  97.44%, 100% { --a2-sec-dim: .42; border-color: var(--a2-line); background: #fff; }
 }
 @keyframes a2-sec-done-6 {
-  0%, 56% { opacity: 0; transform: scale(.7); }
-  58%, 92% { opacity: 1; transform: none; }
-  97%, 100% { opacity: 0; transform: none; }
+  0%, 47.73% { opacity: 0; transform: scale(.7); }
+  49.43%, 93.18% { opacity: 1; transform: none; }
+  97.44%, 100% { opacity: 0; transform: none; }
 }

@@ -4,7 +4,7 @@ import { ViewportMotion } from "@/app/components/ViewportMotion";
 import { A2Composer, A2Pill, A2Sidebar, A2Topbar, a2Labels, type A2SourceKind } from "@/app/components/alphadoc2/kit";
 
 /* M2 · Product hero. Home → @ picks a board guideline → question → document-style answer with sources.
-   One 16s cycle. Keyframe 0% is the home screen; the default (non-animated) state is the final answer,
+   One 11s cycle. Keyframe 0% is the home screen; the default (non-animated) state is the final answer,
    which is what reduced motion shows. */
 
 type Row = { title: string; kind: A2SourceKind; badge: string; badgeTone?: "green"; when: string };
@@ -13,6 +13,7 @@ type Group = { label: string; options: readonly Option[] };
 
 const heroCopy = {
   ko: {
+    role: "약제부 · 약사",
     homeCrumb: "홈",
     greeting: "김지원님, 안녕하세요.",
     sub: "질문하면 보관한 문헌과 노트를 근거로 답합니다.",
@@ -21,37 +22,41 @@ const heroCopy = {
       {
         label: "내 노트",
         options: [
-          { label: "신규 직원 교육 메모", tag: "최근", kind: "note", first: true },
-          { label: "주간 회의록 정리", tag: "최근", kind: "note" },
+          { label: "약제위원회 회의록", tag: "최근", kind: "note", first: true },
+          { label: "반코마이신 TDM 메모", tag: "최근", kind: "note" },
         ],
       },
-      { label: "사내 게시판", options: [{ label: "손 위생 지침 v3", tag: "감염관리", kind: "board", target: true }] },
-      { label: "바이오레 지침", options: [{ label: "WHO 손 위생 지침", tag: "의료 지침", kind: "guideline" }] },
-      { label: "바이오레 문헌", options: [{ label: "병원 전체 손 위생 개선 프로그램", tag: "문헌", kind: "paper" }] },
+      { label: "사내 게시판", options: [{ label: "항생제 사용 지침 개정안", tag: "약제부", kind: "board", target: true }] },
+      { label: "바이오레 지침", options: [{ label: "수술 예방 항생제 국제 지침", tag: "의료 지침", kind: "guideline" }] },
+      { label: "바이오레 문헌", options: [{ label: "반코마이신 TDM 개정 합의문", tag: "문헌", kind: "paper" }] },
     ] satisfies readonly Group[],
-    chip: "손 위생 지침 v3",
-    question: "이 지침에서 바뀐 손 위생 기준을 표로 정리해 줘",
+    chip: "항생제 사용 지침 개정안",
+    question: "현행 지침과 비교해서 바뀐 기준을 표로 정리해 줘",
     listTitle: "이어서 살펴보기",
     listAll: "모두 보기",
     listHead: ["이름", "분류", "마지막 확인"],
     rows: [
-      { title: "신규 직원 교육 메모", kind: "note", badge: "내 노트", when: "오늘" },
-      { title: "손 위생 지침 v3", kind: "board", badge: "사내 게시판", badgeTone: "green", when: "어제" },
-      { title: "WHO 손 위생 지침 요약", kind: "guideline", badge: "의료 지침", when: "2일 전" },
+      { title: "약제위원회 회의록", kind: "note", badge: "내 노트", when: "오늘" },
+      { title: "항생제 사용 지침 개정안", kind: "board", badge: "사내 게시판", badgeTone: "green", when: "어제" },
+      { title: "수술 예방 항생제 국제 지침 요약", kind: "guideline", badge: "의료 지침", when: "2일 전" },
     ] satisfies readonly Row[],
-    answerTitle: "손 위생 지침 v3에서 바뀐 기준",
-    answerLead: ["v3는 손 위생이 필요한 시점을 다섯 가지로 나누고, 장갑을 벗은 뒤에도 손 위생을 하도록 바꿨습니다.", "다섯 시점 구분은 WHO 지침과 같습니다."],
+    answerTitle: "항생제 사용 지침 개정안에서 바뀐 기준",
+    answerLead: [
+      "개정안은 수술 예방 항생제의 투여 시점과 기간을 국제 지침에 맞추고, 반코마이신 혈중농도 관리를 AUC 기준으로 바꿨습니다.",
+      "투여를 수술 후 24시간 안에 끝내는 것은 국제 지침의 권고와 같습니다.",
+    ],
     tableTitle: "바뀐 항목",
-    tableHead: ["항목", "이전 (v2)", "개정 (v3)"],
+    tableHead: ["항목", "현행", "개정안"],
     tableRows: [
-      ["손 위생 시점", "환자 접촉 전후", "다섯 시점으로 구분", "board"],
-      ["장갑 사용", "착용하면 생략", "벗은 뒤 손 위생", "guideline"],
-      ["교육", "연 1회", "입사 첫 달 안에", "note"],
+      ["예방 항생제 투여", "절개 전 2시간 이내", "절개 전 60분 이내", "guideline"],
+      ["예방 항생제 기간", "수술 후 72시간", "24시간 이내 중단", "guideline"],
+      ["반코마이신 모니터링", "최저농도 15–20 mg/L", "AUC 400–600", "paper"],
     ] as const,
-    pills: { board: "손 위생 지침 v3", guideline: "WHO 손 위생 지침", note: "신규 직원 교육 메모" },
+    pills: { board: "항생제 지침 개정안", guideline: "수술 예방 국제 지침", paper: "반코마이신 TDM 합의문" },
     sources: "출처 3",
   },
   en: {
+    role: "Pharmacy · Pharmacist",
     homeCrumb: "Home",
     greeting: "Hi, Jiwon.",
     sub: "Ask a question. Alphadoc answers from your saved literature and notes.",
@@ -60,34 +65,37 @@ const heroCopy = {
       {
         label: "My notes",
         options: [
-          { label: "New staff training memo", tag: "Recent", kind: "note", first: true },
-          { label: "Weekly meeting notes", tag: "Recent", kind: "note" },
+          { label: "P&T committee minutes", tag: "Recent", kind: "note", first: true },
+          { label: "Vancomycin TDM memo", tag: "Recent", kind: "note" },
         ],
       },
-      { label: "Internal board", options: [{ label: "Hand hygiene guideline v3", tag: "Infection control", kind: "board", target: true }] },
-      { label: "Viore guidelines", options: [{ label: "WHO hand hygiene guideline", tag: "Guideline", kind: "guideline" }] },
-      { label: "Viore literature", options: [{ label: "Hospital-wide hand hygiene programme", tag: "Paper", kind: "paper" }] },
+      { label: "Internal board", options: [{ label: "Antibiotic policy revision", tag: "Pharmacy", kind: "board", target: true }] },
+      { label: "Viore guidelines", options: [{ label: "Surgical prophylaxis guideline", tag: "Guideline", kind: "guideline" }] },
+      { label: "Viore literature", options: [{ label: "Vancomycin TDM consensus", tag: "Paper", kind: "paper" }] },
     ] satisfies readonly Group[],
-    chip: "Hand hygiene guideline v3",
-    question: "Show what changed in this guideline as a table",
+    chip: "Antibiotic policy revision",
+    question: "Compare it with the current policy in a table",
     listTitle: "Pick up where you left off",
     listAll: "See all",
     listHead: ["Name", "Type", "Last opened"],
     rows: [
-      { title: "New staff training memo", kind: "note", badge: "My notes", when: "Today" },
-      { title: "Hand hygiene guideline v3", kind: "board", badge: "Internal board", badgeTone: "green", when: "Yesterday" },
-      { title: "WHO hand hygiene guideline summary", kind: "guideline", badge: "Guideline", when: "2 days ago" },
+      { title: "P&T committee minutes", kind: "note", badge: "My notes", when: "Today" },
+      { title: "Antibiotic policy revision", kind: "board", badge: "Internal board", badgeTone: "green", when: "Yesterday" },
+      { title: "Surgical prophylaxis guideline summary", kind: "guideline", badge: "Guideline", when: "2 days ago" },
     ] satisfies readonly Row[],
-    answerTitle: "What changed in Hand hygiene guideline v3",
-    answerLead: ["v3 splits the moments for hand hygiene into five and adds hand hygiene after removing gloves.", "The five moments match the WHO guideline."],
+    answerTitle: "What the antibiotic policy revision changes",
+    answerLead: [
+      "The revision aligns surgical prophylaxis timing and duration with international guidance, and moves vancomycin monitoring to AUC targets.",
+      "Stopping prophylaxis within 24 hours of surgery matches the international recommendation.",
+    ],
     tableTitle: "Changes",
-    tableHead: ["Item", "Before (v2)", "Revised (v3)"],
+    tableHead: ["Item", "Current", "Revised"],
     tableRows: [
-      ["When", "Before and after patient contact", "Five moments", "board"],
-      ["Gloves", "Skipped when gloved", "After removing gloves", "guideline"],
-      ["Training", "Once a year", "Within the first month", "note"],
+      ["Prophylaxis timing", "Within 2 h before incision", "Within 60 min before incision", "guideline"],
+      ["Prophylaxis duration", "72 h after surgery", "Stop within 24 h", "guideline"],
+      ["Vancomycin monitoring", "Trough 15–20 mg/L", "AUC 400–600", "paper"],
     ] as const,
-    pills: { board: "Hand hygiene v3", guideline: "WHO guideline", note: "Training memo" },
+    pills: { board: "Policy revision", guideline: "Surgical prophylaxis", paper: "Vancomycin consensus" },
     sources: "3 sources",
   },
 } as const;
@@ -102,7 +110,7 @@ export function AlphadocV2HeroMotion({ language, label }: { language: Language; 
     <ViewportMotion className="a2-stage a2-hero" role="img" ariaLabel={label} threshold={0.18}>
       <div className="a2" aria-hidden="true">
         <div className="a2-app">
-          <A2Sidebar language={language} active="home" />
+          <A2Sidebar language={language} active="home" role={copy.role} />
           <div className="a2-main">
             <section className="a2h-screen a2h-home a2-anim">
               <A2Topbar language={language} crumbs={[copy.homeCrumb]} />
@@ -212,7 +220,7 @@ export function AlphadocV2HeroMotion({ language, label }: { language: Language; 
                           <span className="a2h-source-icons">
                             <ClipboardList aria-hidden="true" strokeWidth={1.8} />
                             <BookOpen aria-hidden="true" strokeWidth={1.8} />
-                            <FileText aria-hidden="true" strokeWidth={1.8} />
+                            <BookText aria-hidden="true" strokeWidth={1.8} />
                           </span>
                           {copy.sources}
                         </span>

@@ -39,7 +39,7 @@ export const a2Labels = {
       papers: "논문",
     },
     recentLabel: "최근 대화",
-    recent: ["손 위생 지침 개정 사항 정리", "신규 직원 교육 자료 초안", "TRIPOD+AI 보고 항목 확인", "주간 회의록 정리"],
+    recent: ["수술 예방 항생제 기준 비교", "SAE 보고 기한 정리", "TRIPOD+AI 적용 범위 확인", "약제위원회 회의록 정리"],
     profileName: "김지원",
     profileRole: "임상연구팀 · 연구원",
     avatar: "지원",
@@ -63,7 +63,7 @@ export const a2Labels = {
       papers: "Papers",
     },
     recentLabel: "Recent chats",
-    recent: ["Hand hygiene guideline changes", "New staff training draft", "TRIPOD+AI reporting items", "Weekly meeting notes"],
+    recent: ["Surgical prophylaxis changes", "SAE reporting timelines", "TRIPOD+AI scope", "P&T committee minutes"],
     profileName: "Jiwon Kim",
     profileRole: "Clinical research",
     avatar: "JK",
@@ -105,7 +105,8 @@ export function A2NavIcon({ nav }: { nav: A2NavKey }) {
 
 const navOrder: readonly A2NavKey[] = ["home", "chat", "note", "favorites", "notes", "board", "guidelines", "papers"];
 
-export function A2Sidebar({ language, active }: { language: Language; active: A2NavKey }) {
+/* role: the signed-in member's team and job for this scene (the name stays the same). */
+export function A2Sidebar({ language, active, role }: { language: Language; active: A2NavKey; role?: string }) {
   const copy = a2Labels[language];
   return (
     <aside className="a2-sidebar" aria-hidden="true">
@@ -136,7 +137,7 @@ export function A2Sidebar({ language, active }: { language: Language; active: A2
         <span className="a2-avatar">{copy.avatar}</span>
         <span>
           {copy.profileName}
-          <small>{copy.profileRole}</small>
+          <small>{role ?? copy.profileRole}</small>
         </span>
       </div>
     </aside>

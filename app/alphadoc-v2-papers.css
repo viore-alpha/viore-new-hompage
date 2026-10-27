@@ -1,9 +1,9 @@
 /* alphadoc-v2-papers: Alphadoc 2.0 motion styles.
-   Papers screen (CHG-036, CHG-050). One 14s cycle: a card is picked, the reader fills in,
+   Papers screen (CHG-036, CHG-050). One 9.5s cycle: a card is picked, the reader fills in,
    a question is typed into the Alphadoc pane and the answer arrives.
    Each element's own style is the final frame, so reduced motion shows the finished screen. */
 
-.a2-papers .a2 { --a2-cycle: 14s; }
+.a2-papers .a2 { --a2-cycle: 9.52s; }
 
 .a2-papers .a2-main { background: #fff; }
 
@@ -205,61 +205,61 @@
 
 /* Timeline */
 @keyframes a2p-card-select {
-  0%, 9% { border-color: var(--a2-line); background: #fff; box-shadow: 0 0 0 0 rgba(0, 100, 225, 0); transform: none; }
-  12% { transform: scale(.985); }
-  16%, 95% { border-color: rgba(0, 100, 225, .45); background: rgba(0, 100, 225, .04); box-shadow: 0 0 0 .1875em rgba(0, 100, 225, .1); transform: none; }
+  0%, 7.94% { border-color: var(--a2-line); background: #fff; box-shadow: 0 0 0 0 rgba(0, 100, 225, 0); transform: none; }
+  10.59% { transform: scale(.985); }
+  14.12%, 95.59% { border-color: rgba(0, 100, 225, .45); background: rgba(0, 100, 225, .04); box-shadow: 0 0 0 .1875em rgba(0, 100, 225, .1); transform: none; }
   100% { border-color: var(--a2-line); background: #fff; box-shadow: 0 0 0 0 rgba(0, 100, 225, 0); }
 }
 @keyframes a2p-reader-empty {
-  0%, 14% { opacity: 1; }
-  18%, 96% { opacity: 0; }
+  0%, 12.35% { opacity: 1; }
+  15.88%, 96.47% { opacity: 0; }
   100% { opacity: 1; }
 }
 @keyframes a2p-reader-sheet {
-  0%, 15% { opacity: 0; transform: translateY(.6em); }
-  21%, 94% { opacity: 1; transform: none; }
-  99%, 100% { opacity: 0; transform: none; }
+  0%, 13.24% { opacity: 0; transform: translateY(.6em); }
+  18.53%, 94.71% { opacity: 1; transform: none; }
+  99.12%, 100% { opacity: 0; transform: none; }
 }
 @keyframes a2p-pane-empty {
-  0%, 46% { opacity: 1; }
-  50%, 96% { opacity: 0; }
+  0%, 40.59% { opacity: 1; }
+  44.12%, 96.47% { opacity: 0; }
   100% { opacity: 1; }
 }
 @keyframes a2p-placeholder {
-  0%, 25% { opacity: 1; }
-  26%, 47% { opacity: 0; }
-  48%, 100% { opacity: 1; }
+  0%, 22.06% { opacity: 1; }
+  22.94%, 41.47% { opacity: 0; }
+  42.35%, 100% { opacity: 1; }
 }
 @keyframes a2p-typed {
-  0%, 26% { opacity: 1; clip-path: inset(0 100% 0 0); animation-timing-function: steps(24, end); }
-  42%, 47% { opacity: 1; clip-path: inset(0 0 0 0); }
-  48%, 100% { opacity: 0; clip-path: inset(0 0 0 0); }
+  0%, 22.94% { opacity: 1; clip-path: inset(0 100% 0 0); animation-timing-function: steps(24, end); }
+  37.06%, 41.47% { opacity: 1; clip-path: inset(0 0 0 0); }
+  42.35%, 100% { opacity: 0; clip-path: inset(0 0 0 0); }
 }
 @keyframes a2p-send {
-  0%, 41% { opacity: .45; transform: none; }
-  43%, 46% { opacity: 1; transform: none; }
-  47% { opacity: 1; transform: scale(.94); }
-  49%, 100% { opacity: .45; transform: none; }
+  0%, 36.18% { opacity: .45; transform: none; }
+  37.94%, 40.59% { opacity: 1; transform: none; }
+  41.47% { opacity: 1; transform: scale(.94); }
+  43.24%, 100% { opacity: .45; transform: none; }
 }
 @keyframes a2p-question {
-  0%, 47% { opacity: 0; transform: translateY(.5em); }
-  51%, 94% { opacity: 1; transform: none; }
-  99%, 100% { opacity: 0; transform: none; }
+  0%, 41.47% { opacity: 0; transform: translateY(.5em); }
+  45%, 94.71% { opacity: 1; transform: none; }
+  99.12%, 100% { opacity: 0; transform: none; }
 }
 @keyframes a2p-thinking {
-  0%, 51% { opacity: 0; }
-  53%, 59% { opacity: 1; }
-  61%, 100% { opacity: 0; }
+  0%, 45% { opacity: 0; }
+  46.76%, 52.06% { opacity: 1; }
+  53.82%, 100% { opacity: 0; }
 }
 @keyframes a2p-answer {
-  0%, 59% { opacity: 0; transform: translateY(.5em); }
-  64%, 94% { opacity: 1; transform: none; }
-  99%, 100% { opacity: 0; transform: none; }
+  0%, 52.06% { opacity: 0; transform: translateY(.5em); }
+  56.47%, 94.71% { opacity: 1; transform: none; }
+  99.12%, 100% { opacity: 0; transform: none; }
 }
 @keyframes a2p-answer-pill {
-  0%, 70% { color: var(--a2-muted); background: var(--a2-fill); }
-  74%, 88% { color: var(--a2-primary); background: var(--a2-primary-tint-strong); }
-  92%, 100% { color: var(--a2-muted); background: var(--a2-fill); }
+  0%, 61.76% { color: var(--a2-muted); background: var(--a2-fill); }
+  65.29%, 85.88% { color: var(--a2-primary); background: var(--a2-primary-tint-strong); }
+  91.76%, 100% { color: var(--a2-muted); background: var(--a2-fill); }
 }
 
 /* Phone width: the reader on top, the Alphadoc pane below. */
