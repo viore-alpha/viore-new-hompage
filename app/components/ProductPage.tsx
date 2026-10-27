@@ -28,7 +28,7 @@ const productCopy = {
     anatomy: {
       title: "모든 것이 하나의 화면 안에",
       body: "필요한 모든 기능이 단 하나의 공간에 펼쳐집니다.\n복잡함은 비우고 시야는 넓혀, 당신이 필요한 순간에 완벽하게 집중할 수 있도록.",
-      visualLabel: "논문 목록에서 논문을 열어 읽고, 오른쪽 알파닥 창에 질문해 답을 받는 화면",
+      visualLabel: "논문 목록을 검색해 TRIPOD+AI를 열고, 오른쪽 알파닥 창에서 2015년판과 달라진 보고 항목을 묻고 답을 받는 화면",
     },
     general: {
       title: "놓치지 않는 근거",
@@ -79,7 +79,7 @@ const productCopy = {
     anatomy: {
       title: "Everything, on one screen.",
       body: "Your materials on the left. What you're reading in the center. Alphadoc on the right.",
-      visualLabel: "A paper is opened from the paper list, read in the center, and asked about in the Alphadoc panel on the right",
+      visualLabel: "The paper list is searched, TRIPOD+AI is opened, and the Alphadoc panel answers what changed from TRIPOD 2015",
     },
     general: {
       title: "Never miss the evidence.",

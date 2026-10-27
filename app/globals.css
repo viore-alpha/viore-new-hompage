@@ -425,7 +425,14 @@ img { display: block; max-width: 100%; }
 .company-efficiency h2 > span { display: block; white-space: nowrap; }
 .company-efficiency-title-brand { color: var(--red); }
 .company-efficiency-title-workspace { font-size: clamp(32px,3.4vw,48px); line-height: 1.08; letter-spacing: -.048em; }
-.company-efficiency-demo { min-width: 0; display: grid; gap: 18px; }
+.company-question-loop { min-width: 0; height: clamp(76px,7vw,92px); padding: 0 13px 0 24px; display: grid; grid-template-columns: 32px minmax(0,1fr) 56px; align-items: center; gap: 18px; border: 1px solid rgba(238,238,242,.62); border-radius: 999px; background: transparent; color: #e3e3e7; }
+.company-question-search { width: 32px; height: 32px; display: grid; place-items: center; color: #b9b9c0; }
+.company-question-search svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 2.35; stroke-linecap: round; }
+.company-question-typed { min-width: 0; display: flex; align-items: center; overflow: hidden; color: #dedee3; font-size: clamp(15px,1.35vw,19px); font-weight: 480; line-height: 1.3; letter-spacing: -.028em; white-space: nowrap; }
+.company-question-cursor { width: 1.5px; height: 1.15em; margin-left: 3px; flex: none; background: var(--red); animation: company-question-cursor 1s steps(1,end) infinite; }
+.company-question-submit { width: 56px; height: 56px; display: grid; place-items: center; border: 1px solid rgba(238,238,242,.46); border-radius: 50%; color: #c7c7cd; background: transparent; }
+.company-question-submit svg { width: 28px; height: 28px; fill: none; stroke: currentColor; stroke-width: 2.15; stroke-linecap: round; stroke-linejoin: round; }
+@keyframes company-question-cursor { 0%,48% { opacity: 1; } 49%,100% { opacity: .14; } }
 
 /* Home note-writing scene (Alphadoc 2.0 new note with the Alphadoc pane) */
 @container (max-width: 560px) {
@@ -813,7 +820,8 @@ img { display: block; max-width: 100%; }
   .company-efficiency { margin-top: 88px; padding-top: 28px; }
   .company-efficiency-heading { grid-template-columns: minmax(0,1fr); align-items: start; gap: 34px; }
   .company-efficiency h2 { font-size: clamp(38px,7vw,52px); }
-  .company-note-motion { width: min(100%,680px); }
+  .company-question-loop { width: min(100%,680px); height: 76px; grid-template-columns: 30px minmax(0,1fr) 50px; }
+  .company-question-submit { width: 50px; height: 50px; }
   .company-efficiency > p { max-width: 680px; margin: 30px 0 0; font-size: 16px; }
   .company-knowledge { margin-top: 104px; }
   .company-knowledge .company-metrics { margin-top: 48px; }
@@ -933,6 +941,11 @@ img { display: block; max-width: 100%; }
   .company-efficiency { margin-top: 76px; padding-top: 24px; }
   .company-efficiency-heading { gap: 28px; }
   .company-efficiency h2 { font-size: 34px; }
+  .company-question-loop { height: 68px; padding: 0 9px 0 17px; grid-template-columns: 26px minmax(0,1fr) 44px; gap: 12px; }
+  .company-question-search { width: 26px; height: 26px; }
+  .company-question-typed { font-size: 14px; }
+  .company-question-submit { width: 44px; height: 44px; }
+  .company-question-submit svg { width: 24px; height: 24px; }
   .company-efficiency-title-workspace { font-size: 30px; }
   .company-efficiency > p { margin-top: 26px; font-size: 15px; line-height: 1.76; }
   .company-efficiency > p > span + span { margin-top: 5px; }

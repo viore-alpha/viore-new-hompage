@@ -90,11 +90,13 @@ const copy = {
         ["DECIDE-AI", "Nature Medicine · 2022"],
       ],
       paneTitle: "이 논문에 대해 알파닥에게 물어보세요",
-      question: "우리 연구에 맞는 지침을 골라 줘",
+      question: "AI 판독 RCT 결과 보고 지침은?",
+      answer: "CONSORT-AI 확장판을 따릅니다. 계획서는 SPIRIT-AI, 도입 초기 임상 평가는 DECIDE-AI입니다.",
+      pill: "CONSORT-AI",
     },
     favorites: {
       answerTitle: "수술 예방 항생제 투여 기준",
-      answerBody: "절개 전 60분 이내에 투여하고, 수술 후 24시간 안에 중단합니다.",
+      answerBody: "절개 전 60분 이내에 투여하고, 수술 후 24시간 안에 중단합니다. 반코마이신과 플루오로퀴놀론은 절개 전 120분 이내에 시작합니다.",
       pill: "사내 게시판",
       sources: "출처 2",
       listTitle: "저장한 답변",
@@ -172,11 +174,13 @@ const copy = {
         ["DECIDE-AI", "Nature Medicine · 2022"],
       ],
       paneTitle: "Ask Alphadoc about this paper",
-      question: "Which one fits our study?",
+      question: "Reporting an AI-assisted RCT?",
+      answer: "Follow the CONSORT-AI extension. Use SPIRIT-AI for the protocol and DECIDE-AI for early clinical evaluation.",
+      pill: "CONSORT-AI",
     },
     favorites: {
       answerTitle: "Surgical prophylaxis timing",
-      answerBody: "Give it within 60 minutes before incision, and stop within 24 hours after surgery.",
+      answerBody: "Give it within 60 minutes before incision, and stop within 24 hours after surgery. Start vancomycin and fluoroquinolones within 120 minutes before incision.",
       pill: "Internal board",
       sources: "2 sources",
       listTitle: "Saved answers",
@@ -337,7 +341,7 @@ function PapersScene({ c }: { c: SceneCopy }) {
     <div className="a2-fs-papers">
       <div className="a2-fs-grid">
         {c.papers.cards.map(([title, meta], index) => (
-          <div key={title} className={`a2-fs-paper${index === 1 ? " is-target fs-anim" : ""}`}>
+          <div key={title} className={`a2-fs-paper${index === 0 ? " is-target fs-anim" : ""}`}>
             <span className="a2-badge is-green">{c.papers.chip}</span>
             <strong>{title}</strong>
             <small>{meta}</small>
@@ -346,7 +350,16 @@ function PapersScene({ c }: { c: SceneCopy }) {
       </div>
       <aside className="a2-fs-pane a2-fs-paper-pane fs-anim">
         <div className="a2-fs-pane-head"><AlphadocMark />{c.alphadoc}<X strokeWidth={1.8} /></div>
-        <p className="a2-fs-pane-empty"><AlphadocMark />{c.papers.paneTitle}</p>
+        <div className="a2-fs-pane-body">
+          <p className="a2-fs-pane-empty fs-anim"><AlphadocMark />{c.papers.paneTitle}</p>
+          <div className="a2-fs-paper-convo">
+            <p className="a2-bubble a2-fs-paper-q fs-anim">{c.papers.question}</p>
+            <p className="a2-fs-paper-a fs-anim">
+              {c.papers.answer}
+              <A2Pill kind="paper" label={c.papers.pill} />
+            </p>
+          </div>
+        </div>
         <div className="a2-fs-pane-input">
           <span className="a2-fs-pane-typed fs-anim">{c.papers.question}</span>
           <span className="a2-send is-ready"><ArrowUp strokeWidth={2.2} /></span>

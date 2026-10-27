@@ -263,13 +263,16 @@
   .a2-hero .a2-sidebar { display: none; }
   .a2h-home-body { padding: 2em 1.25em 0; }
   .a2h-greeting { font-size: 1.5em; }
-  .a2h-mention { width: calc(100% / .75 - 2em); left: .5em; }
+  .a2h-mention { width: auto; left: .5em; right: .5em; }
   .a2h-list-row { grid-template-columns: minmax(0, 1fr) 6.5em; }
   .a2h-list-row > :last-child { display: none; }
   .a2h-thread { padding: 1em 1.25em 0; }
   .a2h-chat-compose { padding: .5em 1.25em .9em; }
-  .a2-hero .a2-table td:nth-child(2),
-  .a2-hero .a2-table th:nth-child(2) { display: none; }
+  /* Keep the current/revised comparison; the source pill drops under the revised value. */
+  .a2-hero .a2-table { font-size: .7em; }
+  .a2-hero .a2-table td:first-child { white-space: normal; }
+  .a2-hero .a2-table td { word-break: keep-all; }
+  .a2-hero .a2-table td .a2-pill { display: flex; width: max-content; max-width: 100%; margin: .3em 0 0; }
 }
 
 /* ---------- M4 evidence ---------- */
@@ -303,6 +306,11 @@
 /* Raised above the next paragraph so the preview card is not painted under it. */
 .a2e-ans-a { position: relative; z-index: 3; animation-name: a2e-ans-a; }
 .a2 .a2e-ans-b { margin-top: .5em; animation-name: a2e-ans-b; }
+.a2e-list { margin-top: .35em; display: grid; gap: .2em; font-size: .8125em; line-height: 1.6; word-break: keep-all; }
+.a2e-list li { padding-left: .9em; text-indent: -.9em; }
+.a2e-list li::before { content: "•"; margin-right: .5em; color: var(--a2-muted); }
+.a2e-list strong { font-weight: 650; }
+.a2e-list .a2-pill { text-indent: 0; }
 .a2e-actions { animation-name: a2e-actions; }
 .a2e-p1 { position: relative; }
 

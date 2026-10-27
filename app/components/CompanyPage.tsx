@@ -2,7 +2,7 @@ import { CompanyConnections } from "@/app/components/CompanyConnections";
 import { CompanyEnergyCanvas } from "@/app/components/CompanyEnergyCanvas";
 import { CompanyMetrics } from "@/app/components/CompanyMetrics";
 import { CompanyNetworkBackdrop } from "@/app/components/CompanyNetworkBackdrop";
-import { CompanyNoteMotion } from "@/app/components/CompanyNoteMotion";
+import { CompanyQuestionLoop } from "@/app/components/CompanyQuestionLoop";
 import { CompanyPartners, CompanyRecognitions } from "@/app/components/CompanyPartners";
 import { getCompanyMetrics } from "@/app/company-metrics";
 import { detailContent, routeFor, technologyRouteFor, type Language } from "@/app/site-content";
@@ -45,9 +45,7 @@ export async function CompanyPage({ language }: { language: Language }) {
                     </span>
                   ))}
                 </h2>
-                <div className="company-efficiency-demo">
-                  <CompanyNoteMotion language={language} />
-                </div>
+                <CompanyQuestionLoop language={language} />
               </div>
               <p>
                 <span>{page.efficiency.context}</span>

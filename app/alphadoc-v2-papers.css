@@ -1,9 +1,10 @@
 /* alphadoc-v2-papers: Alphadoc 2.0 motion styles.
-   Papers screen (CHG-036, CHG-050). One 9.5s cycle: a card is picked, the reader fills in,
-   a question is typed into the Alphadoc pane and the answer arrives.
-   Each element's own style is the final frame, so reduced motion shows the finished screen. */
+   Papers screen (CHG-036, CHG-050). One 11s cycle: "예측 모델" is typed into the list search,
+   the list narrows to TRIPOD+AI, the card opens in the reader, a question is typed into the
+   Alphadoc pane and the answer arrives. Each element's own style is the final frame, so reduced
+   motion shows the finished screen. */
 
-.a2-papers .a2 { --a2-cycle: 9.52s; }
+.a2-papers .a2 { --a2-cycle: 11s; }
 
 .a2-papers .a2-main { background: #fff; }
 
@@ -22,9 +23,12 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  background: #fff;
 }
+.a2p-list-head { display: flex; align-items: flex-start; justify-content: space-between; gap: .5em; }
 .a2p-list-head h4 { font-size: 1.25em; font-weight: 700; letter-spacing: -.03em; }
 .a2p-list-head p { margin-top: .15em; color: var(--a2-muted); font-size: .6875em; }
+.a2 .a2p-search-button { height: 2.2em; padding: 0 .6em; font-size: .625em; }
 .a2p-filters { margin-top: .75em; display: flex; gap: .3em; }
 .a2p-filters span {
   height: 1.9em;
@@ -48,20 +52,51 @@
   border-radius: .5em;
   color: var(--a2-faint);
   font-size: .6875em;
+  animation-name: a2p-search-focus;
 }
 .a2p-search svg { width: 1.1em; height: 1.1em; }
-.a2p-count { margin: .75em 0 .4em; color: var(--a2-muted); font-size: .625em; }
+.a2p-search-text { position: relative; flex: 1; min-width: 0; height: 1.4em; }
+.a2p-search-ph,
+.a2p-search-query { position: absolute; left: 0; top: 0; white-space: nowrap; line-height: 1.4; }
+.a2p-search-ph { opacity: 0; animation-name: a2p-search-ph; }
+.a2p-search-query { color: var(--a2-fg); animation-name: a2p-search-query; }
 
-.a2p-cards { display: grid; gap: .5em; }
+.a2p-count-row { margin: .7em 0 .35em; display: flex; align-items: center; justify-content: space-between; }
+.a2p-count { display: grid; color: var(--a2-muted); font-size: .625em; }
+.a2p-count > span { grid-area: 1 / 1; white-space: nowrap; }
+.a2p-count-all { opacity: 0; animation-name: a2p-count-all; }
+.a2p-count-result { color: var(--a2-fg); font-weight: 600; animation-name: a2p-count-result; }
+.a2p-views { display: flex; gap: .3em; color: var(--a2-faint); }
+.a2p-views svg { width: .95em; height: .95em; }
+.a2p-views svg.is-active { color: var(--a2-fg); }
+.a2p-select-all {
+  margin-bottom: .5em;
+  padding: .3em 0 .5em;
+  display: flex;
+  align-items: center;
+  gap: .45em;
+  border-bottom: 1px solid var(--a2-line);
+  color: var(--a2-muted);
+  font-size: .5625em;
+}
+.a2p-check { width: 1.15em; height: 1.15em; flex: none; border: 1.5px solid rgba(0, 0, 0, .26); border-radius: .25em; background: #fff; }
+
+.a2p-cards { display: flex; flex-direction: column; }
 .a2p-card {
+  position: relative;
+  max-height: 9em;
+  margin-bottom: .5em;
   padding: .65em .75em .7em;
+  overflow: visible;
   display: grid;
   gap: .3em;
   border: 1px solid var(--a2-line);
   border-radius: .625em;
   background: #fff;
 }
-.a2p-card .a2-badge { justify-self: start; font-size: .5625em; }
+.a2p-card-top { display: flex; align-items: center; justify-content: space-between; }
+.a2p-card .a2-badge { font-size: .5625em; }
+.a2p-card .a2p-check { width: .8em; height: .8em; }
 .a2p-card strong {
   display: -webkit-box;
   overflow: hidden;
@@ -74,12 +109,24 @@
 }
 .a2p-card-desc { color: rgba(0, 0, 0, .68); font-size: .625em; }
 .a2p-card-meta { color: var(--a2-muted); font-size: .5625em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* The search leaves only the target: the other cards fold away. */
+.a2p-card.is-other {
+  max-height: 0;
+  margin-bottom: 0;
+  padding-block: 0;
+  overflow: hidden;
+  border-width: 0;
+  opacity: 0;
+  animation-name: a2p-card-fold;
+}
 .a2p-card.is-target {
   border-color: rgba(0, 100, 225, .45);
   background: rgba(0, 100, 225, .04);
   box-shadow: 0 0 0 .1875em rgba(0, 100, 225, .1);
   animation-name: a2p-card-select;
 }
+.a2p-ptr { position: absolute; right: 18%; top: 48%; width: 1.3em; height: 1.3em; opacity: 0; pointer-events: none; animation-name: a2p-ptr; }
+.a2p-ptr svg { width: 100%; height: 100%; fill: #fff; color: rgba(0, 0, 0, .85); }
 
 /* Reader */
 .a2p-reader {
@@ -89,6 +136,7 @@
   flex-direction: column;
   border-left: 1px solid var(--a2-line);
   background: #f5f5f7;
+  animation-name: none;
 }
 .a2p-reader-bar {
   height: 2.6em;
@@ -132,8 +180,11 @@
 .a2p-sheet-meta dd { margin: 0; }
 .a2p-sheet h5 { margin: 1.1em 0 .4em; font-size: .75em; font-weight: 680; }
 .a2p-sheet p { font-size: .6875em; line-height: 1.7; color: rgba(0, 0, 0, .78); }
+.a2 .a2p-sheet-link { margin-top: .55em; display: inline-flex; align-items: center; gap: .25em; color: var(--a2-primary); font-size: .625em; }
+.a2p-sheet-link svg { width: 1.05em; height: 1.05em; }
 .a2p-sheet ul { display: grid; gap: .25em; font-size: .6875em; color: rgba(0, 0, 0, .78); }
 .a2p-sheet li::before { content: "•"; margin-right: .45em; color: var(--a2-muted); }
+.a2 .a2p-read-full { margin-top: 1.1em; height: 2.3em; font-size: .625em; }
 
 .a2p-reader-empty {
   position: absolute;
@@ -152,6 +203,20 @@
 /* Alphadoc pane */
 .a2p-pane { position: relative; }
 .a2p-pane .a2-panel-head img { width: 1.15em; height: auto; }
+.a2 .a2p-pane-paper {
+  height: 2.2em;
+  padding: 0 .9em;
+  display: flex;
+  align-items: center;
+  gap: .4em;
+  overflow: hidden;
+  border-bottom: 1px solid var(--a2-line);
+  color: var(--a2-muted);
+  font-size: .625em;
+  white-space: nowrap;
+  animation-name: a2p-pane-paper;
+}
+.a2p-pane-paper svg { width: 1.1em; height: 1.1em; }
 .a2p-pane-scroll { position: relative; flex: 1; min-height: 0; overflow: hidden; }
 .a2p-pane-empty {
   position: absolute;
@@ -167,13 +232,14 @@
 .a2p-pane-empty img { width: 2em; height: auto; margin-bottom: .3em; }
 .a2p-pane-empty strong { font-size: .75em; font-weight: 640; }
 .a2p-pane-empty span { color: var(--a2-muted); font-size: .625em; }
+.a2p-pane-empty small { margin-top: .2em; color: var(--a2-faint); font-size: .5625em; }
 
 .a2p-convo { padding: .875em .75em; display: grid; gap: .75em; }
 .a2p-question { max-width: 92%; font-size: .6875em; animation-name: a2p-question; }
 .a2p-thinking {
   position: absolute;
   left: .875em;
-  top: 3.6em;
+  top: 4.6em;
   display: inline-flex;
   gap: .25em;
   opacity: 0;
@@ -181,9 +247,14 @@
 }
 .a2p-thinking i { width: .35em; height: .35em; border-radius: 50%; background: var(--a2-faint); }
 .a2p-answer { animation-name: a2p-answer; }
+.a2p-question,
+.a2p-answer { word-break: keep-all; overflow-wrap: anywhere; }
 .a2p-answer p { font-size: .6875em; line-height: 1.6; }
 .a2p-answer ul { margin-top: .4em; display: grid; gap: .2em; font-size: .6875em; line-height: 1.55; }
+.a2p-answer li { padding-left: .9em; text-indent: -.9em; }
 .a2p-answer li::before { content: "•"; margin-right: .45em; color: var(--a2-muted); }
+.a2p-answer li strong { font-weight: 660; color: var(--a2-fg); }
+.a2p-answer-more { margin-top: .45em; animation-name: a2p-answer-more; }
 .a2p-answer .a2p-answer-source { margin-top: .5em; font-size: .6875em; }
 .a2p-answer-pill { margin-left: 0; animation-name: a2p-answer-pill; }
 
@@ -194,83 +265,151 @@
   border-radius: .75em;
   background: #fff;
 }
-.a2p-pane-input { position: relative; height: 2.4em; font-size: .6875em; }
+.a2p-pane-input { position: relative; height: 2.9em; font-size: .6875em; line-height: 1.4; }
 .a2p-pane-placeholder,
-.a2p-pane-typed { position: absolute; left: 0; top: .1em; white-space: nowrap; }
-.a2p-pane-placeholder { color: var(--a2-faint); animation-name: a2p-placeholder; }
-.a2p-pane-typed { opacity: 0; color: var(--a2-fg); animation-name: a2p-typed; }
+.a2p-pane-typed { position: absolute; left: 0; top: .1em; right: 0; }
+.a2p-pane-placeholder { color: var(--a2-faint); white-space: nowrap; animation-name: a2p-placeholder; }
+.a2p-pane-typed { display: grid; opacity: 0; color: var(--a2-fg); animation-name: a2p-typed; }
+.a2p-typed-line { justify-self: start; white-space: nowrap; }
+.a2p-type-1 { animation-name: a2p-type-1; }
+.a2p-type-2 { animation-name: a2p-type-2; }
 .a2p-pane-row { display: flex; align-items: center; justify-content: space-between; gap: .5em; }
 .a2p-pane-row .a2-badge { font-size: .5625em; }
 .a2p-pane-send { height: 1.9em; padding: 0 .6em; font-size: .625em; opacity: .45; animation-name: a2p-send; }
 
-/* Timeline */
+/* Timeline: 0-7 full list · 8-16 "예측 모델" typed · 19-23 the list narrows · 27 the card is pressed ·
+   29-33 reader opens · 37-49 question typed · 51 sent · 55-60 thinking · 64 answer · hold · 95-99 reset. */
+@keyframes a2p-search-focus {
+  0%, 6% { border-color: var(--a2-line); box-shadow: none; }
+  7%, 21% { border-color: rgba(0, 100, 225, .55); box-shadow: 0 0 0 .2em rgba(0, 100, 225, .12); }
+  24%, 100% { border-color: var(--a2-line); box-shadow: none; }
+}
+@keyframes a2p-search-ph {
+  0%, 7.5% { opacity: 1; }
+  8%, 97% { opacity: 0; }
+  99%, 100% { opacity: 1; }
+}
+@keyframes a2p-search-query {
+  0%, 8% { clip-path: inset(0 100% 0 0); animation-timing-function: steps(8, end); }
+  16%, 97% { clip-path: inset(0 0 0 0); }
+  99%, 100% { clip-path: inset(0 100% 0 0); }
+}
+@keyframes a2p-count-all {
+  0%, 18% { opacity: 1; }
+  20%, 96% { opacity: 0; }
+  98%, 100% { opacity: 1; }
+}
+@keyframes a2p-count-result {
+  0%, 18% { opacity: 0; }
+  20%, 96% { opacity: 1; }
+  98%, 100% { opacity: 0; }
+}
+@keyframes a2p-card-fold {
+  0%, 18% { max-height: 9em; margin-bottom: .5em; padding-block: .65em .7em; border-width: 1px; opacity: 1; }
+  20% { opacity: 0; }
+  23%, 96% { max-height: 0; margin-bottom: 0; padding-block: 0; border-width: 0; opacity: 0; }
+  99%, 100% { max-height: 9em; margin-bottom: .5em; padding-block: .65em .7em; border-width: 1px; opacity: 1; }
+}
 @keyframes a2p-card-select {
-  0%, 7.94% { border-color: var(--a2-line); background: #fff; box-shadow: 0 0 0 0 rgba(0, 100, 225, 0); transform: none; }
-  10.59% { transform: scale(.985); }
-  14.12%, 95.59% { border-color: rgba(0, 100, 225, .45); background: rgba(0, 100, 225, .04); box-shadow: 0 0 0 .1875em rgba(0, 100, 225, .1); transform: none; }
-  100% { border-color: var(--a2-line); background: #fff; box-shadow: 0 0 0 0 rgba(0, 100, 225, 0); }
+  0%, 26% { border-color: var(--a2-line); background: #fff; box-shadow: 0 0 0 0 rgba(0, 100, 225, 0); transform: none; }
+  27.5% { transform: scale(.985); }
+  29%, 96% { border-color: rgba(0, 100, 225, .45); background: rgba(0, 100, 225, .04); box-shadow: 0 0 0 .1875em rgba(0, 100, 225, .1); transform: none; }
+  99%, 100% { border-color: var(--a2-line); background: #fff; box-shadow: 0 0 0 0 rgba(0, 100, 225, 0); }
+}
+@keyframes a2p-ptr {
+  0%, 22% { opacity: 0; transform: translate(2.5em, 2em); }
+  23.5% { opacity: 1; transform: translate(2.5em, 2em); }
+  26.5% { opacity: 1; transform: none; }
+  27.5% { opacity: 1; transform: scale(.86); }
+  28.5% { opacity: 1; transform: none; }
+  31%, 100% { opacity: 0; transform: none; }
 }
 @keyframes a2p-reader-empty {
-  0%, 12.35% { opacity: 1; }
-  15.88%, 96.47% { opacity: 0; }
-  100% { opacity: 1; }
+  0%, 28% { opacity: 1; }
+  31%, 96% { opacity: 0; }
+  99%, 100% { opacity: 1; }
 }
 @keyframes a2p-reader-sheet {
-  0%, 13.24% { opacity: 0; transform: translateY(.6em); }
-  18.53%, 94.71% { opacity: 1; transform: none; }
-  99.12%, 100% { opacity: 0; transform: none; }
+  0%, 28.5% { opacity: 0; transform: translateY(.6em); }
+  33%, 95% { opacity: 1; transform: none; }
+  98%, 100% { opacity: 0; transform: none; }
+}
+@keyframes a2p-pane-paper {
+  0%, 29% { opacity: 0; }
+  32%, 95% { opacity: 1; }
+  98%, 100% { opacity: 0; }
 }
 @keyframes a2p-pane-empty {
-  0%, 40.59% { opacity: 1; }
-  44.12%, 96.47% { opacity: 0; }
-  100% { opacity: 1; }
+  0%, 51% { opacity: 1; }
+  53%, 96% { opacity: 0; }
+  99%, 100% { opacity: 1; }
 }
 @keyframes a2p-placeholder {
-  0%, 22.06% { opacity: 1; }
-  22.94%, 41.47% { opacity: 0; }
-  42.35%, 100% { opacity: 1; }
+  0%, 36% { opacity: 1; }
+  37%, 51% { opacity: 0; }
+  52%, 100% { opacity: 1; }
 }
 @keyframes a2p-typed {
-  0%, 22.94% { opacity: 1; clip-path: inset(0 100% 0 0); animation-timing-function: steps(24, end); }
-  37.06%, 41.47% { opacity: 1; clip-path: inset(0 0 0 0); }
-  42.35%, 100% { opacity: 0; clip-path: inset(0 0 0 0); }
+  0%, 36% { opacity: 0; }
+  37%, 51% { opacity: 1; }
+  52%, 100% { opacity: 0; }
+}
+@keyframes a2p-type-1 {
+  0%, 37% { clip-path: inset(0 100% 0 0); animation-timing-function: steps(16, end); }
+  43%, 100% { clip-path: inset(0 0 0 0); }
+}
+@keyframes a2p-type-2 {
+  0%, 43% { clip-path: inset(0 100% 0 0); animation-timing-function: steps(18, end); }
+  49%, 100% { clip-path: inset(0 0 0 0); }
 }
 @keyframes a2p-send {
-  0%, 36.18% { opacity: .45; transform: none; }
-  37.94%, 40.59% { opacity: 1; transform: none; }
-  41.47% { opacity: 1; transform: scale(.94); }
-  43.24%, 100% { opacity: .45; transform: none; }
+  0%, 49% { opacity: .45; transform: none; }
+  49.5%, 50.5% { opacity: 1; transform: none; }
+  51% { opacity: 1; transform: scale(.94); }
+  52.5%, 100% { opacity: .45; transform: none; }
 }
 @keyframes a2p-question {
-  0%, 41.47% { opacity: 0; transform: translateY(.5em); }
-  45%, 94.71% { opacity: 1; transform: none; }
-  99.12%, 100% { opacity: 0; transform: none; }
+  0%, 51% { opacity: 0; transform: translateY(.5em); }
+  54%, 94% { opacity: 1; transform: none; }
+  98%, 100% { opacity: 0; transform: none; }
 }
 @keyframes a2p-thinking {
-  0%, 45% { opacity: 0; }
-  46.76%, 52.06% { opacity: 1; }
-  53.82%, 100% { opacity: 0; }
+  0%, 54% { opacity: 0; }
+  55%, 60% { opacity: 1; }
+  61%, 100% { opacity: 0; }
 }
 @keyframes a2p-answer {
-  0%, 52.06% { opacity: 0; transform: translateY(.5em); }
-  56.47%, 94.71% { opacity: 1; transform: none; }
-  99.12%, 100% { opacity: 0; transform: none; }
+  0%, 60% { opacity: 0; transform: translateY(.5em); }
+  64%, 94% { opacity: 1; transform: none; }
+  98%, 100% { opacity: 0; transform: none; }
+}
+@keyframes a2p-answer-more {
+  0%, 64% { opacity: 0; transform: translateY(.4em); }
+  68%, 94% { opacity: 1; transform: none; }
+  98%, 100% { opacity: 0; transform: none; }
 }
 @keyframes a2p-answer-pill {
-  0%, 61.76% { color: var(--a2-muted); background: var(--a2-fill); }
-  65.29%, 85.88% { color: var(--a2-primary); background: var(--a2-primary-tint-strong); }
-  91.76%, 100% { color: var(--a2-muted); background: var(--a2-fill); }
+  0%, 72% { color: var(--a2-muted); background: var(--a2-fill); }
+  75%, 86% { color: var(--a2-primary); background: var(--a2-primary-tint-strong); }
+  90%, 100% { color: var(--a2-muted); background: var(--a2-fill); }
+}
+@keyframes a2p-reader-slide {
+  0%, 28.5% { transform: translateX(102%); }
+  32%, 95% { transform: none; }
+  98%, 100% { transform: translateX(102%); }
 }
 
-/* Phone width: the reader on top, the Alphadoc pane below. */
+/* Phone width: the list and search on top first; the reader then slides over it. The pane sits below. */
 @media (max-width: 680px) {
   .a2-stage.a2-papers { aspect-ratio: 4 / 5; }
 }
 @container (max-width: 680px) {
   .a2-papers .a2 { font-size: 2.6cqw; }
   .a2p-body { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) minmax(0, 1.05fr); }
-  .a2p-list { display: none; }
-  .a2p-reader { border-left: 0; }
+  .a2p-list,
+  .a2p-reader { grid-area: 1 / 1; }
+  .a2p-reader { z-index: 1; border-left: 0; animation-name: a2p-reader-slide; }
+  .a2p-select-all { display: none; }
   .a2p-reader-page,
   .a2p-reader-tools span:not(.is-active) { display: none; }
   .a2p-pane { border-left: 0; border-top: 1px solid var(--a2-line); }

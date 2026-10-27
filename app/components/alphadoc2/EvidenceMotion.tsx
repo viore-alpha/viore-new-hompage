@@ -25,7 +25,11 @@ const evidenceCopy = {
     answerTitle: "시험자는 알게 된 뒤 24시간 안에 보고합니다",
     answer: [
       "시험자는 중대한 이상사례를 알게 된 뒤 24시간 안에 의뢰자에게 보고합니다.",
-      "예상하지 못한 중대한 약물이상반응은 의뢰자가 식약처에 보고하며, 사망이나 생명 위협은 7일, 그 밖의 경우는 15일 이내입니다.",
+      "예상하지 못한 중대한 약물이상반응(SUSAR)은 의뢰자가 식약처에 보고합니다.",
+    ],
+    deadlines: [
+      ["사망·생명 위협", "알게 된 날부터 7일 이내, 추가 정보는 이후 8일 안에"],
+      ["그 밖의 경우", "알게 된 날부터 15일 이내"],
     ],
     boardPill: "이상사례 보고 SOP",
     secondPill: "안전성 정보 관리 지침",
@@ -57,7 +61,11 @@ const evidenceCopy = {
     answerTitle: "Investigators report within 24 hours",
     answer: [
       "Investigators report a serious adverse event to the sponsor within 24 hours of learning about it.",
-      "The sponsor reports unexpected serious adverse drug reactions to the MFDS: within 7 days for deaths or life-threatening cases, and within 15 days for all others.",
+      "The sponsor reports suspected unexpected serious adverse reactions (SUSARs) to the MFDS.",
+    ],
+    deadlines: [
+      ["Death or life-threatening", "within 7 days of learning about it, with follow-up within 8 more days"],
+      ["All other cases", "within 15 days"],
     ],
     boardPill: "SAE reporting SOP",
     secondPill: "Safety information policy",
@@ -123,10 +131,17 @@ export function AlphadocV2EvidenceMotion({ language, label }: { language: Langua
                         </span>
                       </p>
                     </div>
-                    <p className="a2e-ans-b a2-anim">
-                      {copy.answer[1]}
-                      <A2Pill kind="board" label={copy.secondPill} />
-                    </p>
+                    <div className="a2e-ans-b a2-anim">
+                      <p>{copy.answer[1]}</p>
+                      <ul className="a2e-list">
+                        {copy.deadlines.map(([term, detail], index) => (
+                          <li key={term}>
+                            <strong>{term}</strong> {detail}
+                            {index === copy.deadlines.length - 1 ? <A2Pill kind="board" label={copy.secondPill} /> : null}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                     <div className="a2-answer-actions a2e-actions a2-anim">
                       <Copy aria-hidden="true" strokeWidth={1.8} />
                       <Star aria-hidden="true" strokeWidth={1.8} />
