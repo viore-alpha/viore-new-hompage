@@ -2,9 +2,9 @@ import { CompanyConnections } from "@/app/components/CompanyConnections";
 import { CompanyEnergyCanvas } from "@/app/components/CompanyEnergyCanvas";
 import { CompanyMetrics } from "@/app/components/CompanyMetrics";
 import { CompanyNetworkBackdrop } from "@/app/components/CompanyNetworkBackdrop";
-import { CompanyQuestionLoop } from "@/app/components/CompanyQuestionLoop";
 import { CompanyPartners, CompanyRecognitions } from "@/app/components/CompanyPartners";
 import { withAlphadocName } from "@/app/components/BrandName";
+import { AlphadocHeroStory } from "@/app/components/alphadoc2/HeroStory";
 import { getCompanyMetrics } from "@/app/company-metrics";
 import { detailContent, routeFor, technologyRouteFor, type Language } from "@/app/site-content";
 
@@ -46,7 +46,12 @@ export async function CompanyPage({ language }: { language: Language }) {
                     </span>
                   ))}
                 </h2>
-                <CompanyQuestionLoop language={language} />
+                {/* Alphadoc's main motion, copied as is from the alphadoc.ai landing
+                    (alphadoc-landing: HeroStory.tsx, timeline.ts, alphadoc-hero-story.css).
+                    Change it there first, then copy it here again. */}
+                <div className="company-efficiency-motion">
+                  <AlphadocHeroStory language={language} label={page.efficiency.visualLabel} />
+                </div>
               </div>
               <p>
                 <span>{page.efficiency.context}</span>

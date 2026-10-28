@@ -267,9 +267,10 @@ test("server-renders the Korean Company story as the homepage", async () => {
   assert.doesNotMatch(html, /company-efficiency-workspace|company-section-subtitle/);
   assert.match(html, /class="company-knowledge"/);
   assert.match(html, /id="company-knowledge-title">Ever-growing Knowledge<\/h2>/);
-  assert.match(html, /class="company-question-loop"/);
-  assert.match(html, /패혈성 쇼크 첫 1시간 처치 순서는\?/);
-  assert.match(html, /알파닥 질문 입력 예시: [^"]*임상시험 SUSAR 보고 기한은\?[^"]*논문을 TRIPOD\+AI로 점검해 줘/);
+  assert.match(html, /class="company-efficiency-motion"><div class="hs"><div class="hs-stage" role="img" aria-label="알파닥 창에서 참조 범위를 고르고 @로 지침을 지정해 질문한 뒤/);
+  assert.match(html, /항생제 사용 지침 개정안/);
+  assert.match(html, /src="\/brand\/alphadoc-alpha\.svg"/);
+  assert.doesNotMatch(html, /company-question-loop|패혈성 쇼크 첫 1시간 처치 순서는/);
   assert.doesNotMatch(html, /a2-note|company-note-motion|a2n-/);
   assert.match(html, /의료 현장은 수많은 정보와 시스템 사이를 끊임없이 오갑니다\./);
   assert.match(html, /기록하고, 계산하고, 검색하고, 확인하는 반복적인 과정은 의료인의 시간을 빼앗습니다\./);
@@ -771,27 +772,26 @@ test("keeps the three connected principles text-only over the continuous company
   assert.doesNotMatch(css, /\.company-connections \{[^}]*border-top:/);
 });
 
-test("loops six Alphadoc user questions in the original search field", async () => {
-  const [page, questionLoop, css, homeRoute] = await Promise.all([
+test("plays Alphadoc's main motion from alphadoc.ai in the home Alphadoc section", async () => {
+  const [page, heroStory, heroCss, css, homeRoute] = await Promise.all([
     readFile(new URL("../app/components/CompanyPage.tsx", import.meta.url), "utf8"),
-    readFile(new URL("../app/components/CompanyQuestionLoop.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/components/alphadoc2/HeroStory.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/alphadoc-hero-story.css", import.meta.url), "utf8"),
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
     readFile(new URL("../app/[lang]/page.tsx", import.meta.url), "utf8"),
   ]);
 
-  assert.match(page, /<CompanyQuestionLoop language=\{language\} \/>/);
-  assert.doesNotMatch(page, /CompanyNoteMotion|company-efficiency-demo/);
+  assert.match(page, /<div className="company-efficiency-motion">\s*<AlphadocHeroStory language=\{language\} label=\{page\.efficiency\.visualLabel\} \/>/);
+  assert.doesNotMatch(page, /CompanyQuestionLoop|CompanyNoteMotion|company-efficiency-demo/);
+  assert.match(homeRoute, /import "\.\.\/alphadoc-hero-story\.css";/);
   assert.doesNotMatch(homeRoute, /alphadoc-v2/);
-  assert.equal((questionLoop.match(/패혈성 쇼크 첫 1시간 처치 순서는|개정된 항생제 지침에서 바뀐 점은|임상시험 SUSAR 보고 기한은|조영제 과민반응 전처치 기준은|지난 회의록에서 할 일만 정리해 줘|논문을 TRIPOD\+AI로 점검해 줘/g) ?? []).length, 6);
-  assert.match(questionLoop, /function SearchIcon/);
-  assert.doesNotMatch(questionLoop, /company-question-scope|PlusIcon/);
-  assert.match(questionLoop, /IntersectionObserver/);
-  assert.match(questionLoop, /prefers-reduced-motion: reduce/);
-  assert.match(questionLoop, /role="img"/);
-  assert.match(css, /\.company-question-loop \{[^}]*grid-template-columns: 32px minmax\(0,1fr\) 56px;/);
-  assert.match(css, /\.company-question-loop \{[^}]*background: transparent;/);
-  assert.match(css, /@keyframes company-question-cursor/);
-  assert.doesNotMatch(css, /company-note-|company-efficiency-demo/);
+  assert.match(heroStory, /useTimelinePlayer/);
+  assert.match(heroStory, /role="img" aria-label=\{label\}/);
+  assert.doesNotMatch(heroStory, /<h6>/);
+  assert.match(heroCss, /\.hs-stage \{[^}]*width: 640px; height: 580px;/);
+  assert.match(heroCss, /prefers-reduced-motion: reduce/);
+  assert.match(css, /\.company-efficiency-motion \{[^}]*max-width: 560px;[^}]*justify-self: end;/);
+  assert.doesNotMatch(css, /company-question-|company-note-|company-efficiency-demo/);
   assert.match(css, /\.company-efficiency > p > span \{ display: block; \}/);
   assert.match(css, /\.company-efficiency \{[^}]*border-top: 1px solid rgba\(255,255,255,\.18\);/);
   assert.match(css, /\.company-efficiency-heading \{[^}]*grid-template-columns: max-content minmax\(0,1fr\);/);

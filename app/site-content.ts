@@ -29,6 +29,7 @@ export type CompanyEfficiencyContent = {
   repetition: string;
   product: string;
   productLead: string;
+  visualLabel: string;
 };
 
 export type DetailPage = {
@@ -215,6 +216,7 @@ export const detailContent: Record<Language, Record<PageKey, DetailPage>> = {
         repetition: "기록하고, 계산하고, 검색하고, 확인하는 반복적인 과정은 의료인의 시간을 빼앗습니다.",
         product: "알파닥",
         productLead: "은 논문과 의료 지침, 사내 문서를 한 화면에 모아 이 과정을 하나의 흐름으로 연결합니다.",
+        visualLabel: "알파닥 창에서 참조 범위를 고르고 @로 지침을 지정해 질문한 뒤, 출처가 붙은 답변을 노트에 넣고, 논문 화면에서 알파닥과 논문 내용을 대화하는 화면",
       },
       connections: {
         title: "One connected flow\nfor medicine.",
@@ -339,6 +341,7 @@ export const detailContent: Record<Language, Record<PageKey, DetailPage>> = {
         repetition: "Recording, searching, and double-checking eat into every day.",
         product: "Alphadoc",
         productLead: " puts papers, guidelines, and internal documents on one screen, so the work becomes one flow.",
+        visualLabel: "In Alphadoc, a source scope is chosen, a guideline is added with @, the sourced answer is added to a note, and a paper is discussed with Alphadoc in the Papers view",
       },
       connections: {
         title: "One connected flow\nfor medicine.",
