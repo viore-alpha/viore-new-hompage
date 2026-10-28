@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import "../alphadoc-hero-story.css";
 import { CompanyPage } from "@/app/components/CompanyPage";
 import {
   HOME_SEO,
