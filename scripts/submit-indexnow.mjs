@@ -44,8 +44,8 @@ const urlList = [
   ),
 ];
 
-if (urlList.length !== 10) {
-  throw new Error(`Expected 10 canonical URLs in the live sitemap, found ${urlList.length}.`);
+if (urlList.length !== 8) {
+  throw new Error(`Expected 8 canonical URLs in the live sitemap, found ${urlList.length}.`);
 }
 
 const payload = {

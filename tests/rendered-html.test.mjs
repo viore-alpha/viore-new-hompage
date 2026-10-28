@@ -219,7 +219,7 @@ test("submits exactly the production sitemap through IndexNow after a successful
 
   assert.match(packageJson, /"seo:indexnow": "node scripts\/submit-indexnow\.mjs"/);
   assert.match(script, /const SITEMAP_URL = `\$\{SITE_ORIGIN\}\/sitemap\.xml`/);
-  assert.match(script, /urlList\.length !== 10/);
+  assert.match(script, /urlList\.length !== 8/);
   assert.match(script, /response\.status !== 200 && response\.status !== 202/);
   assert.match(workflow, /deployment_status:/);
   assert.match(workflow, /github\.event\.deployment\.environment == 'Production'/);
