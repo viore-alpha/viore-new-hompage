@@ -2,7 +2,7 @@
 
 import { useState, type ReactNode } from "react";
 import { usePathname } from "next/navigation";
-import { routeFor, siteContent, technologyRouteFor, type Language, type PageKey } from "@/app/site-content";
+import { isExternalHref, routeFor, siteContent, technologyRouteFor, type Language, type PageKey } from "@/app/site-content";
 
 type MenuId = "product";
 type MenuItem = { label: string; key?: PageKey; href?: string; badge?: string; disabled?: boolean };
@@ -10,8 +10,7 @@ type MenuItem = { label: string; key?: PageKey; href?: string; badge?: string; d
 export function SiteChrome({ language, children }: { language: Language; children: ReactNode }) {
   const pathname = usePathname();
   const isTechnologyPage = pathname.includes("/technology");
-  const isProductPage = pathname.includes("/product/alphadoc");
-  const isDarkPage = isTechnologyPage || isProductPage;
+  const isDarkPage = isTechnologyPage;
   const isCompanyPage = pathname === `/${language}` || pathname === `/${language}/`;
   const isDarkFooter = isCompanyPage || isTechnologyPage;
   const [openMenu, setOpenMenu] = useState<MenuId | null>(null);
@@ -25,6 +24,8 @@ export function SiteChrome({ language, children }: { language: Language; childre
   };
 
   const navLabel = (id: MenuId) => content.nav[id];
+  const hrefFor = (item: MenuItem) => item.href ?? routeFor(language, item.key!);
+  const linkTarget = (href: string) => (isExternalHref(href) ? { target: "_blank", rel: "noreferrer" } : {});
 
   return (
     <div className="site-frame">
@@ -56,7 +57,7 @@ export function SiteChrome({ language, children }: { language: Language; childre
                       <span>{item.label}</span><small>{item.badge}</small>
                     </span>
                   ) : (
-                    <a href={item.href ?? routeFor(language, item.key!)} key={item.href ?? item.key}>
+                    <a href={hrefFor(item)} {...linkTarget(hrefFor(item))} key={item.href ?? item.key}>
                       <span>{item.label}</span>
                       {item.badge ? <small>{item.badge}</small> : <span aria-hidden="true">↗</span>}
                     </a>
@@ -96,7 +97,7 @@ export function SiteChrome({ language, children }: { language: Language; childre
                 <div>{menus[menu].map((item) => item.disabled ? (
                   <span className="mobile-menu-disabled" aria-disabled="true" key={item.label}>{item.label}<small>{item.badge}</small></span>
                 ) : (
-                  <a href={item.href ?? routeFor(language, item.key!)} key={item.href ?? item.key}>{item.label}{item.badge && <small>{item.badge}</small>}</a>
+                  <a href={hrefFor(item)} {...linkTarget(hrefFor(item))} key={item.href ?? item.key}>{item.label}{item.badge && <small>{item.badge}</small>}</a>
                 ))}</div>
               </div>
             ))}

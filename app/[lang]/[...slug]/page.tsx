@@ -24,18 +24,9 @@ export async function generateMetadata({ params }: { params: RouteParams }): Pro
   }
   const key = pageKeyFromSlug(slug);
   if (!isLanguage(lang) || !key) return {};
-  if (key === "company" || key === "contact") return {};
+  if (key === "company" || key === "contact" || key === "alphadoc") return {};
   if (key === "knowledge") {
     const copy = PAGE_SEO.knowledge[lang];
-    return buildPageMetadata({
-      lang,
-      title: copy.title,
-      description: copy.description,
-      path: `/${pageRoutes[key]}`,
-    });
-  }
-  if (key === "alphadoc") {
-    const copy = PAGE_SEO.product[lang];
     return buildPageMetadata({
       lang,
       title: copy.title,
@@ -64,7 +55,7 @@ function continuationFor(language: Language, pageKey: PageKey) {
   const ko = language === "ko";
   if (pageKey === "alphadoc-engine") return { label: "Explore AlphaEvidence", href: routeFor(language, "alphaevidence") };
   if (pageKey === "alphaevidence") return { label: "Explore AlphaDocument", href: routeFor(language, "alphadocument") };
-  if (pageKey === "alphadocument") return { label: ko ? "알파닥 만나기" : "Meet Alphadoc", href: routeFor(language, "alphadoc") };
+  if (pageKey === "alphadocument") return { label: ko ? "알파닥 만나기" : "Meet Alphadoc", href: routeFor(language, "alphadoc"), external: true };
   if (pageKey === "alphadoc") return { label: "Open alphadoc.ai", href: "https://alphadoc.ai", external: true };
   if (pageKey === "knowledge") return { label: ko ? "Council & Partners 만나기" : "Meet Council & Partners", href: routeFor(language, "clinical-council") };
   if (pageKey === "clinical-council") return { label: ko ? "함께 이야기하기" : "Start a conversation", href: routeFor(language, "contact") };

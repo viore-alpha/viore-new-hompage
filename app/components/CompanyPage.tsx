@@ -77,7 +77,7 @@ export async function CompanyPage({ language }: { language: Language }) {
         <section className="detail-next company-join" id="company-join">
           <h2>{language === "ko" ? "우리가 그리는 새로운 선형에\n합류하세요." : "Be part of\nthe new linearity."}</h2>
           <div className="company-join-links">
-            <a className="company-join-product" href={routeFor(language, "alphadoc")}>
+            <a className="company-join-product" href={routeFor(language, "alphadoc")} target="_blank" rel="noreferrer">
               <span>
                 {language === "ko" ? "그 첫 번째 선형, " : "Our first linearity: "}
                 <span className="company-join-product-name">{language === "ko" ? "알파닥 Alphadoc" : "Alphadoc"}</span>

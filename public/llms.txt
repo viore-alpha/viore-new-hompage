@@ -8,8 +8,8 @@
 - English homepage: https://vioreai.com/en
 - Korean technology: https://vioreai.com/ko/technology
 - English technology: https://vioreai.com/en/technology
-- Korean product overview: https://vioreai.com/ko/product/alphadoc
-- English product overview: https://vioreai.com/en/product/alphadoc
+- Alphadoc product site (Korean): https://alphadoc.ai
+- Alphadoc product site (English): https://alphadoc.ai/en
 - Korean knowledge: https://vioreai.com/ko/knowledge
 - English knowledge: https://vioreai.com/en/knowledge
 - Korean legal notice: https://vioreai.com/ko/legal

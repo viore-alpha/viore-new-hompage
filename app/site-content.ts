@@ -62,9 +62,18 @@ export const pageRoutes: Record<PageKey, string> = {
 
 const inactivePageKeys: ReadonlySet<PageKey> = new Set(["clinical-council"]);
 
+// Alphadoc has its own site. The old product page redirects there (next.config.ts).
+export const ALPHADOC_SITE: Record<Language, string> = {
+  ko: "https://alphadoc.ai",
+  en: "https://alphadoc.ai/en",
+};
+
+export const isExternalHref = (href: string) => /^https?:\/\//.test(href);
+
 export function routeFor(language: Language, key: PageKey) {
   if (key === "company") return `/${language}`;
   if (key === "contact") return `/${language}#partnership-inquiry`;
+  if (key === "alphadoc") return ALPHADOC_SITE[language];
   return `/${language}/${pageRoutes[key]}`;
 }
 
