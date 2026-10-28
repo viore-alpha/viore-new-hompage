@@ -38,8 +38,10 @@
 12. 의료 특화 AI 모델은 개발 중으로 표현한다. 성능 수치, 기반 모델 이름, 평가
     기준값을 공개하지 않는다. 기관에서 쓰는 현재 모델은 공개 기반 모델로만 쓴다.
 13. KMI 한국의학연구소의 이름과 로고는 기관이 동의한 범위 안에서 홈 Partners
-    섹션에만 쓴다. 제품, Technology와 llms.txt에서는 기관명 대신 '첫 기관'으로
-    쓴다. 기관 유형 표현, PoC 단계, 유료 전환과 매출 일정은 쓰지 않는다.
+    섹션과 alphadoc.ai 랜딩 하단 Partners 띠에만 쓴다. alphadoc.ai 띠에는 로고만
+    두고 설명 문구는 붙이지 않는다(2026-10-28 KMI 동의). 그 밖의 제품, Technology와
+    llms.txt에서는 기관명 대신 '첫 기관'으로 쓴다. 기관 유형 표현, PoC 단계, 유료
+    전환과 매출 일정은 쓰지 않는다.
 14. 의학 자료 갱신 주기는 실제 공급 주기를 확인한 뒤에만 쓴다.
 
 Public copy may describe Viore-owned contracts, provenance, workflow controls and
