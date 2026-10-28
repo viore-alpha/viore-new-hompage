@@ -1227,7 +1227,7 @@ function OnpremiseDiagram({ language, mobile }: { language: Language; mobile: bo
   const storeTokenLabel = [pick(language, "토큰 볼트", "Token vault")];
   const externalLabel = [pick(language, "외부 AI", "External AI")];
   const noLeaveLines = language === "ko" ? ["기관 데이터는 사내망에"] : ["Institution data stays", "on the corporate network"];
-  const updateLabel = language === "ko" ? ["바이오레 자료 갱신", "(한 방향)"] : ["Viore data updates", "(one way)"];
+  const updateLabel = language === "ko" ? ["최신 의학 자료", "갱신 (한 방향)"] : ["Latest medical data", "updates (one way)"];
   const footnote = [pick(language, "개발 구상", "Development concept")];
 
   if (mobile) {
