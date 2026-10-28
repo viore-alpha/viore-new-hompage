@@ -78,8 +78,6 @@ test("server-renders the correct document language for every canonical page", as
     "/en",
     "/ko/technology",
     "/en/technology",
-    "/ko/product/alphadoc",
-    "/en/product/alphadoc",
     "/ko/knowledge",
     "/en/knowledge",
     "/ko/legal",
@@ -177,12 +175,16 @@ test("ships aligned crawler files and brand thumbnail dimensions", async () => {
   assert.doesNotMatch(sitemap, /\/council/);
   assert.doesNotMatch(sitemap, /\/insight\//);
   assert.match(sitemap, /hreflang="x-default" href="https:\/\/vioreai\.com\/ko"/);
-  assert.equal((sitemap.match(/hreflang="x-default"/g) ?? []).length, 10);
-  assert.equal((sitemap.match(/<loc>/g) ?? []).length, 10);
+  assert.doesNotMatch(sitemap, /\/product\/alphadoc/);
+  assert.equal((sitemap.match(/hreflang="x-default"/g) ?? []).length, 8);
+  assert.equal((sitemap.match(/<loc>/g) ?? []).length, 8);
   assert.match(llms, /Korean homepage: https:\/\/vioreai\.com\/ko/);
   assert.doesNotMatch(llms, /vioreai\.com\/ko\/company/);
   assert.match(llms, /Korean knowledge: https:\/\/vioreai\.com\/ko\/knowledge/);
   assert.match(llms, /English knowledge: https:\/\/vioreai\.com\/en\/knowledge/);
+  assert.match(llms, /Alphadoc product site \(Korean\): https:\/\/alphadoc\.ai\n/);
+  assert.match(llms, /Alphadoc product site \(English\): https:\/\/alphadoc\.ai\/en\n/);
+  assert.doesNotMatch(llms, /\/product\/alphadoc/);
   assert.match(llms, /Viore designs medical AI as a connected technology system rather than one model/);
   assert.match(llms, /AlphaDocument's core engine and product connection paths are implemented/);
   assert.match(llms, /AlphaImage's bounded static-image artifact technology is implemented and synthetic-input runtime-verified/);
@@ -556,219 +558,54 @@ test("redirects legacy Knowledge while keeping the former Council route unavaila
   assert.equal(councilResponse.status, 404);
 });
 
-test("server-renders the Alphadoc 2.0 product story", async () => {
-  const [response, css, productCss, kitCss, featureCss, securityCss, productSource, productRoute, featureRailSource, featureCardSource, featureSceneSource, kitSource, viewportMotionSource, deferredViewportMotionSource, energyCanvasSource, threadRenderQualitySource, nextConfigSource] = await Promise.all([
-    render("/ko/product/alphadoc"),
+test("permanently redirects the former Alphadoc product page to alphadoc.ai", async () => {
+  const cases = [
+    ["/ko/product/alphadoc", /^https:\/\/alphadoc\.ai\/?$/],
+    ["/ko/product/alphadoc/", /^https:\/\/alphadoc\.ai\/?$/],
+    ["/en/product/alphadoc", /^https:\/\/alphadoc\.ai\/en$/],
+    ["/en/product/alphadoc/", /^https:\/\/alphadoc\.ai\/en$/],
+  ];
+  const responses = await Promise.all(cases.map(([pathname]) => render(pathname)));
+  for (const [index, response] of responses.entries()) {
+    const [pathname, destination] = cases[index];
+    assert.equal(response.status, 301, pathname);
+    assert.match(response.headers.get("location") ?? "", destination, pathname);
+  }
+
+  const [koHtml, enHtml] = await Promise.all([render("/ko"), render("/en")].map((request) => request.then((response) => response.text())));
+  // Header menu (desktop and mobile) and the Company page link go straight to the product site.
+  assert.match(koHtml, /<a href="https:\/\/alphadoc\.ai" target="_blank" rel="noreferrer"><span>Alphadoc<\/span><span aria-hidden="true">↗<\/span><\/a>/);
+  assert.match(koHtml, /<a href="https:\/\/alphadoc\.ai" target="_blank" rel="noreferrer">Alphadoc<\/a>/);
+  assert.match(koHtml, /class="company-join-product" href="https:\/\/alphadoc\.ai" target="_blank" rel="noreferrer"/);
+  assert.match(enHtml, /<a href="https:\/\/alphadoc\.ai\/en" target="_blank" rel="noreferrer"><span>Alphadoc<\/span>/);
+  assert.match(enHtml, /class="company-join-product" href="https:\/\/alphadoc\.ai\/en" target="_blank" rel="noreferrer"/);
+  assert.doesNotMatch(koHtml, /\/product\/alphadoc/);
+  assert.doesNotMatch(enHtml, /\/product\/alphadoc/);
+});
+
+test("keeps the shared paper texture, brand color and motion helpers", async () => {
+  const [css, viewportMotionSource, energyCanvasSource, threadRenderQualitySource, nextConfigSource, darkTextureAsset] = await Promise.all([
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
-    readFile(new URL("../app/product.css", import.meta.url), "utf8"),
-    readFile(new URL("../app/alphadoc-v2.css", import.meta.url), "utf8"),
-    readFile(new URL("../app/alphadoc-v2-features.css", import.meta.url), "utf8"),
-    readFile(new URL("../app/alphadoc-v2-security.css", import.meta.url), "utf8"),
-    readFile(new URL("../app/components/ProductPage.tsx", import.meta.url), "utf8"),
-    readFile(new URL("../app/[lang]/product/alphadoc/page.tsx", import.meta.url), "utf8"),
-    readFile(new URL("../app/components/AlphadocFeatureRail.tsx", import.meta.url), "utf8"),
-    readFile(new URL("../app/components/AlphadocFeatureCard.tsx", import.meta.url), "utf8"),
-    readFile(new URL("../app/components/alphadoc2/FeatureScene.tsx", import.meta.url), "utf8"),
-    readFile(new URL("../app/components/alphadoc2/kit.tsx", import.meta.url), "utf8"),
-    readFile(new URL("../app/components/useViewportMotion.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/components/ViewportMotion.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/components/CompanyEnergyCanvas.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/components/threadRenderQuality.ts", import.meta.url), "utf8"),
     readFile(new URL("../next.config.ts", import.meta.url), "utf8"),
+    readFile(new URL("../public/media/viore-paper-texture-dark-v2.webp", import.meta.url)),
   ]);
-  assert.equal(response.status, 200);
 
-  const html = await response.text();
-  assert.match(html, /<title>알파닥 \| 의료기관과 의료기업을 위한 AI 에이전트 워크스페이스<\/title>/);
-  assert.match(html, /<link rel="canonical" href="https:\/\/vioreai\.com\/ko\/product\/alphadoc"/);
-  assert.match(html, /class="alphadoc-product lang-ko"/);
-  assert.match(html, /class="site-header site-header-dark"/);
-  assert.match(html, /class="site-footer "/);
-  assert.match(html, /class="ap-hero-brand">알파닥, <\/span><span class="ap-hero-tagline">의료기관과 의료기업을 위한 AI 에이전트 워크스페이스<\/span>/);
-  assert.match(html, /근거를 찾는 일도, 노트를 쓰는 일도 <span class="brand-alphadoc">알파닥<\/span>에게 맡기세요\.\s*최신 의학 문헌과 진료지침, 계속 업데이트되는 사내 자료를 바탕으로 답하고 정리합니다\./);
-  assert.match(html, /href="#overview"[^>]*>인터페이스/);
-  assert.match(html, /href="#general"[^>]*>근거 대화/);
-  assert.match(html, /href="#clinical"[^>]*>기능/);
-  assert.match(html, /href="#alphadocs"[^>]*>보안/);
-
-  // 2.0 motions: home → @ mention → document answer, papers reader, source scope and citations, Zero Trust steps.
-  assert.match(html, /class="a2-stage a2-hero[^"]*"[^>]*role="img"/);
-  assert.match(html, /김지원님, 안녕하세요\./);
-  assert.match(html, /현행 지침과 비교해서 바뀐 기준을 표로 정리해 줘/);
-  assert.match(html, /절개 전 60분 이내/);
-  assert.match(html, /24시간 이내 중단/);
-  assert.match(html, /최저농도 15–20 mg\/L/);
-  assert.match(html, /AUC 400–600/);
-  assert.match(html, /class="a2-stage a2-papers[^"]*"[^>]*role="img"/);
-  assert.match(html, /TRIPOD\+AI statement/);
-  // Papers scene: the list of eight papers is searched down to TRIPOD+AI before it is opened.
-  for (const label of ["논문 검색", "제목·내용·저자로 검색", "예측 모델", "자료 목록 · 8개 자료", "검색 결과 · 1개 자료", "저널 원문 열기", "논문 본문 읽기", "Surviving Sepsis Campaign", "DECIDE-AI"]) {
-    assert.ok(html.includes(label), label);
-  }
-  assert.equal((html.match(/class="a2p-card a2-anim is-other"/g) ?? []).length, 7);
-  assert.equal((html.match(/class="a2p-card a2-anim is-target"/g) ?? []).length, 1);
-  assert.match(html, /class="a2-stage a2-evidence[^"]*"[^>]*role="img"/);
-  assert.match(html, /참조 범위/);
-  assert.match(html, /자료: 사내 게시판/);
-  assert.match(html, /임상시험 중 중대한 이상사례는 언제까지 보고해야 해\?/);
-  assert.match(html, /예상하지 못한 중대한 약물이상반응\(SUSAR\)은 의뢰자가 식약처에 보고합니다\./);
-  assert.match(html, /알게 된 날부터 7일 이내, 추가 정보는 이후 8일 안에/);
-  assert.match(html, /알게 된 날부터 15일 이내/);
-  assert.match(html, /사내 게시판 2/);
-  assert.match(html, /본문 27개 항목과 초록 13개 항목/);
-  // Papers pane: what TRIPOD+AI adds to TRIPOD 2015, not a yes/no reply.
-  for (const label of ["2015년 TRIPOD 대비 새로 챙겨야 할 항목만 정리해 줘", "2015년판에 없거나 크게 늘어난 항목은 네 가지입니다.", "공정성", "클래스 불균형", "오픈 사이언스", "환자·대중 참여"]) {
-    assert.ok(html.includes(label), label);
-  }
-  assert.doesNotMatch(html, /이 지침을 써도 돼\?/);
-  assert.doesNotMatch(html, /손 위생|김지원 선생님|10월/);
-  assert.match(html, /class="ap-arch[^"]*"[^>]*role="img"[^>]*aria-label="알파닥 보안 아키텍처:/);
-  assert.match(html, /<svg class="ap-arch-svg" viewBox="0 0 460 640"/);
-  assert.match(html, /기관 단위 보안 체계 · 구축 중/);
-  assert.match(html, /기관 환경 · 사내망 또는 분리 클라우드/);
-  for (const label of ["인증 · 권한 확인", "민감정보 치환", "입력 검증", "허용 모델 호출", "응답 검증 · 복원", "감사 기록", "기관 환경 모델", "검증된 답변", "외부 AI"]) {
-    assert.ok(html.includes(label), label);
-  }
-  assert.equal((html.match(/class="arch-part arch-anim arch-s\d+/g) ?? []).length >= 20, true);
-  assert.doesNotMatch(html, /a2-sec-|토큰 볼트|Token vault|\[이름 1\]/);
-  assert.match(html, /\/brand\/alphadoc-alpha\.png/);
-
-  assert.match(html, /모든 것이 하나의 화면 안에/);
-  assert.match(html, /놓치지 않는 근거/);
-  assert.match(html, /사내 문서도, 나만의 노트도, 그리고 최신 의학 자료도 같은 입력창에서 시작합니다\./);
-  assert.match(html, /모든 가능성은 한눈에/);
-  for (const id of ["evidence-chat", "notes", "board", "guidelines", "papers", "favorites"]) {
-    assert.match(html, new RegExp(`data-feature-card="${id}"`));
-  }
-  assert.match(html, /참고할 자료를, 질문하기 전에 고릅니다\./);
-  assert.match(html, /노트를 쓰다가, 정리는 <span class="brand-alphadoc">알파닥<\/span>에게 맡깁니다\./);
-  assert.match(html, /class="ap-feature-motion-placeholder"/);
-  assert.match(html, /정보의 모든 순간을,\s*더 직관적이고 책임 있게/);
-  assert.match(html, /<span class="brand-alphadoc">알파닥<\/span>은 보안을 최우선으로 하여 분리 클라우드와 사내망에서 유연하게 작동합니다\./);
-  // The product name in running copy uses the Alphadoc color; the filled CTA button keeps white text.
+  // The product name in running copy uses the Alphadoc color.
   assert.match(css, /\.brand-alphadoc \{ color: var\(--red\); \}/);
-  assert.ok((html.match(/class="brand-alphadoc"/g) ?? []).length >= 8);
-  assert.doesNotMatch(html, /ap-button-primary"[^>]*><span class="brand-alphadoc"/);
-  assert.match(html, /<h3>Lightweight<\/h3>/);
-  assert.match(html, /<h3>One-way<\/h3>/);
-  assert.match(html, /<h3>Zero Trust<\/h3>/);
-  assert.match(html, /일방향 학습형 AI 구조로서 기관 데이터를 학습에 쓰지 않고 밖으로 내보내지 않습니다\./);
-  assert.match(html, /입력, 경로, 응답까지 검증 로직을 더한 보안 체계를 구현하고 있습니다\./);
-  assert.doesNotMatch(html, /KMI|한국의학연구소|ap-deploy-proof/);
-  assert.match(html, /바이오레의 첫번째 선형,/);
-  assert.match(html, /이제 시작해보세요\./);
-  assert.match(html, /class="ap-button ap-button-primary" href="https:\/\/alphadoc\.ai"[^>]*>알파닥 시작하기/);
-  assert.match(html, /class="ap-final-logo-stage"/);
-  assert.match(html, /class="company-energy-canvas"/);
-  assert.match(html, /"@type":"SoftwareApplication"/);
-  assert.match(html, /"@id":"https:\/\/alphadoc\.ai\/#software"/);
-  assert.match(html, /클라우드 & 사내망 안에서 작동하는, 의료기관과 의료기업을 위한 일방향 학습형 AI 에이전트 워크스페이스/);
-  assert.match(html, /"inLanguage":"ko-KR"/);
-
-  // 1.x content and the copy rules for 2.0.
-  assert.doesNotMatch(html, /의료 업무를 하나의 AI Workspace로|알파닥스|일반대화|TTP와 DIC|모든 가능성은 앱 하나로/);
-  assert.doesNotMatch(html, /ap-hero-motion|ap-workspace-motion|ap-general-motion"|ap-alphadocs-phone|alphadoc\.ai\/brand/);
-  assert.doesNotMatch(html, /온프레미스|폐쇄망|채팅|Medical OS|오픈.?베타|OPEN.?BETA/);
-  assert.doesNotMatch(html, /GPT|Gemini|OpenAI|Llama|Qwen/);
-  assert.doesNotMatch(html, /10월|11월/);
-  assert.doesNotMatch(featureSceneSource, /"\d{2}\.\d{2}"/);
-  // Papers feature card answers its question; favorites keeps the 120-minute exception.
-  assert.match(featureSceneSource, /AI 판독 RCT 결과 보고 지침은\?/);
-  assert.match(featureSceneSource, /CONSORT-AI 확장판을 따릅니다\. 계획서는 SPIRIT-AI, 도입 초기 임상 평가는 DECIDE-AI입니다\./);
-  assert.match(featureSceneSource, /반코마이신과 플루오로퀴놀론은 절개 전 120분 이내에 시작합니다\./);
-  assert.doesNotMatch(featureSceneSource, /우리 연구에 맞는 지침을 골라 줘/);
-  assert.doesNotMatch(kitSource, /\d{1,2}월/);
-
-  assert.match(productRoute, /import "\.\.\/\.\.\/\.\.\/alphadoc-v2\.css";/);
-  assert.match(productRoute, /import "\.\.\/\.\.\/\.\.\/alphadoc-v2-security\.css";/);
-  assert.match(productSource, /<CompanyEnergyCanvas quality="balanced" \/>/);
-  assert.match(productSource, /<AlphadocLocalNav items=\{content\.nav\} language=\{language\} \/>/);
-  assert.match(productSource, /<ViewportMotion as="section" className="ap-final-cta" threshold=\{0\.12\}>/);
-  assert.doesNotMatch(productSource, /^"use client"/m);
-  assert.match(nextConfigSource, /"img-src 'self' data:",/);
-  assert.doesNotMatch(nextConfigSource, /img-src[^"]*alphadoc\.ai/);
-
-  assert.match(viewportMotionSource, /matchMedia\("\(prefers-reduced-motion: reduce\)"\)/);
-  assert.match(viewportMotionSource, /document\.addEventListener\("visibilitychange"/);
-  assert.match(viewportMotionSource, /shouldAnimate: inView && pageVisible && !reducedMotion/);
-  assert.match(deferredViewportMotionSource, /new IntersectionObserver/);
-  assert.match(deferredViewportMotionSource, /media\.addEventListener\("change", syncMotionPreference\)/);
-  assert.match(energyCanvasSource, /const GLOW_BLUR_PX = 6/);
-  assert.match(energyCanvasSource, /getThreadRenderTier/);
-  assert.match(threadRenderQualitySource, /sharedThreadRenderTier/);
-  assert.match(energyCanvasSource, /frame = window\.requestAnimationFrame\(animate\)/);
-
-  assert.match(featureRailSource, /const AUTO_SCROLL_PX_PER_SECOND = 18/);
-  assert.match(featureRailSource, /const RAIL_COPIES = \[0, 1\] as const/);
-  assert.match(featureRailSource, /useViewportMotion<HTMLDivElement>\(0\.04\)/);
-  assert.match(featureRailSource, /motionVisible=\{visibleInstances\.has\(instanceId\)\}/);
-  assert.match(featureRailSource, /event\.key !== "ArrowLeft" && event\.key !== "ArrowRight"/);
-  assert.match(featureCardSource, /const AlphadocV2FeatureScene = lazy\(async \(\) =>/);
-  assert.match(featureCardSource, /<A2NavIcon nav=\{featureIcons\[item\.id\]\} \/>/);
-  assert.match(featureCardSource, /aria-hidden=\{duplicate \? "true" : undefined\}/);
-  assert.doesNotMatch(featureCardSource, /AlphadocFeatureMotionSvg|loading="lazy"/);
-
-  // Motion timelines pause off screen and show the final frame when motion is reduced.
-  assert.match(kitCss, /\.a2-anim \{[^}]*animation-play-state: var\(--a2-play, paused\);/);
-  assert.match(kitCss, /\.is-playing \.a2,\s*\.is-playing\.a2 \{ --a2-play: running; \}/);
-  assert.match(kitCss, /\.is-reduced \.a2-anim,\s*\.is-reduced\.a2-anim \{ animation: none !important; \}/);
-  assert.match(featureCss, /animation-play-state: var\(--ap-feature-play-state, paused\);/);
-  assert.match(securityCss, /@property --arch-on/);
-  assert.match(securityCss, /\.ap-arch\.is-reduced \.arch-anim \{ animation: none !important; \}/);
-  assert.match(securityCss, /\.arch-hl \{[^}]*opacity: var\(--arch-on\);/);
-  for (let step = 0; step <= 10; step += 1) {
-    assert.match(securityCss, new RegExp(`@keyframes arch-on-${step} \\{`));
-  }
-  assert.doesNotMatch(securityCss, /\.a2-sec|background: #fff/);
-
   assert.doesNotMatch(css, /PretendardVariable\.woff2/);
   assert.match(css, /--dark-paper-base: #000000;/);
-  assert.match(productCss, /\.alphadoc-product \{[\s\S]*?background-color: var\(--dark-paper-base\);[\s\S]*?background-image: var\(--dark-paper-image\);/);
-  assert.match(productCss, /--ap-red: var\(--red\)/);
-  assert.match(productCss, /\.ap-button-primary \{[^}]*background: var\(--ap-red\);[^}]*color: #fff;/);
-  assert.match(productCss, /#general,#clinical,#alphadocs \{ scroll-margin-top: calc\(var\(--header\) \+ 44px\); \}/);
-  assert.match(productCss, /\.ap-hero-tagline \{[^}]*white-space: normal; word-break: keep-all; text-wrap: balance; \}/);
-  assert.doesNotMatch(productCss, /\.ap-hero-tagline \{[^}]*nowrap/);
-  assert.match(productCss, /\.ap-feature-rail \{[^}]*scroll-behavior: auto;/);
-  assert.match(productCss, /\.ap-feature-gallery\.is-playing \.ap-feature-card\.is-motion-visible \{ --ap-feature-play-state:running; \}/);
-  assert.match(productCss, /\.ap-final-cta\.is-playing \.ap-final-logo-stage::before/);
-  assert.doesNotMatch(productCss, /ap-hero-motion|ap-workspace-motion|ap-real-|ap-svg-|ap-community-|ap-general-window|ap-alphadocs-phone/);
-
-  const darkTextureAsset = await readFile(new URL("../public/media/viore-paper-texture-dark-v2.webp", import.meta.url));
+  assert.match(viewportMotionSource, /new IntersectionObserver/);
+  assert.match(viewportMotionSource, /media\.addEventListener\("change", syncMotionPreference\)/);
+  assert.match(energyCanvasSource, /const GLOW_BLUR_PX = 6/);
+  assert.match(energyCanvasSource, /getThreadRenderTier/);
+  assert.match(energyCanvasSource, /frame = window\.requestAnimationFrame\(animate\)/);
+  assert.match(threadRenderQualitySource, /sharedThreadRenderTier/);
+  assert.match(nextConfigSource, /"img-src 'self' data:",/);
+  assert.doesNotMatch(nextConfigSource, /img-src[^"]*alphadoc\.ai/);
   assert.ok(darkTextureAsset.length > 5_000 && darkTextureAsset.length < 40_000);
-});
-
-test("server-renders the English Alphadoc product page in its own voice", async () => {
-  const response = await render("/en/product/alphadoc");
-  assert.equal(response.status, 200);
-  const html = await response.text();
-  assert.match(html, /<title>Alphadoc \| The AI Agent Workspace for Healthcare<\/title>/);
-  assert.match(html, /class="ap-hero-brand">Alphadoc,<\/span><span class="ap-hero-tagline">the AI agent workspace for healthcare\.<\/span>/);
-  assert.match(html, /href="#overview"[^>]*>Overview/);
-  assert.match(html, /href="#general"[^>]*>Evidence/);
-  assert.match(html, /href="#clinical"[^>]*>Features/);
-  assert.match(html, /href="#alphadocs"[^>]*>Security/);
-  assert.match(html, /Everything, on one screen\./);
-  assert.match(html, /Never miss the evidence\./);
-  assert.match(html, /Every possibility, at a glance\./);
-  assert.match(html, /Sources: Internal board/);
-  assert.match(html, /aria-label="Alphadoc security architecture:/);
-  assert.match(html, /Zero Trust · in progress/);
-  assert.match(html, /Verified answer/);
-  assert.match(html, /Results · 1 paper/);
-  assert.match(html, /Four areas are new or much expanded:/);
-  assert.match(html, /within 7 days of learning about it, with follow-up within 8 more days/);
-  assert.match(html, /prediction model/);
-  assert.doesNotMatch(html, /Token vault|a2-sec-|\[Name 1\]/);
-  assert.match(html, /Every moment of information,\s*handled with clarity and care\./);
-  assert.doesNotMatch(html, /KMI|Korea Medical Institute|ap-deploy-proof/);
-  assert.match(html, /Viore(?:&#x27;|')s first linearity\./);
-  assert.match(html, /Start here\./);
-  assert.match(html, /"inLanguage":"en-US"/);
-
-  const article = html.slice(html.indexOf("<article"), html.indexOf("</article>")).replace(/<script[\s\S]*?<\/script>/g, "");
-  assert.doesNotMatch(article, /[가-힣]/);
-  assert.doesNotMatch(article, /on-premise|closed network|Medical OS/i);
 });
 
 test("carries the hero energy-line language into a slow scroll-linked convergence", async () => {
@@ -974,8 +811,8 @@ test("routes Company and Contact navigation into the locale homepage", async () 
   assert.match(content, /if \(key === "company"\) return `\/\$\{language\}`;/);
   assert.match(content, /if \(key === "contact"\) return `\/\$\{language\}#partnership-inquiry`;/);
   assert.match(chrome, /const isCompanyPage = pathname === `\/\$\{language\}`/);
-  assert.match(chrome, /const isProductPage = pathname\.includes\("\/product\/alphadoc"\)/);
-  assert.match(chrome, /const isDarkPage = isTechnologyPage \|\| isProductPage/);
+  assert.doesNotMatch(chrome, /isProductPage|\/product\/alphadoc/);
+  assert.match(chrome, /const isDarkPage = isTechnologyPage;/);
   assert.match(chrome, /const isDarkFooter = isCompanyPage \|\| isTechnologyPage/);
   assert.match(chrome, /nav-link \$\{isCompanyPage \? "is-active" : ""\}/);
   assert.match(chrome, /site-footer \$\{isDarkFooter \? "site-footer-dark" : ""\}/);

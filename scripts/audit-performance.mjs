@@ -4,7 +4,6 @@ import { pathToFileURL } from "node:url";
 const DEFAULT_ROUTES = [
   "/ko",
   "/ko/technology",
-  "/ko/product/alphadoc",
   "/ko/knowledge",
 ];
 

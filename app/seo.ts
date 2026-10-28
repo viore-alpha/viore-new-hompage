@@ -50,18 +50,6 @@ export const PAGE_SEO = {
         "How Viore designs AlphaEvidence, AlphaDoc Engine, AlphaDocument, AlphaImage, AlphaLayer, and AlphaSeal, how far each is verified, and how a one-way AI architecture keeps institution data inside corporate-network Alphadoc.",
     },
   },
-  product: {
-    ko: {
-      title: "알파닥 | 의료기관과 의료기업을 위한 AI 에이전트 워크스페이스",
-      description:
-        "알파닥은 의료기관과 의료기업을 위한 AI 에이전트 워크스페이스입니다. 근거를 찾는 일도, 노트를 쓰는 일도 알파닥에게 맡길 수 있습니다.",
-    },
-    en: {
-      title: "Alphadoc | The AI Agent Workspace for Healthcare",
-      description:
-        "Alphadoc is the AI agent workspace for healthcare providers and healthcare companies. Hand off evidence searches and note-writing, and keep your data inside.",
-    },
-  },
   knowledge: {
     ko: {
       title: "바이오레 Knowledge | 최신 의학 논문과 근거",

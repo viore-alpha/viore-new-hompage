@@ -70,6 +70,14 @@ const nextConfig: NextConfig = {
         destination: "/ko/legal",
         permanent: true,
       },
+      // The Alphadoc product page moved to its own site, alphadoc.ai.
+      ...[
+        ["/ko/product/alphadoc", "https://alphadoc.ai"],
+        ["/en/product/alphadoc", "https://alphadoc.ai/en"],
+      ].flatMap(([source, destination]) => [
+        { source, destination, statusCode: 301 as const },
+        { source: `${source}/`, destination, statusCode: 301 as const },
+      ]),
       {
         source: "/:path+/",
         destination: "/:path+",
