@@ -17,6 +17,9 @@ const KMI_LOGO: { src: string; width: number; height: number } | null = {
 const NVIDIA_TRADEMARK_NOTICE =
   "NVIDIA, the NVIDIA logo, and NVIDIA Inception are trademarks and/or registered trademarks of NVIDIA Corporation in the U.S. and other countries.";
 
+/* KMI is hidden for now and the Partners tile shows "Coming Soon". Set to true to bring it back. */
+const SHOW_KMI = false;
+
 const kmiName: Record<Language, string> = {
   ko: "KMI 한국의학연구소",
   en: "KMI (Korea Medical Institute)",
@@ -30,7 +33,9 @@ export function CompanyPartners({ language }: { language: Language }) {
       </header>
       <ul className="company-logo-row">
         <li className="company-logo-item">
-          {KMI_LOGO ? (
+          {!SHOW_KMI ? (
+            <span className="company-logo-wordmark">Coming Soon</span>
+          ) : KMI_LOGO ? (
             <span className="company-partner-tile">
               <img
                 className="company-partner-logo"
