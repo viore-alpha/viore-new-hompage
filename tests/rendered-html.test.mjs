@@ -291,7 +291,8 @@ test("server-renders the Korean Company story as the homepage", async () => {
   assert.match(html, /One connected flow/);
   assert.match(html, /for medicine\./);
   assert.match(html, /<h2 id="company-partners-title">Partners<\/h2>/);
-  assert.match(html, /class="company-partner-tile"><img class="company-partner-logo" src="\/brand\/partners\/kmi-logo\.png" alt="KMI 한국의학연구소" width="349" height="41"/);
+  assert.match(html, /class="company-logo-section company-partners"[\s\S]*?<span class="company-logo-wordmark">Coming Soon<\/span>/);
+  assert.doesNotMatch(html, /KMI|한국의학연구소|kmi-logo/);
   assert.match(html, /<h2 id="company-recognitions-title">Recognitions<\/h2>/);
   assert.match(html, /class="company-recognition-badge" src="\/brand\/partners\/nvidia-inception-program-badge-rgb\.svg" alt="NVIDIA Inception program member"/);
   assert.match(html, /class="company-trademark">NVIDIA, the NVIDIA logo, and NVIDIA Inception are trademarks/);
