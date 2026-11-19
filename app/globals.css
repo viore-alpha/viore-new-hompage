@@ -446,15 +446,17 @@ img { display: block; max-width: 100%; }
 .company-connection-node-copy > p { margin: 8px 0 0; color: #aaaab0; font-size: 13px; font-weight: 450; line-height: 1.4; letter-spacing: -.014em; text-wrap: balance; }
 /* Partners and Recognitions: the connections heading and rule lines, with one mark per cell. */
 .company-logo-section { margin-top: clamp(104px,9vw,140px); }
-.company-logo-row { margin: 56px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); border-top: 1px solid rgba(255,255,255,.16); border-bottom: 1px solid rgba(255,255,255,.12); list-style: none; }
-.company-logo-item { min-width: 0; min-height: 196px; padding: 40px 28px; display: flex; align-items: center; }
+.company-logo-section + .company-logo-section { margin-top: clamp(72px,6vw,96px); }
+.company-logo-row { margin: 40px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); border-top: 1px solid rgba(255,255,255,.16); border-bottom: 1px solid rgba(255,255,255,.12); list-style: none; }
+.company-logo-item { min-width: 0; min-height: 148px; padding: 32px; display: flex; align-items: center; }
 .company-logo-item:first-child { padding-left: 0; }
 .company-logo-item + .company-logo-item { border-left: 1px solid rgba(255,255,255,.12); }
 .company-logo-wordmark { color: #f5f5f7; font-size: 26px; font-weight: 640; line-height: 1.2; letter-spacing: -.035em; word-break: keep-all; }
-/* White tile matched to the NVIDIA badge's white box (its file has 6% clear space on each side). */
-.company-partner-tile { margin-left: 14px; padding: 21px 24px; display: inline-flex; align-items: center; background: #fff; }
+/* White tile matched to the height of the NVIDIA badge's white box. */
+.company-partner-tile { padding: 25px 24px; display: inline-flex; align-items: center; background: #fff; }
 .company-partner-logo { width: 280px; max-width: 100%; height: auto; display: block; }
-.company-recognition-badge { width: 240px; max-width: 100%; height: auto; display: block; }
+/* Badges share one height; the NVIDIA file is cropped to its white box so both start at the cell edge. */
+.company-recognition-badge { width: auto; max-width: 100%; height: 84px; display: block; }
 .company-trademark { max-width: 620px; margin: 18px 0 0; color: #8e8e94; font-size: 11px; line-height: 1.5; letter-spacing: -.005em; }
 .detail-items { margin: 112px 0 0 22%; border-top: 1px solid rgba(15,15,16,.25); }
 .detail-items article { min-height: 170px; padding: 35px 0; display: grid; grid-template-columns: 68px minmax(180px,.78fr) minmax(260px,1fr); align-items: start; gap: 28px; border-bottom: 1px solid var(--line); }
@@ -824,8 +826,9 @@ img { display: block; max-width: 100%; }
   .company-connection-node + .company-connection-node { border-left: 0; }
   .company-connection-node h3 { font-size: 20px; }
   .company-logo-section { margin-top: 104px; }
-  .company-logo-row { margin-top: 40px; grid-template-columns: 1fr; }
-  .company-logo-item { min-height: 150px; padding: 32px 0; }
+  .company-logo-section + .company-logo-section { margin-top: 72px; }
+  .company-logo-row { margin-top: 32px; grid-template-columns: 1fr; }
+  .company-logo-item { min-height: 128px; padding: 28px 0; }
   .company-logo-item + .company-logo-item { border-left: 0; border-top: 1px solid rgba(255,255,255,.12); }
   .product-hero-v2 { min-height: auto; padding-top: calc(var(--header) + 100px); display: flex; flex-direction: column; align-items: stretch; gap: 70px; }
   .product-hero-copy-v2 { max-width: 760px; }
@@ -939,9 +942,10 @@ img { display: block; max-width: 100%; }
   .company-knowledge .company-metrics { margin-top: 38px; }
   .company-connections { margin-top: 90px; }
   .company-logo-section { margin-top: 90px; }
+  .company-logo-section + .company-logo-section { margin-top: 64px; }
   .company-logo-wordmark { font-size: 22px; }
-  .company-recognition-badge { width: 200px; }
-  .company-partner-tile { margin-left: 12px; padding: 18px 20px; }
+  .company-recognition-badge { height: 70px; }
+  .company-partner-tile { padding: 20px 20px; }
   .company-partner-logo { width: 232px; }
   .company-connections-heading h2 { font-size: 30px; }
   .company-connections-stage { margin-top: 38px; }

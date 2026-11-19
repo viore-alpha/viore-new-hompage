@@ -294,7 +294,9 @@ test("server-renders the Korean Company story as the homepage", async () => {
   assert.match(html, /class="company-logo-section company-partners"[\s\S]*?<span class="company-logo-wordmark">Coming Soon<\/span>/);
   assert.doesNotMatch(html, /KMI|한국의학연구소|kmi-logo/);
   assert.match(html, /<h2 id="company-recognitions-title">Recognitions<\/h2>/);
-  assert.match(html, /class="company-recognition-badge" src="\/brand\/partners\/nvidia-inception-program-badge-rgb\.svg" alt="NVIDIA Inception program member"/);
+  assert.match(html, /class="company-recognition-badge" src="\/brand\/partners\/nvidia-inception-program-badge-rgb-cropped\.svg" alt="NVIDIA Inception program member"/);
+  assert.match(html, /class="company-recognition-badge" src="\/brand\/partners\/microsoft-for-startups-badge\.png" alt="Microsoft for Startups"/);
+  assert.ok(html.indexOf('nvidia-inception-program-badge-rgb-cropped.svg') < html.indexOf('microsoft-for-startups-badge.png'));
   assert.match(html, /class="company-trademark">NVIDIA, the NVIDIA logo, and NVIDIA Inception are trademarks/);
   assert.ok(html.indexOf('class="company-connections"') < html.indexOf('class="company-logo-section company-partners"'));
   assert.ok(html.indexOf('class="company-logo-section company-partners"') < html.indexOf('class="company-logo-section company-recognitions"'));
