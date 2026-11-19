@@ -5,7 +5,7 @@ import type { Language } from "@/app/site-content";
    KMI's name and logo appear only here (public contract rule 13). */
 
 /* KMI's official logo, cropped to its edges with colors unchanged. Its dark lettering sits on
-   a white tile, sized like the white box of the NVIDIA badge below. Set to null to show the name. */
+   a white tile, as tall as the NVIDIA badge below. Set to null to show the name. */
 const KMI_LOGO: { src: string; width: number; height: number } | null = {
   src: "/brand/partners/kmi-logo.png",
   width: 349,
@@ -66,10 +66,22 @@ export function CompanyRecognitions() {
         <li className="company-logo-item">
           <img
             className="company-recognition-badge"
-            src="/brand/partners/nvidia-inception-program-badge-rgb.svg"
+            src="/brand/partners/nvidia-inception-program-badge-rgb-cropped.svg"
             alt="NVIDIA Inception program member"
-            width="240"
-            height="104"
+            width="450"
+            height="165"
+            loading="lazy"
+            decoding="async"
+          />
+        </li>
+        <li className="company-logo-item">
+          {/* Official website badge from the Microsoft for Startups PR toolkit, used unaltered. */}
+          <img
+            className="company-recognition-badge"
+            src="/brand/partners/microsoft-for-startups-badge.png"
+            alt="Microsoft for Startups"
+            width="524"
+            height="224"
             loading="lazy"
             decoding="async"
           />
